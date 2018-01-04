@@ -20,10 +20,6 @@ prtbrown() {
 
 # install Bot
 
-  prtgrn '
-  ➡[ Send ] (ʏ/ɴ):
-'
-
       prtgrn "
  >> Fetching $TDCLI
 "
