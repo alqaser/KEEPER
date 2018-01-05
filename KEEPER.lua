@@ -8,7 +8,7 @@
 القيصر كرار 
 WRITING THE SOURCE BY : @LLX8XLL
 CH SOURCE : @KEEPER_CH
-لا تكمزون لان ادري حتنضغطون بس تكمز انيج اختك
+
 ]]--
 local Ayatol_Korsi = "karrar alqaser develop source Keeper language lua "
 local serpent = require("serpent")
@@ -152,7 +152,6 @@ done
 
 ]])
 file:close()
-return
 end
 local serialize_to_file = function(data, file, uglify)
   file = io.open(file, "w+")
