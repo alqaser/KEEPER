@@ -56,9 +56,7 @@ prtbrown() {
 	  rm -fr luarocks-2.2.2.tar.gz
 	  rm -fr luarocks-2.2.2
 	  lua ./KEEPER.lua
-	  chmod +x keeper
-	  screen -X -S keeper quit
-	  screen -S keeper ./keeper
+
 	  
 	  
 	  
