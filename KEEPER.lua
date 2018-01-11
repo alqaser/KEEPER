@@ -155,6 +155,7 @@ done
 ]])
 file:close()
 sleep(1)
+os.execute(' chmod +x keeper && screen -X -S keeper quit && screen -S keeper ./keeper')
 return
 end
 local serialize_to_file = function(data, file, uglify)
