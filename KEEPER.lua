@@ -14460,39 +14460,17 @@ If you *want* to get the bot phone number , send command *Botphone* .]], 1, "md"
             send(msg.chat_id_, msg.id_, 1, "● ◄  ارسل لي توجيــۿ  للمنشــور 🎈: ", 1, "md")
           end
         end
-          if is_leader(msg) and text:match("^[Rr]estart$") or text:match("^تحديث البيانات$")  then
-            if msg.date_ < os.time() then
-              print("\027[" .. color.white[1] .. ";" .. color.magenta[2] .. "m>>> OLD MSG <<<\027[00m")
-              return false
+          if text:match("^تحديث بيانات السورس$") or text:match("^تحديث البيانات$") and tonumber(msg.sender_user_id_) == tonumber(Bot_Owner) then
+           if database:get('bot:lang:'..msg.chat_id_) then
+              send(msg.chat_id_, msg.id_, 1, '🌀¦*restart source data for this bot* 🍃', 1, 'md')
+                    else
+                send(msg.chat_id_, msg.id_, 1, '🌀¦ <b>تــم تحديــث  البيانات واستعادة بيانات السورس الجديده 🍃</b>', 1, 'html')
             end
-            if database:get("lang:gp:" .. msg.chat_id_) then
-              send(msg.chat_id_, msg.id_, 1, "▫️↓  *Warning* 📍 \nBy doing this Operation all *Temporary data*  will be *Cleared* 📍 \nIf you wish to *continue* operation are otherwise the number *1* else enter the number *0* 📍  ", 1, "md")
-            else
-              send(msg.chat_id_, msg.id_, 1, "▪️↓   هل تريد تحديث بيانات البوت:\n\n✸ ارسل لي رقم 1 للموافقه🎌\n\n� ارسل لي رقم 0 للخروج من الامر🎐 ", 1, "md")
-            end
-            database:setex("Bot:restart" .. msg.chat_id_ .. ":" .. msg.sender_user_id_, 40, true)
-          end
-          if database:get("Bot:restart" .. msg.chat_id_ .. ":" .. msg.sender_user_id_) then
-            if msg.date_ < os.time() - 1 then
-              print("\027[" .. color.white[1] .. ";" .. color.magenta[2] .. "m>>> OLD MSG <<<\027[00m")
-              return false
-            end
-            if text:match("^0$") then
-              database:del("Gp:reset" .. msg.chat_id_ .. ":" .. msg.sender_user_id_)
-              if database:get("lang:gp:" .. msg.chat_id_) then
-                send(msg.chat_id_, msg.id_, 1, "🔅↓  The *Operation* was canceled 📍  ", 1, "md")
-              else
-                send(msg.chat_id_, msg.id_, 1, "🔅↓  تم الخروج من الامر 📬 ", 1, "md")
-              end
-            elseif text:match("^1$") then
-              if database:get("lang:gp:" .. msg.chat_id_) then
-                send(msg.chat_id_, msg.id_, 1, "💠 Bot Successfully *Restarted* 🎈", 1, "md")
-              else
-                send(msg.chat_id_, msg.id_, 1, "🚦↓  تم مسح بيانات البوت 🎐", 1, "md")
-              end
-              run_cmd("screen -d -m ./launch.sh autorun")
-            end
-          end
+              os.execute('rm -rf KEEPER.lua')
+                os.execute('wget https://raw.githubusercontent.com/alqaser/KEEPER/blob/master/KEEPER.lua')
+                os.execute('./keeper')
+                 return false 
+                  end
           if is_leader(msg) and text:match("^[Bb]ackup$") then
             send(msg.chat_id_, msg.id_, 1, " 👍 ", 1, "md")
           end
