@@ -105,13 +105,13 @@ function sleep(sec)
 end
 local AutoSet = function()
   io.write([[
- Send your id sudo ( ارسل ايديك) : ]])
+ Send your id sudo( ارسل ايديك): ]])
   local Bot_Owner_ = tonumber(io.read())
   if not tostring(Bot_Owner_):match('%d+') then
 Bot_Owner_ = 352568466 
 end
   io.write([[
- Send (token) bot( التوكــــن ): ]])
+ Send (token)bot( التوكن ): ]])
   local Token_ = tostring(io.read())
   Bot_ID_ = Token_:match("(%d+)")
   local create = function(data, file, uglify)
@@ -14132,7 +14132,7 @@ If you *want* to get the bot phone number , send command *Botphone* .]], 1, "md"
               end
             end
             if #list == 0 then
-              text = "🚦↓ معلوماتك هيه〽️:\n\n📮 <b>اسمــك</b>: " .. name .. "\n\n🛋 <b>معرفك</b> : " .. susername .. "\n\n🌀 <b> لم تضف اي مجوعه</b>🎐"
+              text = "🚦↓ معلوماتك هيه〽️:\n\n📮 <b>اسمــك</b>: " .. name .. "\n\n🛋 <b>معرفك</b> : " .. susername .. "\n\n🌀 <b> لم تضف اي مجموعه</b>🎐"
             end
             send_large_msg(msg.chat_id_, msg.id_, 1, text, 1, "html")
           end
@@ -14398,7 +14398,7 @@ If you *want* to get the bot phone number , send command *Botphone* .]], 1, "md"
             if database:get("lang:gp:" .. msg.chat_id_) then
               send(msg.chat_id_, msg.id_, 1, "📛 <b>Name</b> : " .. name .. "\n\n🕹 <b>User</b> : " .. username .. "\n\n💡 <b>Your ID</b> : <code>" .. result.id_ .. "</code>\n\n📪 <b>Your Rank</b> : <b>" .. ten .. "</b> ", 1, "html")
             else
-              send(msg.chat_id_, msg.id_, 1, "📛 <b>اســمك </b> : " .. name .. "\n\n🕹<b> مــعرفـك </b>: " .. username .. "\n\n💡 <b> الايدي </b>: <code>" .. result.id_ .. "</code>\n\n📪 <b> الرتبۿ </b>: <code> " .. tar .. "</code> " , 1, "html")
+              send(msg.chat_id_, msg.id_, 1, "📛↓ <b>اســمك </b> : " .. name .. "\n\n🕹↓<b> مــعرفـك </b>: " .. username .. "\n\n💡↓ <b> الايدي </b>: <code>" .. result.id_ .. "</code>\n\n📪↓ <b> الرتبۿ </b>: <code> " .. tar .. "</code> " , 1, "html")
             end
           end
           getUser(msg.sender_user_id_, get_me)
@@ -14447,7 +14447,7 @@ If you *want* to get the bot phone number , send command *Botphone* .]], 1, "md"
             if database:get("lang:gp:" .. msg.chat_id_) then
               send(msg.chat_id_, msg.id_, 1, "📛 <b>Name</b> : " .. name .. "\n\n🕹 <b>User</b> : " .. username .. "\n\n💡 <b>Your ID</b> : <code>" .. result.id_ .. "</code>\n\n📪 <b>Your Rank</b> : <b>" .. ten .. "</b> ", 1, "html")
             else
-              send(msg.chat_id_, msg.id_, 1, "📛 <b>اســمك </b> : " .. name .. "\n\n🕹<b> مــعرفـك </b>: " .. username .. "\n\n💡 <b> الايدي </b>: <code>" .. result.id_ .. "</code>\n\n📪 <b> الرتبۿ </b>: <code> " .. tar .. "</code> " , 1, "html")
+              send(msg.chat_id_, msg.id_, 1, "📛↓ <b>اســمك </b> : " .. name .. "\n\n🕹↓<b> معرفـك </b>: " .. username .. "\n\n💡↓ <b> الايدي </b>: <code>" .. result.id_ .. "</code>\n\n📪↓ <b> الرتبۿ </b>: <code> " .. tar .. "</code> " , 1, "html")
             end
           end
           getUser(msg.sender_user_id_, get_me)
