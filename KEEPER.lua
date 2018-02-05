@@ -182,7 +182,6 @@ end
 _redis = load_redis()
 --------------------------------------------------------------------------------------
 print(string.sub(_redis.Bot_ID,1,0))
-database:select(string.sub(_redis.Bot_ID,1,0))
 local bot_id = database:get("Bot:BotAccount") or tonumber(_redis.Bot_ID)
 local save_config = function()
   serialize_to_file(_config, "./Config.lua")
@@ -2257,7 +2256,7 @@ function tdcli_update_callback(data)
         if database:get("lang:gp:" .. msg.chat_id_) then
           send(msg.chat_id_, msg.id_, 1, "⇨ The More *Hits* You `" .. msg.views_ .. "` Seen", 1, "md")
         else
-          send(msg.chat_id_, msg.id_, 1, "📛↓ <b>عـــدد المشاهـــدات </b>\n:` " .. msg.views_ .. " `", 1, "html")
+          send(msg.chat_id_, msg.id_, 1, "📛↓ <b>عـــدد المشاهـــدات </b>\n:<code> " .. msg.views_ .. " </code>", 1, "html")
         end
         database:del("bot:viewget" .. msg.sender_user_id_)
       end
