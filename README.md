@@ -1,5 +1,6 @@
 # <p align="center" style="color:#cb3349" > ســــــورس كيبــــر 🍃
-
+# <p align="center" style="color:#cb3349" > source keePer 🍃
+ 
 # <p align="center" style="color: #14635c;" > 📣اقــوى ســورس على التليـكرام
 
 
@@ -44,7 +45,7 @@
 
 # <p align="center"> رابــط  دعــم السورس
 
-  # <p align="center">[📨اضغط هنا للدخول الى المجموعه](https://t.me/joinchat/EBlF10VvCwjmnIpVSdxcAA)
+  # <p align="center">[📨اضغط هنا للدخول الى المجموعه](https://t.me/keeper_ch)
   
   [📨حسابــي](https://telegram.me/karrar_alqaser) <br>
   
