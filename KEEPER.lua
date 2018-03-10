@@ -2048,7 +2048,7 @@ if not database:hget('replay:'..msg.chat_id_,msg.content_.text_) then
 send(msg.chat_id_, msg.id_, 1,'🌀║ لا يوجد رد بهذا الاسم 📌',  1, "html")
 else
 database:hdel('replay:'..msg.chat_id_,msg.content_.text_)
-send(msg.chat_id_, msg.id_, 1,'🌀║ كلمـة الرد<b>('..msg.content_.text_..')</b>\nتــم مسحها ✔️',  1, "html")
+send(msg.chat_id_, msg.id_, 1,'🌀║ كلمـة الرد*('..msg.content_.text_..')*\nتــم مسحها ✔️',  1, "md")
 return false
 end
 end 
@@ -2056,13 +2056,13 @@ end
 if database:get('add_replay:'..msg.sender_user_id_) then 
 if not database:get('replay1'..msg.sender_user_id_) then 
 database:setex('replay1'..msg.sender_user_id_,500,msg.content_.text_)
-send(msg.chat_id_, msg.id_, 1, "🌀║ تمام ارسل لي جواب الرد ✔️" ,  1, "html")
+send(msg.chat_id_, msg.id_, 1, "🌀║ تمام ارسل لي جواب الرد ✔️" ,  1, "md")
 return false
 end
 if database:get('replay1'..msg.sender_user_id_) then 
 database:hset('replay:'..msg.chat_id_, database:get("replay1"..msg.sender_user_id_), msg.content_.text_)
 database:del('add_replay:'..msg.sender_user_id_)
-send(msg.chat_id_, msg.id_, 1, '🌀║ كلمـة الرد<b>('..database:get('replay1'..msg.sender_user_id_)..')</b>\nتــم حفظهـا ✔️',  1, "html")
+send(msg.chat_id_, msg.id_, 1, '🌀║ كلمـة الرد*('..database:get('replay1'..msg.sender_user_id_)..')*\nتــم حفظهـا ✔️',  1, "md")
 database:del("replay1"..msg.sender_user_id_)
 return false
 end 
@@ -2120,7 +2120,7 @@ end
 -----------------------------------------------------------------------------------------
 if msg.content_.text_ then
 if database:hget('replay:'..msg.chat_id_, msg.content_.text_) then
-send(msg.chat_id_,msg.id_,1,database:hget('replay:'..msg.chat_id_, msg.content_.text_),  1, "html")
+send(msg.chat_id_,msg.id_,1,database:hget('replay:'..msg.chat_id_, msg.content_.text_),  1, "md")
 end
 end
 -----------------------------------------------------------------
@@ -13379,7 +13379,7 @@ end
               local fname = result.first_name_ or ""
               local lname = result.last_name_ or ""
               local username = "@" .. result.username_ or "---"
-              send(bot_owner, 0, 1, "🌀║ <b>تم اضافه مجموعه جديده</b>\n🌀║ <code>معلومات عن المطور 📪</code>\n🌀║<b> ايدي </b> : <code>" .. msg.sender_user_id_ .. "</code>\n🌀║ <code>الاسم</code> : " .. fname .. " " .. lname .. "\n🎫║ <code>المعرف</code> : " .. username .. "\n🎫║ <b>ايدي المجموعه </b>: <code>" .. msg.chat_id_ .. "</code>\n🎫║<b> اسم المجموعه 🐿</b>:\n " .. (chat and chat.title_ or "") .. "\n\n🎫║<b> لاخراج البوت ارسل الامر التالي 🍃</b>: \n•• <code>غادر " .. msg.chat_id_ .. "</code>", 1, "html")
+              send(bot_owner, 0, 1, "🌀║ <b>تم اضافه مجموعه جديده</b>\n🌀║ <code>معلومات عن المطور 📪</code>\n🌀║<b> ايدي </b> : <code>" .. msg.sender_user_id_ .. "</code>\n🌀║ <code>الاسم</code> : " .. fname .. " " .. lname .. "\n🎫║ <code>المعرف</code> : " .. username .. "\n🎫║ <b>ايدي المجموعه </b>: <code>" .. msg.chat_id_ .. "</code>\n🎫║<b> لاخراج البوت ارسل 🍃</b>\n•• <code>غادر " .. msg.chat_id_ .. "</code>", 1, "html")
               database:set("bot:enable:" .. msg.chat_id_, true)
               database:setex("bot:charge:" .. msg.chat_id_, 2 * day, true)
               database:sadd("sudo:data:" .. msg.sender_user_id_, msg.chat_id_)
@@ -13808,6 +13808,33 @@ end
           end
         end end
 --------------------------------------------------------
+if is_momod(msg.sender_user_id_, msg.chat_id_) and text:match("^بروفايل (%d+)$") and check_user_channel(msg) then
+               if not database:get('lock:add'..msg.chat_id_) then
+		local apfa = {
+            string.match(text, "^(بروفايل) (%d+)$")
+          }
+          local idinfocallbackfa = function(extra, result)
+            if result.first_name_ then
+              local _first_name_ = result.first_name_:gsub("#", "")
+              if database:get("lang:gp:" .. msg.chat_id_) then
+                sendmen(msg.chat_id_, msg.id_, "🔍║ Click To View User Profiles ", 2, 30, result.id_)
+              else
+                sendmen(msg.chat_id_, msg.id_, "🔍║ (اضغط هنا  عزيزي) 🍃", 2, 22, result.id_)
+              end
+            elseif database:get("lang:gp:" .. msg.chat_id_) then
+              send(msg.chat_id_, msg.id_, 1, "🔍║ *User Not Found* !", 1, "md")
+            else
+              send(msg.chat_id_, msg.id_, 1, "🔍║ لا يوجد حساب 🍂", 1, "md")
+            end
+          end
+          tdcli_function({
+            ID = "GetUser",
+            user_id_ = apfa[2]
+          }, idinfocallbackfa, {
+            chat_id = msg.chat_id_
+          })
+end	end					
+--------------------------------------------------------
 if  text:match("^رسايلي$") or text:match("^رسائلي$")  then 
 if not database:get('lock:add'..msg.chat_id_) then
 local msgs = database:get("msgs:"..msg.sender_user_id_..":"..msg.chat_id_)
@@ -13969,7 +13996,7 @@ local KEEPER = {"شطبخلك/ج  🙊😋" }
 send(msg.chat_id_, msg.id_, 1,''..KEEPER[math.random(#KEEPER)]..'', 1, 'md')
 end
 end
------------------------------------------ 
+-----------------------------------------
         if text == "ههه" or text == "هههه" or text == "ههههه" or text == "هههههه" or text == "ههههههه" then
         	if not database:get('lock:add'..msg.chat_id_) then 
 local KEEPER = {"دووم الضحكه 🙊🍃","دوم الضحكه ℡̮⇣┆👑😻⇣ۦ ٰ" }
