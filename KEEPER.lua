@@ -11556,23 +11556,6 @@ end
             send(msg.chat_id_, msg.id_, 1, "⇗<code>معلومات حول البوت⇖</code> \n\n⚙️↲ <b>المجموعات</b> : " .. gps .. "\n\n📧↲ الرسائل  : " .. allmgs .. "\n\n🚭↲ <b>الخروج التلقائي</b> : " .. autoleaveAR .. "\n\n⛓↲ <b>الكليشه</b> : " .. clerkAR .. "\n\n♻️↲  الدخول للقناة : " .. joinchannelAR .. "\n\n📊↲  الدخول عبر الرابط : " .. joinbylinkAR .. "\n\n☜<code>معلومات السيرفر</code>☞ :\n\n⇦ <b>اليوزر </b>: " .. usersv .. "\n\n⇦ <b>وقت التشغيل</b> : " .. ResultUptimeServer .. "" , 1, "html")
           end
         end end
-        if is_sudo(msg) and (text:match("^[Rr]esgp$") or text:match("^تحديث المجموعات$")) then
-        				 if not database:get('lock:add'..msg.chat_id_) then  
-		  if database:get("lang:gp:" .. msg.chat_id_) then
-            send(msg.chat_id_, msg.id_, 1, "✸↓ Nubmber of Groups bot \n has been *Updated* 🎈", 1, "md")
-          else
-            send(msg.chat_id_, msg.id_, 1, "🌀║ <code>تم تحديث عدد المجموعات </code>📍 ", 1, "html")
-          end
-          database:del("bot:groups")
-        end
-        if is_sudo(msg) and (text:match("^[Rr]esmsg$") or text:match("^تحديث الرسائل$")) then
-          database:del("bot:allmsgs")
-          if database:get("lang:gp:" .. msg.chat_id_) then
-            send(msg.chat_id_, msg.id_, 1, "🌀║  All msg Received has been *Reset* 📍 ", 1, "md")
-          else
-            send(msg.chat_id_, msg.id_, 1, "🌀║ <code>تم تحديث ✅ جميع الرسائل </code>📍 ", 1, "html")
-          end
-        end end
 ----------------------------------------------------------		
         if is_momod(msg.sender_user_id_, msg.chat_id_) and (text:match("^[Ss]etlang (.*)$") or text:match("^ضع لغه (.*)$")) then
           				 if not database:get('lock:add'..msg.chat_id_) then
