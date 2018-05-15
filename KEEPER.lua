@@ -5,9 +5,9 @@
 | . \  | |___  | |___  |  __/  | |___  |  _ <
 |_|\_\ |_____| |_____| |_|     |_____| |_| \_\
 تم كتابه وبرمجة السورس بوسطه المطور 
-القيصر كرار 
-WRITING THE SOURCE BY : @LLX8XLL
-CH SOURCE : @KEEPER_CH
+القيصر علي 
+WRITING THE SOURCE BY : @KENAYY
+CH SOURCE : @DKBSSK
 
 ]]--
 local Ayatol_Korsi = "karrar alqaser develop source Keeper language lua "
@@ -422,9 +422,9 @@ print("\27[0;31m>>"..[[
 print("\27[0;35m>>"..[[
 تم كتابه السورس بوسطه المطور 
 القيصر كرار 
-WRITING THE SOURCE BY : @LLX8XLL
-CH SOURCE : @KEEPER_CH 
-- عمر السراي = @blcon
+WRITING THE SOURCE BY : @KENAYY
+CH SOURCE : @DKBSSK 
+- القيصر علي = @Ail_Jassim
 
 ]].."\n\027[00m")
       
@@ -10911,20 +10911,20 @@ if text:match("^رابط حذف$") or text:match("^رابط الحذف$") or tex
 ]]
                 send(msg.chat_id_, msg.id_, 1, text, 1, 'md')
 end end
-		if text:match("^السورس$") or text:match("^مطور السورس$") or text:match("^ياسورس$") or  text:match("^سورس كيبر$") or text:match("^اريد سورس$") then
+		if text:match("^السورس$") or text:match("^مطور السورس$") or text:match("^ياسورس$") or  text:match("^سورس كيناي$") or text:match("^اريد سورس$") then
             if not database:get('lock:add'..msg.chat_id_) then
    local text =  [[
    ‏
    ‏
-🔍┊ اهلاً بك في سورس كيبر❗️
+🔍┊ اهلاً بك في سورس كيناي❗️
 🌀┊ اقوى السورسات العربية..
 
 🔰┊السورس من تطوير✔️
 
-[👷┊القيصر : keePer](T.ME/llX8Xll)
-[🔎┊بوت تواصل الفريق](T.ME/lqlxlqlbot)
+[👷┊القيصر : keePer](T.ME/Ail_Jassim)
+[🔎┊بوت تواصل الفريق](T.ME/XO_BUTPbot)
 
-[💲┊ قناٌة السوٰٰرسٰ](T.ME/keeper_ch) 
+[💲┊ قناٌة السوٰٰرسٰ](T.ME/KENAYY) 
 
 [💢┊ رابط حساب Github](https://github.com/alqaser/KEEPER)								
 ‏
@@ -10935,7 +10935,7 @@ end end
 				if text:match("^الاوامر$") and is_momod(msg.sender_user_id_, msg.chat_id_) then
             if not database:get('lock:add'..msg.chat_id_) then
    local text = [[
-<b>👷‍♂️╎ اهلا بك في سورس كيبر 💯</b>
+<b>👷‍♂️╎ اهلا بك في سورس كينام 💯</b>
 
 《 الاوامر كالتالـي : ✔️》
    
@@ -10959,7 +10959,7 @@ end end
    if text:match("^م1$") and is_momod(msg.sender_user_id_, msg.chat_id_) then
             if not database:get('lock:add'..msg.chat_id_) then
    local text = [[
-<b>👷‍♂️╎ اهلا بك في سورس كيبر 💯</b>
+<b>👷‍♂️╎ اهلا بك في سورس كينام 💯</b>
 
 ※ ╎ الآوامر الحمايۿ كالتالي :- 
 《 استخدم (قفل\فتح) + الامر 》
@@ -10997,7 +10997,7 @@ end end
 if text:match("^م2$") and is_momod(msg.sender_user_id_, msg.chat_id_) then
             if not database:get('lock:add'..msg.chat_id_) then
    local text = [[
-<b>👷‍♂️╎ اهلا بك في سورس كيبر 💯</b>
+<b>👷‍♂️╎ اهلا بك في سورس كينام 💯</b>
 
 (( اوامر الرفع كالتالي : ✔️))
 
@@ -11027,7 +11027,7 @@ if text:match("^م2$") and is_momod(msg.sender_user_id_, msg.chat_id_) then
   if text:match("^م3$") and is_momod(msg.sender_user_id_, msg.chat_id_) then
             if not database:get('lock:add'..msg.chat_id_) then
    local text = [[
-<b>👷‍♂️╎ اهلا بك في سورس كيبر 💯</b>
+<b>👷‍♂️╎ اهلا بك في سورس كينام 💯</b>
 
 (( اوامر الحظر كالتالي : ✔️))
 
@@ -11062,7 +11062,7 @@ if text:match("^م2$") and is_momod(msg.sender_user_id_, msg.chat_id_) then
   if text:match("^م4$") and is_momod(msg.sender_user_id_, msg.chat_id_) then
             if not database:get('lock:add'..msg.chat_id_) then
    local text = [[
-<b>👷‍♂️╎ اهلا بك في سورس كيبر 💯</b>
+<b>👷‍♂️╎ اهلا بك في سورس كينام 💯</b>
 
 (( اوامر العرض كالتالي : ✔️))
 
@@ -11164,7 +11164,7 @@ if text:match("^م5$") and is_momod(msg.sender_user_id_, msg.chat_id_) then
 if text:match("^م7$") and is_momod(msg.sender_user_id_, msg.chat_id_) then
             if not database:get('lock:add'..msg.chat_id_) then
    local text = [[
-<b>👷‍♂️╎ اهلا بك في سورس كيبر 💯</b>
+<b>👷‍♂️╎ اهلا بك في سورس كينام 💯</b>
 
 (( اوامر الاخرى كالتالي
 
@@ -11209,7 +11209,7 @@ if text:match("^م7$") and is_momod(msg.sender_user_id_, msg.chat_id_) then
 if text:match("^help$") and is_momod(msg.sender_user_id_, msg.chat_id_) then
    
    local text = [[
- *Hello in source KEEPER*🏌️
+ *Hello in source KENAYY*🏌️
 ━─────────━
 اوامر اللغه الانكليزيه هي:
 🔸 *aa* : لعرض اوامر الحمايه
@@ -11220,14 +11220,14 @@ if text:match("^help$") and is_momod(msg.sender_user_id_, msg.chat_id_) then
 
 🔸 *a3* : لعرض الاوامر الاخرى
 ━─────────━
-✸. *sudo source* : @llX8Xll
+✸. *sudo source* : @KENAYY
 ]]
                 send(msg.chat_id_, msg.id_, 1, text, 1, 'md')
    end 
   if text:match("^a2$") and is_momod(msg.sender_user_id_, msg.chat_id_) then
    
    local text = [[
- *Hello in source KEEPER*🏌️
+ *Hello in source KENAYY*🏌️
 ━─────────━
 اوامر الحظر :
 
@@ -11246,7 +11246,7 @@ if text:match("^help$") and is_momod(msg.sender_user_id_, msg.chat_id_) then
 
 🔹 unmute : الغاء الكتم 
 ━─────────━
-✸. *sudo source* : @llX8Xll
+✸. *sudo source* : @KENAYY
 
 ]]
                 send(msg.chat_id_, msg.id_, 1, text, 1, 'md')
@@ -11254,7 +11254,7 @@ if text:match("^help$") and is_momod(msg.sender_user_id_, msg.chat_id_) then
 				 if text:match("^aa$") and is_momod(msg.sender_user_id_, msg.chat_id_) then
    
    local text = [[
- *Hello in source KEEPER*🏌️
+ *Hello in source KENAYY*🏌️
 ━─────────━
 اوامر الحمايه [antispam] :
 استخدم *lock* + الامر للقفل or
@@ -11291,14 +11291,14 @@ if text:match("^help$") and is_momod(msg.sender_user_id_, msg.chat_id_) then
 ✸ `Contact`
 ✸ `Sticker`
 ━─────────━
-✸. *sudo source* : @llX8Xll
+✸. *sudo source* : @KENAYY
 ]]
                 send(msg.chat_id_, msg.id_, 1, text, 1, 'md')
    end 
  if text:match("^a3$") and is_momod(msg.sender_user_id_, msg.chat_id_) then
    
    local text = [[
- *Hello in source KEEPER*🏌️
+ *Hello in source KENAYY*🏌️
 ━─────────━
 اوامر الاخرى : 
 
@@ -11330,14 +11330,14 @@ if text:match("^help$") and is_momod(msg.sender_user_id_, msg.chat_id_) then
 ▪️ filter : لمنع كلمه
 ▪️ unfilter :الغاء منع
 ━─────────━
-✸. *sudo source* : @llX8Xll
+✸. *sudo source* : @KENAYY
 ]]
                 send(msg.chat_id_, msg.id_, 1, text, 1, 'md')
    end
   if text:match("^a1$") and is_momod(msg.sender_user_id_, msg.chat_id_) then
    
    local text = [[
- *Hello in source KEEPER*🏌️
+ *Hello in source KENAYY*🏌️
 ━─────────━
 اوامر  الرفع :
 ✪ setowner : رفع مدير 
@@ -11357,7 +11357,7 @@ if text:match("^help$") and is_momod(msg.sender_user_id_, msg.chat_id_) then
 ✪ remvip : لتنزل العضو
 
 ━─────────━
-✸. *sudo source* : @llX8Xll
+✸. *sudo source* : @KENAYY
 ]]
                 send(msg.chat_id_, msg.id_, 1, text, 1, 'md')
    end  
@@ -13829,189 +13829,189 @@ send(msg.chat_id_, msg.id_, 1, "🔎║ رسـائلك : ( *"..msgs.."* ) رسا
         if text == "السلام عليكم" or text == "سلام عليكم" or text == "سلام" then
       if not database:get('lock:add'..msg.chat_id_) then  	
 local KEEPER = {"وعليكم السلام والرحمه⇣😻","يمه هلا بالغالي 😻🍃","وعليكم السلام حبيبي ☺️🍃","كافي بس تسلمون 🌝💔" }
-send(msg.chat_id_, msg.id_, 1,''..KEEPER[math.random(#KEEPER)]..'', 1, 'md')
+send(msg.chat_id_, msg.id_, 1,''..KENAYY[math.random(#KENAYY)]..'', 1, 'md')
 end
 end
 ----------------------------------------- 
         if text == "هلو" or text == "هيلو" or text == "هاي" or text == "هلاو" then
    if not database:get('lock:add'..msg.chat_id_) then     	
 local KEEPER = {"هلووووات  ⁽🙆‍♂✨₎ֆ","يمه هلا بالعافيه 😻🍃","لا هلا ولا مرحبه شلونك مشتاقين 😻😂","اخلاً وصخلا 😌😂" }
-send(msg.chat_id_, msg.id_, 1,''..KEEPER[math.random(#KEEPER)]..'', 1, 'md')
+send(msg.chat_id_, msg.id_, 1,''..KENAYY[math.random(#KENAYY)]..'', 1, 'md')
 end
 end
 -----------------------------------------
         if text == "شلونك" or text == "شلونكم" or text == "شلونج" or text == "شونج" then
         	if not database:get('lock:add'..msg.chat_id_) then
 local KEEPER = {"تمام وانت/ي 😘🍃","شعليك انت 🧐😂","بخير انت/ي شلونك/ج ☺️","تمام وانت/ي ‏ ᵛ͢ᵎᵖ💛﴾" }
-send(msg.chat_id_, msg.id_, 1,''..KEEPER[math.random(#KEEPER)]..'', 1, 'md')
+send(msg.chat_id_, msg.id_, 1,''..KENAYY[math.random(#KENAYY)]..'', 1, 'md')
 end
 end
 ----------------------------------------- 
         if text == "بوت" or text == "هذا بوت" then
         	if not database:get('lock:add'..msg.chat_id_) then
 local KEEPER = {"عـٰٰـٰود لوتُٰي 🙀 يـٰگول بُِوت عبالـٰه طافٰـُٰي💔 ويضِٰل يمٰـٓسلت وينشٰٰر روابـٰٓط 😳🍃","كافي تره صارت ماصخه 🙁🍃","اي بوت شتريد 😤","سمعتك كافي لتلح 😡" }
-send(msg.chat_id_, msg.id_, 1,''..KEEPER[math.random(#KEEPER)]..'', 1, 'md')
+send(msg.chat_id_, msg.id_, 1,''..KENAYY[math.random(#KENAYY)]..'', 1, 'md')
 end
 end
 ----------------------------------------- 
         if text == "غني" or text == "غنيلي" then
         	if not database:get('lock:add'..msg.chat_id_) then
 local KEEPER = {"شكلولك عليه كاولي 😶😂","صوتي محلو للاسف 😌💔","اشعجـب كاطع بيه ياراحتي النفسيه 😂💔","حرام  الغنا 😐🍃" }
-send(msg.chat_id_, msg.id_, 1,''..KEEPER[math.random(#KEEPER)]..'', 1, 'md')
+send(msg.chat_id_, msg.id_, 1,''..KENAYY[math.random(#KENAYY)]..'', 1, 'md')
 end
 end
 -----------------------------------------
         if text == "باي" or text == "رايح" then
         	if not database:get('lock:add'..msg.chat_id_) then
 local KEEPER = {"بايات 💛🍃","گلعه 😶💔","الله الله الله وياك 😻😂","ثيمالا 🌝✋🏾" }
-send(msg.chat_id_, msg.id_, 1,''..KEEPER[math.random(#KEEPER)]..'', 1, 'md')
+send(msg.chat_id_, msg.id_, 1,''..KENAYY[math.random(#KENAYY)]..'', 1, 'md')
 end
 end
 ----------------------------------------- 
        if text == "جاو" or text == "ججاو" then
        	if not database:get('lock:add'..msg.chat_id_) then
 local KEEPER = {"منو ال أجوو👀😹","جااااوات  ₎✿💥😈 ❥" }
-send(msg.chat_id_, msg.id_, 1,''..KEEPER[math.random(#KEEPER)]..'', 1, 'md')
+send(msg.chat_id_, msg.id_, 1,''..KENAYY[math.random(#KENAYY)]..'', 1, 'md')
 end
 end
 ----------------------------------------- 
         if text == "نورت" or text == "منور" or text == "منوره" or text == "نورتي" then
      if not database:get('lock:add'..msg.chat_id_) then    	
 local KEEPER = {"نورك/ج هذا ورده 🌝🍃","بوجودك/غلا تسلم 😻✨","انت/ي اصل النور 😋🍃","عماني نورك 😣😂" }
-send(msg.chat_id_, msg.id_, 1,''..KEEPER[math.random(#KEEPER)]..'', 1, 'md')
+send(msg.chat_id_, msg.id_, 1,''..KENAYY[math.random(#KENAYY)]..'', 1, 'md')
 end
 end
 -----------------------------------------
         if text == "بوسني" or text == "بوسه" then
         	
-if not database:get('lock:add'..msg.chat_id_) then local KEEPER = {"مووووووووواححح💋😻","مابوس ولي😌😹","خدك/ج نضيف 😂🍃","البوسه بالف حمبي 🌝💋" }
-send(msg.chat_id_, msg.id_, 1,''..KEEPER[math.random(#KEEPER)]..'', 1, 'md')
+if not database:get('lock:add'..msg.chat_id_) then local KENAYY = {"مووووووووواححح💋😻","مابوس ولي😌😹","خدك/ج نضيف 😂🍃","البوسه بالف حمبي 🌝💋" }
+send(msg.chat_id_, msg.id_, 1,''..KENAYY[math.random(#KENAYY)]..'', 1, 'md')
 end
 end
 ----------------------------------------- 
           if text == "امك" or text == "امج" then
   if not database:get('lock:add'..msg.chat_id_) then         	
 local KEEPER = {"عيـــب 🙀😹","شبيه امك حمبي😋🍃" }
-send(msg.chat_id_, msg.id_, 1,''..KEEPER[math.random(#KEEPER)]..'', 1, 'md')
+send(msg.chat_id_, msg.id_, 1,''..KENAYY[math.random(#KENAYY)]..'', 1, 'md')
 end
 end
 ----------------------------------------- 
         if text == "خالتك" or text == "خالتج" then
     if not database:get('lock:add'..msg.chat_id_) then     	
 local KEEPER = {"شبيه الشكره ام الوصخ 🤭😹","حبيته فدوووه😻","شرايد من خالته 🤭😂","خالته تفلش 😶😹" }
-send(msg.chat_id_, msg.id_, 1,''..KEEPER[math.random(#KEEPER)]..'', 1, 'md')
+send(msg.chat_id_, msg.id_, 1,''..KENAYY[math.random(#KENAYY)]..'', 1, 'md')
 end
 end
 -----------------------------------------
         if text == "تف" or text == "تفف" then
   if not database:get('lock:add'..msg.chat_id_) then       	
 local KEEPER = {"تف عليك ادبسزز 😒😹","لا تتفل على وجهك 😻😹","ما اسمحلك هيلگ 😡😹","بدون تفال رجائاً 😹😹" }
-send(msg.chat_id_, msg.id_, 1,''..KEEPER[math.random(#KEEPER)]..'', 1, 'md')
+send(msg.chat_id_, msg.id_, 1,''..KENAYY[math.random(#KENAYY)]..'', 1, 'md')
 end
 end
 ----------------------------------------- 
         if text == "😂" or text == "😂😂" or text == "😂😂😂😂" or text == "😂😂😂" or text == "😹😹" or text == "😹😹😹" or text == "😹" or text == "😹😹😹😹" then
      if not database:get('lock:add'..msg.chat_id_) then    	
 local KEEPER = {"كافـي ضحــك 😐","لتضحك هواي وتصير فاول 🌝😹","هذ شبي يضحك 🙀😳","اضحك هيه الدنيا خربانه 😂😂" }
-send(msg.chat_id_, msg.id_, 1,''..KEEPER[math.random(#KEEPER)]..'', 1, 'md')
+send(msg.chat_id_, msg.id_, 1,''..KENAYY[math.random(#KENAYY)]..'', 1, 'md')
 end
 end
 ----------------------------------------- 
         if text == "😡" or text == "😡😡" or text == "😡😡😡" or text == "😡😡😡😡" then
       if not database:get('lock:add'..msg.chat_id_) then   	
 local KEEPER = {"لصير عصبي يرتفع ضغطـك 😌😂","صار وجه احمر مثل الطماطه 🙊😹","اوف شحلاتك وانت ضايج 😻","شبي هذا الله يستر 😼😹" }
-send(msg.chat_id_, msg.id_, 1,''..KEEPER[math.random(#KEEPER)]..'', 1, 'md')
+send(msg.chat_id_, msg.id_, 1,''..KENAYY[math.random(#KENAYY)]..'', 1, 'md')
 end
 end
 -----------------------------------------
         if text == "😒" or text == "😒😒" or text == "😒😒😒" or text == "😒😒😒😒" then
         	if not database:get('lock:add'..msg.chat_id_) then 
 local KEEPER = {"لضوج متسوووه 🤭😹","يمه زعلان الحلو ما يكلي مرحبا 😻😹","اعدل وجهك لا اعدله الك/ج 😼👊🏼" }
-send(msg.chat_id_, msg.id_, 1,''..KEEPER[math.random(#KEEPER)]..'', 1, 'md')
+send(msg.chat_id_, msg.id_, 1,''..KENAYY[math.random(#KENAYY)]..'', 1, 'md')
 end
 end
 ----------------------------------------- 
         if text == "🌝" or text == "🌝🌝" then
         	if not database:get('lock:add'..msg.chat_id_) then 
 local KEEPER = {"يمه الگمر عذبني حبه 🙊😻","عو نضيف الوصخ 😹😹","طفي ضواك عميتني 😼😹" }
-send(msg.chat_id_, msg.id_, 1,''..KEEPER[math.random(#KEEPER)]..'', 1, 'md')
+send(msg.chat_id_, msg.id_, 1,''..KENAYY[math.random(#KENAYY)]..'', 1, 'md')
 end
 end
 ----------------------------------------- 
         if text == "💋" or text == "💋💋" then
         if not database:get('lock:add'..msg.chat_id_) then 	
 local KEEPER = {"كبر 🙀 جان استحيتو 😹😹","عســـل 😋🙊" }
-send(msg.chat_id_, msg.id_, 1,''..KEEPER[math.random(#KEEPER)]..'', 1, 'md')
+send(msg.chat_id_, msg.id_, 1,''..KENAYY[math.random(#KENAYY)]..'', 1, 'md')
 end
 end
 -----------------------------------------
         if text == "💔" or text == "💔💔" then
         if not database:get('lock:add'..msg.chat_id_) then 	
 local KEEPER = {"شبي مكسور 😔💔","موجوع كلبي والتعب بيه 😔😹","اكل بصل وانسه الحصل 😻😹" }
-send(msg.chat_id_, msg.id_, 1,''..KEEPER[math.random(#KEEPER)]..'', 1, 'md')
+send(msg.chat_id_, msg.id_, 1,''..KENAYY[math.random(#KENAYY)]..'', 1, 'md')
 end
 end
 ----------------------------------------- 
          if text == "😻" or text == "😻😻" or text == "😍😍" or text == "😍" then
       if not database:get('lock:add'..msg.chat_id_) then    	
 local KEEPER = {"شوفو الحب صاعد فول 😻😹","ها ناوي تزحف 😹😹","فدوووه لهاي العيون 🙊😻" }
-send(msg.chat_id_, msg.id_, 1,''..KEEPER[math.random(#KEEPER)]..'', 1, 'md')
+send(msg.chat_id_, msg.id_, 1,''..KENAYY[math.random(#KENAYY)]..'', 1, 'md')
 end
 end
 ----------------------------------------- 
         if text == "😐" or text == "🙂" then
         	if not database:get('lock:add'..msg.chat_id_) then 
 local KEEPER = {"شبيك حبيبي 😂💔","منور محمد الاعمى 😐😹" }
-send(msg.chat_id_, msg.id_, 1,''..KEEPER[math.random(#KEEPER)]..'', 1, 'md')
+send(msg.chat_id_, msg.id_, 1,''..KENAYY[math.random(#KENAYY)]..'', 1, 'md')
 end
 end
 -----------------------------------------
         if text == "لا" or text == "لاا" then
      if not database:get('lock:add'..msg.chat_id_) then    	
 local KEEPER = {"انجــب اي 😒😹","اي صحيح لا 🙊😹" }
-send(msg.chat_id_, msg.id_, 1,''..KEEPER[math.random(#KEEPER)]..'', 1, 'md')
+send(msg.chat_id_, msg.id_, 1,''..KENAYY[math.random(#KENAYY)]..'', 1, 'md')
 end
 end
 ----------------------------------------- 
         if text == "جوعان" or text == "جوعانه" then
         	if not database:get('lock:add'..msg.chat_id_) then 
 local KEEPER = {"شطبخلك/ج  🙊😋" }
-send(msg.chat_id_, msg.id_, 1,''..KEEPER[math.random(#KEEPER)]..'', 1, 'md')
+send(msg.chat_id_, msg.id_, 1,''..KENAYY[math.random(#KENAYY)]..'', 1, 'md')
 end
 end
 -----------------------------------------
         if text == "ههه" or text == "هههه" or text == "ههههه" or text == "هههههه" or text == "ههههههه" then
         	if not database:get('lock:add'..msg.chat_id_) then 
 local KEEPER = {"دووم الضحكه 🙊🍃","دوم الضحكه ℡̮⇣┆👑😻⇣ۦ ٰ" }
-send(msg.chat_id_, msg.id_, 1,''..KEEPER[math.random(#KEEPER)]..'', 1, 'md')
+send(msg.chat_id_, msg.id_, 1,''..KENAYY[math.random(#KENAYY)]..'', 1, 'md')
 end
 end
 -----------------------------------------
         if text == "كيبر" or text == "keeper" then
         	if not database:get('lock:add'..msg.chat_id_) then 
 local KEEPER = {"عيون 👀 كيبر امرني 🤠🍃","اي تفضل اغاتي🌝🍃","شرايد مني 😐💔","ها حياتي😻🍃" }
-send(msg.chat_id_, msg.id_, 1,''..KEEPER[math.random(#KEEPER)]..'', 1, 'md')
+send(msg.chat_id_, msg.id_, 1,''..KENAYY[math.random(#KENAYY)]..'', 1, 'md')
 end
 end
 ----------------------------------------- 
         if text == "اكلك" or text == "اكلج" then
         	if not database:get('lock:add'..msg.chat_id_) then 
 local KEEPER = {"اي غرد/ي دا اسمع 👂🏽😹","كول😹 (كول لو هدف)😔😹","ها حياتي 🙊" }
-send(msg.chat_id_, msg.id_, 1,''..KEEPER[math.random(#KEEPER)]..'', 1, 'md')
+send(msg.chat_id_, msg.id_, 1,''..KENAYY[math.random(#KENAYY)]..'', 1, 'md')
 end
 end
 ----------------------------------------- 
         if text == "شبيك" or text == "شبيك انت" then
         	if not database:get('lock:add'..msg.chat_id_) then 
 local KEEPER = {"انت/ي شبيك/ج😣","مابيه شي تسلم 💋😹" }
-send(msg.chat_id_, msg.id_, 1,''..KEEPER[math.random(#KEEPER)]..'', 1, 'md')
+send(msg.chat_id_, msg.id_, 1,''..KENAYY[math.random(#KENAYY)]..'', 1, 'md')
 end
 end
 ----------------------------------------
 if text == "🌚💔" or text == "💔" then
          if not database:get('lock:add'..msg.chat_id_) then 
 local KEEPER = {"هم اجانه محترك وجه😂♥️","هاي منو كاسر كلبك😡","اهو هم اجانه صخام🐸👌" }
-send(msg.chat_id_, msg.id_, 1,''..KEEPER[math.random(#KEEPER)]..'', 1, 'md')
+send(msg.chat_id_, msg.id_, 1,''..KENAYY[math.random(#KENAYY)]..'', 1, 'md')
 end
 end
 ---------------------------------------
@@ -14025,14 +14025,14 @@ end
 if text == "😢" or text == "😢😢" then
          if not database:get('lock:add'..msg.chat_id_) then 
 local KEEPER = {"يبجي دلوع😜😹","هاي عود انت جبير كاعد تبجي😑💔","لتلح درينه تبجي😒"}
-send(msg.chat_id_, msg.id_, 1,''..KEEPER[math.random(#KEEPER)]..'', 1, 'md')
+send(msg.chat_id_, msg.id_, 1,''..KENAYY[math.random(#KENAYY)]..'', 1, 'md')
 end
 end
 --------------------------------------
 if text == "ميتين" or text == "اصنام" then
          if not database:get('lock:add'..msg.chat_id_) then 
 local KEEPER = {"علساس انت متفاعل😒😒","اي عندك اعتراض🤔","اني معليه احرسكم😎" }
-send(msg.chat_id_, msg.id_, 1,''..KEEPER[math.random(#KEEPER)]..'', 1, 'md')
+send(msg.chat_id_, msg.id_, 1,''..KENAYY[math.random(#KENAYY)]..'', 1, 'md')
 end
 end
 ------------------------------------
@@ -14046,28 +14046,28 @@ end
 if text == "اجه" or text == "اجت" then
          if not database:get('lock:add'..msg.chat_id_) then 
 local KEEPER = {"اهو لا هلا بيه ✨😂","خي ولي مزاعله ✨😂","اهلا بيه بس اطرده اذا اجه😒😂" }
-send(msg.chat_id_, msg.id_, 1,''..KEEPER[math.random(#KEEPER)]..'', 1, 'md')
+send(msg.chat_id_, msg.id_, 1,''..KENAYY[math.random(#KENAYY)]..'', 1, 'md')
 end
 end
 ------------------------------------------------------------
 if text == "الخميس" or text == "خميس" then
          if not database:get('lock:add'..msg.chat_id_) then 
 local KEEPER = {"وخرو وخرو🤓 هلا بلخميس تيرارا وياي يلا😍😹","هلا بلخميس عطله وكذا ركصو يلا😍😂" }
-send(msg.chat_id_, msg.id_, 1,''..KEEPER[math.random(#KEEPER)]..'', 1, 'md')
+send(msg.chat_id_, msg.id_, 1,''..KENAYY[math.random(#KENAYY)]..'', 1, 'md')
 end
 end
 -----------------------------------------
 if text == "🙊" or text == "🙈" then
          if not database:get('lock:add'..msg.chat_id_) then 
 local KEEPER = {"اول مره اشوف قرد يستحي🤔😂","ما مرجيه منك هايه صاير تستحي انته هوايه 😍😂😂" }
-send(msg.chat_id_, msg.id_, 1,''..KEEPER[math.random(#KEEPER)]..'', 1, 'md')
+send(msg.chat_id_, msg.id_, 1,''..KENAYY[math.random(#KENAYY)]..'', 1, 'md')
 end
 end
 --------------------------------------
 if text == "ممكن نزوج" or text == "ممكن نرتبط" then
          if not database:get('lock:add'..msg.chat_id_) then 
 local KEEPER = {"ها ها يمعودين احنه هنا😒😹","اعتقد اكو خاص وخطبو وهنا زفه بسيارتي🚗😂" }
-send(msg.chat_id_, msg.id_, 1,''..KEEPER[math.random(#KEEPER)]..'', 1, 'md')
+send(msg.chat_id_, msg.id_, 1,''..KENAYY[math.random(#KENAYY)]..'', 1, 'md')
 end
 end
 ----------------------------------------------------------	   
