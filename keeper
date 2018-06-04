@@ -49,7 +49,7 @@ prtbrown() {
       sudo luarocks install dkjson
       sudo luarocks install lanes
       sudo luarocks install Lua-cURL
-	  sudo luarocks install lua-cjson
+	  sudo luarocks install lua-cjson2
 	  sudo luarocks install fakeredis
 	  sudo luarocks install ltn12
       cd ..
