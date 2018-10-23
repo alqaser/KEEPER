@@ -4883,7 +4883,7 @@ if redis:get(KEEPER.."post:lock" .. msg.chat_id_) then
 local id = msg.id_
 local msgs = {
 [0] = id
-}
+ }
 local chat = msg.chat_id_
 delete_msg(chat, msgs)
 print_del_msg("Deleted Because [Lock] [Post]")
@@ -6081,7 +6081,7 @@ keeper = [[
 🔰┊قم بأضافة  البوت الى المجموعه ،
 🌀┊ثم ارسل (تفعيل) او راسل المطور،
 ✔️┊لكي يتم تفعيله فْـي المجموعـِْـْه'
-🔱┊*مطور البوت* » ( ]] .. UserKeeper .. [[ )‏
+🔱┊*مطور البوت* » ( []] .. UserKeeper .. [[] )‏
 ‏
 ‏]]
 send(msg.chat_id_, msg.id_, 1, keeper, 1, 'md')
