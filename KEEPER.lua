@@ -3569,9 +3569,6 @@ end
 if redis:get(KEEPER.."bot:member:lock" .. msg.chat_id_) and not is_vipmem(msg.content_.members_[0].id_, msg.chat_id_) and not is_vipmem(msg.sender_user_id_, msg.chat_id_) then
 chat_kick(msg.chat_id_, msg.content_.members_[0].id_)
 end
-if is_bot(msg.content_.members_[0].id_) and not is_admin(msg.sender_user_id_) then
-chat_leave(msg.chat_id_, bot_id)
-end
 if is_banned(msg.content_.members_[0].id_, msg.chat_id_) then
 chat_kick(msg.chat_id_, msg.content_.members_[0].id_)
 end
