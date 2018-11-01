@@ -752,6 +752,16 @@ end
 end
 return false
 end
+function forwardMessages(chat_id, from_chat_id, message_ids, disable_notification)
+  tdcli_function ({
+    ID = "ForwardMessages",
+    chat_id_ = chat_id,
+    from_chat_id_ = from_chat_id,
+    message_ids_ = message_ids, -- vector
+    disable_notification_ = disable_notification,
+    from_background_ = 1
+  }, dl_cb, nil)
+end
 ------------------------sendRequest
 local sendRequest = function(request_id, chat_id, reply_to_message_id, disable_notification, from_background, reply_markup, input_message_content, callback, extra)
 tdcli_function({
@@ -926,12 +936,6 @@ user_id_ = user_id
 }
 }, dl_cb, nil)                                ----- By KEEPER-----
 end
-function rem_group(chat_id)
-redis:srem(KEEPER..'bot:groups',chat_id)
-end
-function add_group(chat_id)
-redis:sadd(KEEPER..'bot:groups',chat_id)
-end
 local sendPhoto = function(chat_id, reply_to_message_id, disable_notification, from_background, reply_markup, photo, caption)
 tdcli_function({
 ID = "SendMessage",
@@ -1012,34 +1016,34 @@ end
 --------------function retba---------------------------------
 local tmkeeper = function(msg)
 if is_KpiD(msg.sender_user_id_) then
-keeper  = "المطور الاساسي🍃"
+keeper  = "المطور 🌿"
 elseif is_sudoid(msg.sender_user_id_) then
-keeper = "المطور 🍃"
+keeper = "المطور 🌿"
 elseif is_admin(msg.sender_user_id_) then
-keeper = "الادمن 🍃"
+keeper = "الادمن 🐾"
 elseif is_vipmems(msg.sender_user_id_) then
-keeper = "مميز عام 🍃"
+keeper = "مميز عام 🐾"
 elseif is_monshi(msg.sender_user_id_, msg.chat_id_) then
-keeper = "المنشىء 🍃"
+keeper = "المنشىء 🌿"
 elseif is_owner(msg.sender_user_id_, msg.chat_id_) then
-keeper = "المدير 🍃"
+keeper = "المدير 🌿"
 elseif is_momod(msg.sender_user_id_, msg.chat_id_) then
-keeper = "الادمن 🍃"
+keeper = "الادمن 🐾"
 elseif is_vipmem(msg.sender_user_id_, msg.chat_id_) then
-keeper = "عضو مميز 🍃 "
+keeper = "عضو مميز 🌿 "
 else
-keeper = "عضو 🛩"
+keeper = "عضو 🐾"
 end
 return keeper
 end
 ----------------KP_TM_NM----BY KEEPER-----------------------------------
 local KP_TM_NM = function(msgs)
-if msgs < 100 then KP_TM = 'ضعيف جدا'
-elseif msgs < 200 then KP_TM = 'ضعيف' elseif msgs < 555 then KP_TM = 'متفاعل'
-elseif msgs < 1000 then KP_TM = 'متفاعل' elseif msgs < 2000 then KP_TM = 'استمر بالتفاعل'
-elseif msgs < 7000 then KP_TM = 'متفاعل' elseif msgs < 20000 then KP_TM = 'روعه'
-elseif msgs < 40000 then KP_TM = 'حيل متفاعل' elseif msgs < 70000 then KP_TM = 'قوي'
-elseif msgs < 100000 then KP_TM = 'اقوى تفاعل' elseif msgs < 200000 then KP_TM = 'التفاعل الامثل'
+if msgs < 100 then KP_TM = 'ضعيف جدا 🌿'
+elseif msgs < 200 then KP_TM = 'ضعيف' elseif msgs < 555 then KP_TM = 'متفاعل 🔥'
+elseif msgs < 1000 then KP_TM = 'متفاعل ✨' elseif msgs < 2000 then KP_TM = 'استمر بالتفاعل⚡️'
+elseif msgs < 7000 then KP_TM = 'متفاعل 🌙'elseif msgs < 20000 then KP_TM = 'روعه 💪'
+elseif msgs < 40000 then KP_TM = 'اقوى تفاعل 👏🏻' elseif msgs < 70000 then KP_TM = 'ناري 😻'
+elseif msgs < 100000 then KP_TM = 'اقوى تفاعل 😽' elseif msgs < 200000 then KP_TM = 'التفاعل الامثل 🤸‍♂️'
 end
 return KP_TM
 end
@@ -1288,19 +1292,23 @@ chat_id_ = chat_id,
 remove_from_chat_list_ = 0
 }, cb or dl_cb, nil)
 end
-local getChatHistory = function(chat_id, from_message_id, offset, limit, cb)
-if not limit or limit > 100 then
-limit = 100
+function getChatHistory(chat_id, from_message_id, offset, limit,cb)
+  tdcli_function ({
+    ID = "GetChatHistory",
+    chat_id_ = chat_id,
+    from_message_id_ = from_message_id,
+    offset_ = offset,
+    limit_ = limit
+  }, cb, nil)
 end
-tdcli_function({
-ID = "GetChatHistory",
-chat_id_ = chat_id,
-from_message_id_ = from_message_id,
-offset_ = offset or 0,
-limit_ = limit
-}, cb or dl_cb, nil)
+local function changeChannelAbout(channel_id, about, cb, cmd)
+  tdcli_function ({
+    ID = "ChangeChannelAbout",
+    channel_id_ = getChatId(channel_id).ID,
+    about_ = about
+  }, cb or dl_cb, cmd)
 end
-----------------------------sendSticker--------------------------------------------------
+---------------------------sendSticker--------------------------------------------------
 local sendSticker = function(chat_id, reply_to_message_id, disable_notification, from_background, reply_markup, sticker)
 local input_message_content = {
 ID = "InputMessageSticker",
@@ -1526,6 +1534,12 @@ redis:set(KEEPER.."Game:lock" .. chat_id, true)
 redis:set(KEEPER.."bot:cmds" .. chat_id, true)
 redis:set(KEEPER.."bot:duplipost:mute" .. chat_id, true)
 redis:set(KEEPER.."bot:panel" .. chat_id, "three")
+end
+local function exportChatInviteLink(chat_id, cb, cmd)
+  tdcli_function ({
+    ID = "ExportChatInviteLink",
+    chat_id_ = chat_id
+  }, cb or dl_cb, cmd)
 end
 function string:starts(text)
 return text == string.sub(self, 1, string.len(text))
@@ -3569,6 +3583,7 @@ end
 if redis:get(KEEPER.."bot:member:lock" .. msg.chat_id_) and not is_vipmem(msg.content_.members_[0].id_, msg.chat_id_) and not is_vipmem(msg.sender_user_id_, msg.chat_id_) then
 chat_kick(msg.chat_id_, msg.content_.members_[0].id_)
 end
+
 if is_banned(msg.content_.members_[0].id_, msg.chat_id_) then
 chat_kick(msg.chat_id_, msg.content_.members_[0].id_)
 end
@@ -4804,7 +4819,7 @@ send(msg.chat_id_, msg.id_, 1, "🌀┊ تم توجيه رسالتك الى\n` "
 redis:del(KEEPER.."broadcast" .. msg.chat_id_ .. ":" .. msg.sender_user_id_)
 end
 end
---------------------rem  cam broadcast2--------------------------------------------------------------------------------------
+--------------------rem  cam broadcast2--------------------------------------------------------------------------
 if redis:get(KEEPER.."broadcast2" .. msg.chat_id_ .. ":" .. msg.sender_user_id_) then
 if text:match("^الغاء$") then
 send(msg.chat_id_, msg.id_, 1, "🔰- تم الغاء الامر بنجاح🎈 ", 1, "md")
@@ -4826,10 +4841,10 @@ if redis:get(KEEPER.."bot:joinbylink:" .. msg.sender_user_id_) and (msg.content_
 else
 end
 --------------------set cam sudo  ------------------------------------------
-if redis:get(KEEPER.."bot:nerkh" .. msg.chat_id_ .. ":" .. msg.sender_user_id_) then
-redis:del(KEEPER.."bot:nerkh" .. msg.chat_id_ .. ":" .. msg.sender_user_id_)
-local nerkh = msg.content_.text_:match("(.*)")
-redis:set(KEEPER.."nerkh", nerkh)
+if redis:get(KEEPER.."bot:keeper_dev" .. msg.chat_id_ .. ":" .. msg.sender_user_id_) then
+redis:del(KEEPER.."bot:keeper_dev" .. msg.chat_id_ .. ":" .. msg.sender_user_id_)
+local keeper_dev = msg.content_.text_:match("(.*)")
+redis:set(KEEPER.."keeper_dev", keeper_dev)
 send(msg.chat_id_, msg.id_, 1, "🌀┊ تم وضــع كليشه المطور 🎗", 1, "md")
 end
 --------------------check_filter_words---------------------------------------------------------
@@ -5029,7 +5044,7 @@ print("\01[" .. color.white[1] .. ";" .. color.magenta[2] .. "m>>> Lock Cmd Is A
 return false
 end
 end
-if is_momod(msg.sender_user_id_, msg.chat_id_) and not Kp_JoinCh(msg) or is_owner(msg.sender_user_id_, msg.chat_id_) and not Kp_JoinCh(msg) or is_monshi(msg.sender_user_id_, msg.chat_id_) and not Kp_JoinCh(msg) or is_sudo(msg) and not Kp_JoinCh(msg) then
+if is_owner(msg.sender_user_id_, msg.chat_id_) and not Kp_JoinCh(msg) or is_monshi(msg.sender_user_id_, msg.chat_id_) and not Kp_JoinCh(msg) or is_sudo(msg) and not Kp_JoinCh(msg) then
 return false
 end
 -------------------------------leave groups----------------------------------------------------------------------
@@ -5915,6 +5930,40 @@ table.remove(_config.Sudo_Users, getindex(_config.Sudo_Users, k))
 save_on_config()
 load_config()
 end
+-------------------------------------------------------------
+if text:match("^حذف كل الرتب$") and is_monshi(msg.sender_user_id_, msg.chat_id_) and msg.reply_to_message_id_ then
+function delallrtb(extra, result, success)
+redis:srem(KEEPER..'bot:owners:'..msg.chat_id_, result.sender_user_id_)
+redis:srem(KEEPER..'bot:momod:'..msg.chat_id_, result.sender_user_id_)
+redis:srem(KEEPER..'bot:vipmem:'..msg.chat_id_, result.sender_user_id_)
+send(msg.chat_id_, msg.id_, 1, '🌀┊ العضو *('..result.sender_user_id_..')*\n🔰┊ تم حذف كل الرتب عنه ✔️', 1, 'md')
+end
+getMessage(msg.chat_id_, msg.reply_to_message_id_,delallrtb)
+end
+------------------------------------------------------------------------
+if text:match("^حذف كل الرتب @(.*)$") and is_monshi(msg.sender_user_id_, msg.chat_id_) then
+local ap = {string.match(text, "^(حذف كل الرتب) @(.*)$")}
+function delallrtb(extra, result, success)
+if result.id_ then
+redis:srem(KEEPER..'bot:owners:'..msg.chat_id_, result.id_)
+redis:srem(KEEPER..'bot:momod:'..msg.chat_id_, result.id_)
+redis:srem(KEEPER..'bot:vipmem:'..msg.chat_id_, result.id_)
+texts = '🌀┊ العضو *('..result.id_..')*\n🔰┊ تم حذف كل الرتب عنه ✔️'
+else
+texts = '🌀┊ لا يوجد عضو بهذا المعرف 🍃'
+end
+send(msg.chat_id_, msg.id_, 1, texts, 1, 'html')
+end
+resolve_username(ap[2],delallrtb)
+end
+--------------------------------------------------------------------
+if text:match("^حذف كل الرتب (%d+)$") and is_monshi(msg.sender_user_id_, msg.chat_id_) then
+local ap = {string.match(text, "^(حذف كل الرتب) (%d+)$")}
+redis:srem(KEEPER..'bot:owners:'..msg.chat_id_, ap[2])
+redis:srem(KEEPER..'bot:momod:'..msg.chat_id_, ap[2])
+redis:srem(KEEPER..'bot:vipmem:'..msg.chat_id_, ap[2])
+send(msg.chat_id_, msg.id_, 1, '🌀┊ العضو *('..ap[2]..')*\n🔰┊ تم حذف كل الرتب عنه ✔️', 1, 'md')
+end
 ----------------id gP-----------------------------------------
 if text:match("^ايدي المجموعه$") and idf:match("-100(%d+)") then
 if not redis:get(KEEPER..'lock:add'..msg.chat_id_) then
@@ -6067,7 +6116,9 @@ local UserKeeper = user_info_
 if user_info_ then
 local start = redis:get(KEEPER.."startbot")
 if start then
-keep = [[]]..start..[[]]
+keep = [[
+[]]..start..[[]
+]]
 send(msg.chat_id_, msg.id_, 1, keep, 1, 'md')
 else
 keeper = [[
@@ -6551,10 +6602,12 @@ end
 getMessage(msg.chat_id_, msg.reply_to_message_id_, getid_by_reply)
 end
 ----------------ID BY User--------------------------------------------------------------------
-if text:match("^ايدي @(%S+)$")  then
+if text:match("^ايدي @(%S+)$") then
 do
 local ap = {string.match(text, "^(ايدي) @(%S+)$") }
 local id_by_username = function(extra, result)
+local kp_msgss = tonumber(redis:get(KEEPER.."msgs:"..result.id_..":"..msg.chat_id_))
+local Kpcontact = (tonumber(redis:get(KEEPER.."kpaddcon"..msg.chat_id_..":"..result.id_) or 0))
 if result.id_ then
 if tonumber(result.id_) == tonumber(Kp_Owner) then
 t = "مطور الاساسـي 🍃"
@@ -6577,14 +6630,14 @@ t = "عضو 🍃"
 end end
 local gpid = tostring(result.id_)
 if gpid:match("^(%d+)") then
-text = "💠┊ الايدي » *(" .. result.id_ .. ")*\n🎫┊ الرتبه » *" .. t .. "*\n"
+text = "🎟╏ ⌍ العضو ⌌ » [@" .. ap[2] .. "]\n📩╏ ⌏ رسائله ⌎ » *" .. kp_msgss .. "*\n🗯╏ ⌍ جهاتـه ⌌ » *"..Kpcontact.."*\n⚙️╏ ⌏ تفاعله ⌎ » " .. KP_TM_NM(kp_msgss) .. "\n⚠️╏ ⌍ ايديــه⌌ » `" .. result.id_ .. "`\n📌╏ ⌏ موقعه⌎ » " .. t .. "\n╍ ╍ ╍ ╍ ╍ ╍ ╍ ╍ ╍ ╍\n"
 elseif not result.id_ then
-text = "🌀┊ المعرف غير صحيح   "
+text = "🌀┊ لا يوجد عضو بهذا المعرف"
 end
 send(msg.chat_id_, msg.id_, 1, text, 1, "md")
 end
 resolve_username(ap[2], id_by_username)
-end else end
+end else end 
 ----------------- RTBA BY USER-----------------------------------------------------------------
 if text:match("^الرتبه @(%S+)$")  then
 do
@@ -6707,48 +6760,48 @@ username = "@" .. result.username_
 elseif redis:get(KEEPER.."lang:gp:" .. msg.chat_id_) then
 username = "Not Found"
 else
-username = "لا يوجد؟"
+username = "Not Found"
 end
-local fname = result.first_name_ or ""
-local lname = result.last_name_ or ""
-local name = fname .. " " .. lname
-redis:set(KEEPER.."Nameuser:" .. msg.chat_id_ .. ":" .. msg.sender_user_id_, name)
 end
 getUser(msg.sender_user_id_, getnameEN)
 local getprofa = function(extra, result)
+local OwnerKP_ = redis:get(KEEPER.."Bot:KpOwnerBot")
+local user_info_ = redis:get(KEEPER.."user:Name" .. OwnerKP_)
+local UserKeeper = user_info_
+if user_info_ then
 if redis:get(KEEPER.."getidstatus" .. msg.chat_id_) == "Photo" then
 if result.photos_[0] then
 if redis:get(KEEPER.."lang:gp:" .. msg.chat_id_) then
-sendPhoto(msg.chat_id_, msg.id_, 0, 1, nil, result.photos_[0].sizes_[1].photo_.persistent_id_, "‏\n🔱┊ ايديك ≈ " .. msg.sender_user_id_ .. "\n🚫┊ معرفك ≈ " .. username .. "\n👨🏼┊ موقعك ≈ " .. tar .. "\n🎆┊ صورك  ≈  "..result.total_count_.." صوره\n🔰┊ جهاتك ≈ ⧼ "..Kpcontact.." ⧽\n🔲┊ تفاعلك ≈ " .. KP_TM_NM(msgs) .. " \n📧┊ رسائلك ≈ (" .. msgs .. ") رساله\n‏", msg.id_, msg.id_, "md")
+sendPhoto(msg.chat_id_, msg.id_, 0, 1, nil, result.photos_[0].sizes_[1].photo_.persistent_id_, "‏\n📌╏ ⌍ صورك ⌌• "..result.total_count_.."\n🗯╏ ⌏ جهاتـك⌎• "..Kpcontact.."\n⚙️╏ ⌍ تفاعلك⌌• " .. KP_TM_NM(msgs) .. " \n💬╏ ⌏ معرفـك⌎• " .. username .. "\n👁‍🗨╏ ⌍ ايديــك⌌• " .. msg.sender_user_id_ .. "\n📩╏ ⌏ رسائلك⌎• " .. msgs .. " رساله\n‏⚠️╏ ⌏ موقعك⌎• " .. tar .. "\n╍ ╍ ╍ ╍ ╍ ╍ ╍ ╍ ╍ ╍\n")
 else
-sendPhoto(msg.chat_id_, msg.id_, 0, 1, nil, result.photos_[0].sizes_[1].photo_.persistent_id_, "‏\n🔱┊ ايديك ≈ " .. msg.sender_user_id_ .. "\n🚫┊ معرفك ≈ " .. username .. "\n👨🏼┊ موقعك ≈ " .. tar .. "\n🎆┊ صورك  ≈  "..result.total_count_.." صوره\n🔰┊ جهاتك ≈ ⧼ "..Kpcontact.." ⧽\n🔲┊ تفاعلك ≈ " .. KP_TM_NM(msgs) .. " \n📧┊ رسائلك ≈ (" .. msgs .. ") رساله\n‏", msg.id_, msg.id_, "md")
+sendPhoto(msg.chat_id_, msg.id_, 0, 1, nil, result.photos_[0].sizes_[1].photo_.persistent_id_, "‏\n📌╏ ⌍ صورك ⌌• "..result.total_count_.."\n🗯╏ ⌏ جهاتـك⌎• "..Kpcontact.."\n⚙️╏ ⌍ تفاعلك⌌• " .. KP_TM_NM(msgs) .. " \n💬╏ ⌏ معرفـك⌎• " .. username .. "\n👁‍🗨╏ ⌍ ايديــك⌌• " .. msg.sender_user_id_ .. "\n📩╏ ⌏ رسائلك⌎• " .. msgs .. " رساله\n‏⚠️╏ ⌏ موقعك⌎• " .. tar .. "\n╍ ╍ ╍ ╍ ╍ ╍ ╍ ╍ ╍ ╍\n")
 end
 elseif redis:get(KEEPER.."lang:gp:" .. msg.chat_id_) then
-send(msg.chat_id_, msg.id_, 1, "انت لا تمتلك صوره لحسابك🎈\n🔱┊ ايديك ≈ " .. msg.sender_user_id_ .. "\n🚫┊ معرفك ≈ " .. username .. "\n👨🏼┊ موقعك ≈ " .. tar .. "\n🔰┊ جهاتك ≈ ⧼ "..Kpcontact.." ⧽\n🎆┊ صورك  ≈  *"..result.total_count_.."* صوره\n🔲┊ تفاعلك ≈ " .. KP_TM_NM(msgs) .. " \n📧┊ رسائلك ≈ *(" .. msgs .. ")* رساله\n‏", 1, "md")
+send(msg.chat_id_, msg.id_, 1, "انت لا تمتلك صوره لحسابك🎈‏\n📌╏ ⌍ صورك ⌌• *"..result.total_count_.."*\n🗯╏ ⌏ جهاتـك⌎• *"..Kpcontact.."*\n⚙️╏ ⌍ تفاعلك⌌• " .. KP_TM_NM(msgs) .. " \n💬╏ ⌏ معرفـك⌎• [" .. username .. "]\n👁‍🗨╏ ⌍ ايديــك⌌• `" .. msg.sender_user_id_ .. "`\n📩╏ ⌏ رسائلك⌎• *" .. msgs .. "* رساله\n‏⚠️╏ ⌏ موقعك⌎• " .. tar .. "\n╍ ╍ ╍ ╍ ╍ ╍ ╍ ╍ ╍ ╍\n👤╏ *⌍ المطور⌌* » ["..UserKeeper.."]\n╍ ╍ ╍ ╍ ╍ ╍ ╍ ╍ ╍ ╍\n",1, "md")
 else
-send(msg.chat_id_, msg.id_, 1, "انت لا تمتلك صوره لحسابك🎈\n🔱┊ ايديك ≈ " .. msg.sender_user_id_ .. "\n🚫┊ معرفك ≈ " .. username .. "\n👨🏼┊ موقعك ≈ " .. tar .. "\n🔰┊ جهاتك ≈ ⧼ "..Kpcontact.." ⧽\n🎆┊ صورك  ≈  *"..result.total_count_.."* صوره\n🔲┊ تفاعلك ≈ " .. KP_TM_NM(msgs) .. " \n📧┊رسائلك ≈ *(" .. msgs .. ")* رساله\n‏", 1, "md")
+send(msg.chat_id_, msg.id_, 1, "انت لا تمتلك صوره لحسابك🎈‏\n📌╏ ⌍ صورك ⌌• *"..result.total_count_.."*\n🗯╏ ⌏ جهاتـك⌎• *"..Kpcontact.."*\n⚙️╏ ⌍ تفاعلك⌌• " .. KP_TM_NM(msgs) .. " \n💬╏ ⌏ معرفـك⌎• [" .. username .. "]\n👁‍🗨╏ ⌍ ايديــك⌌• `" .. msg.sender_user_id_ .. "`\n📩╏ ⌏ رسائلك⌎• *" .. msgs .. "* رساله\n‏⚠️╏ ⌏ موقعك⌎• " .. tar .. "\n╍ ╍ ╍ ╍ ╍ ╍ ╍ ╍ ╍ ╍\n👤╏ *⌍ المطور⌌* » ["..UserKeeper.."]\n╍ ╍ ╍ ╍ ╍ ╍ ╍ ╍ ╍ ╍\n",1, "md")
 end
 end
 if redis:get(KEEPER.."getidstatus" .. msg.chat_id_) == "Simple" then
 if redis:get(KEEPER.."lang:gp:" .. msg.chat_id_) then
-send(msg.chat_id_, msg.id_, 1, "🔱┊ ايديك ≈ " .. msg.sender_user_id_ .. "\n🚫┊ معرفك ≈ " .. username .. "\n👨🏼┊ موقعك ≈ " .. tar .. "\n🔰┊ جهاتك ≈ ⧼ "..Kpcontact.." ⧽\n🎆┊ صورك  ≈  *"..result.total_count_.."* صوره\n🔲┊ تفاعلك ≈ " .. KP_TM_NM(msgs) .. " \n📧┊ رسائلك ≈ *(" .. msgs .. ")* رساله\n‏", 1, "md")
+send(msg.chat_id_, msg.id_, 1, "‏📌╏ ⌍ صورك ⌌• *"..result.total_count_.."*\n🗯╏ ⌏ جهاتـك⌎• *"..Kpcontact.."*\n⚙️╏ ⌍ تفاعلك⌌• " .. KP_TM_NM(msgs) .. " \n💬╏ ⌏ معرفـك⌎• [" .. username .. "]\n👁‍🗨╏ ⌍ ايديــك⌌• `" .. msg.sender_user_id_ .. "`\n📩╏ ⌏ رسائلك⌎• *" .. msgs .. "* رساله\n‏⚠️╏ ⌏ موقعك⌎• " .. tar .. "\n╍ ╍ ╍ ╍ ╍ ╍ ╍ ╍ ╍ ╍\n👤╏ *⌍ المطور⌌* » ["..UserKeeper.."]\n╍ ╍ ╍ ╍ ╍ ╍ ╍ ╍ ╍ ╍\n", 1, "md")
 else
-send(msg.chat_id_, msg.id_, 1, "🔱┊ ايديك ≈ " .. msg.sender_user_id_ .. "\n🚫┊ معرفك ≈ " .. username .. "\n👨🏼┊ موقعك ≈ " .. tar .. "\n🔰┊ جهاتك ≈ ⧼ "..Kpcontact.." ⧽\n🎆┊ صورك  ≈  *"..result.total_count_.."* صوره\n🔲┊ تفاعلك ≈ " .. KP_TM_NM(msgs) .. " \n📧┊ رسائلك ≈ *(" .. msgs .. ")* رساله\n‏", 1, "md")
+send(msg.chat_id_, msg.id_, 1, "‏📌╏ ⌍ صورك ⌌• *"..result.total_count_.."*\n🗯╏ ⌏ جهاتـك⌎• *"..Kpcontact.."*\n⚙️╏ ⌍ تفاعلك⌌• " .. KP_TM_NM(msgs) .. " \n💬╏ ⌏ معرفـك⌎• [" .. username .. "]\n👁‍🗨╏ ⌍ ايديــك⌌• `" .. msg.sender_user_id_ .. "`\n📩╏ ⌏ رسائلك⌎• *" .. msgs .. "* رساله\n‏⚠️╏ ⌏ موقعك⌎• " .. tar .. "\n╍ ╍ ╍ ╍ ╍ ╍ ╍ ╍ ╍ ╍\n👤╏ *⌍ المطور⌌* » ["..UserKeeper.."]\n╍ ╍ ╍ ╍ ╍ ╍ ╍ ╍ ╍ ╍\n", 1, "md")
 end
 end
 if not redis:get(KEEPER.."getidstatus" .. msg.chat_id_) then
 if redis:get(KEEPER.."lang:gp:" .. msg.chat_id_) then
-send(msg.chat_id_, msg.id_, 1, "🔱┊ ايديك ≈ " .. msg.sender_user_id_ .. "\n🚫┊ معرفك ≈ " .. username .. "\n👨🏼┊ موقعك ≈ " .. tar .. "\n🔰┊ جهاتك ≈ ⧼ "..Kpcontact.." ⧽\n🎆┊ صورك  ≈  *"..result.total_count_.."* صوره\n🔲┊ تفاعلك ≈ " .. KP_TM_NM(msgs) .. " \n📧┊ رسائلك ≈ *(" .. msgs .. ")* رساله\n‏", 1, "md")
+send(msg.chat_id_, msg.id_, 1, "‏📌╏ ⌍ صورك ⌌• *"..result.total_count_.."*\n🗯╏ ⌏ جهاتـك⌎• *"..Kpcontact.."*\n⚙️╏ ⌍ تفاعلك⌌• " .. KP_TM_NM(msgs) .. " \n💬╏ ⌏ معرفـك⌎• [" .. username .. "]\n👁‍🗨╏ ⌍ ايديــك⌌• `" .. msg.sender_user_id_ .. "`\n📩╏ ⌏ رسائلك⌎• *" .. msgs .. "* رساله\n‏⚠️╏ ⌏ موقعك⌎• " .. tar .. "\n╍ ╍ ╍ ╍ ╍ ╍ ╍ ╍ ╍ ╍\n👤╏ *⌍ المطور⌌* » ["..UserKeeper.."]\n╍ ╍ ╍ ╍ ╍ ╍ ╍ ╍ ╍ ╍\n", 1, "md")
 else
-send(msg.chat_id_, msg.id_, 1, "🔱┊ ايديك ≈ " .. msg.sender_user_id_ .. "\n🚫┊ معرفك ≈ " .. username .. "\n👨🏼┊ موقعك ≈ " .. tar .. "\n🔰┊ جهاتك ≈ ⧼ "..Kpcontact.." ⧽\n🎆┊ صورك  ≈  *"..result.total_count_.."* صوره\n🔲┊ تفاعلك ≈ " .. KP_TM_NM(msgs) .. " \n📧┊ رسائلك ≈ *(" .. msgs .. ")* رساله\n‏", 1, "md")
-end end end
+send(msg.chat_id_, msg.id_, 1, "‏📌╏ ⌍ صورك ⌌• *"..result.total_count_.."*\n🗯╏ ⌏ جهاتـك⌎• *"..Kpcontact.."*\n⚙️╏ ⌍ تفاعلك⌌• " .. KP_TM_NM(msgs) .. " \n💬╏ ⌏ معرفـك⌎• [" .. username .. "]\n👁‍🗨╏ ⌍ ايديــك⌌• `" .. msg.sender_user_id_ .. "`\n📩╏ ⌏ رسائلك⌎• *" .. msgs .. "* رساله\n‏⚠️╏ ⌏ موقعك⌎• " .. tar .. "\n╍ ╍ ╍ ╍ ╍ ╍ ╍ ╍ ╍ ╍\n👤╏ *⌍ المطور⌌* » ["..UserKeeper.."]\n╍ ╍ ╍ ╍ ╍ ╍ ╍ ╍ ╍ ╍\n", 1, "md")
+end end end end
 tdcli_function({
 ID = "GetUserProfilePhotos",
 user_id_ = msg.sender_user_id_,
 offset_ = 0,
 limit_ = 1
 }, getprofa, nil)
-end end
+end end 
 -------------------KP_TM_NM----------------------------------------
 if text:match("^تفاعلي$") or text:match("^شنو تفاعلي$")  then
 local msgs = tonumber(redis:get(KEEPER.."msgs:"..msg.sender_user_id_..":"..msg.chat_id_))
@@ -6758,17 +6811,38 @@ end
 end
 --------------------Kp concat add----------------------------------------
 if text == 'جهاتي' then
-send(msg.chat_id_, msg.id_, 1, '🔰┊ عدد جهاتك ≈ *⧼ '..(tonumber(redis:get(KEEPER..'kpaddcon'..msg.chat_id_..':'..msg.sender_user_id_) or 0))..' ⧽*',1,'md')
+send(msg.chat_id_, msg.id_, 1, '🔰┊ عدد جهاتك ≈ * '..(tonumber(redis:get(KEEPER..'kpaddcon'..msg.chat_id_..':'..msg.sender_user_id_) or 0))..' *',1,'md')
 end
 --------------------ID BY REPLY------------------------------------------
-if idf:match("-100(%d+)") and msg.reply_to_message_id_ ~= 0 then
-text = text:gsub("ايدي", "ايدي")
-if (text:match("^[Ii]d$") or text:match("^ايدي$"))  then
-local id_by_reply = function(extra, result)
-send(msg.chat_id_, msg.id_, 1, "`" .. result.sender_user_id_ .."`", 1, "md")
+if text:match("^ايدي$") and msg.reply_to_message_id_ then
+function iD_reP(extra, result, success)
+local Kpmsgss = (tonumber(redis:get(KEEPER.."msgs:"..result.sender_user_id_..":"..msg.chat_id_) or 0 ))
+local Kpcontact = (tonumber(redis:get(KEEPER.."kpaddcon"..msg.chat_id_..":"..result.sender_user_id_) or 0))
+if result.id_ then
+if tonumber(result.sender_user_id_) == tonumber(Kp_Owner) then
+keeper3 = "مطور الاساسـي 🌿"
+elseif is_sudoid(result.sender_user_id_) then
+keeper3 = "المطور 🐾"
+elseif is_admin(result.sender_user_id_) then
+keeper3 = "ادمن في البوت"
+elseif is_vipmems(result.sender_user_id_) then
+keeper3 = "مميز عام 🌿"
+elseif is_monshi(result.sender_user_id_, msg.chat_id_) then
+keeper3 = "منشىء الكروب 🐾"
+elseif is_owner(result.sender_user_id_, msg.chat_id_) then
+keeper3 = "المدير 🌿"
+elseif is_momod(result.sender_user_id_, msg.chat_id_) then
+keeper3 = "ادمن المجموعه🐾"
+elseif is_vipmem(result.sender_user_id_, msg.chat_id_) then
+keeper3 = "عضو مميز 🌿"
+else
+keeper3 = "عـضـو 🐾"
 end
-getMessage(msg.chat_id_, msg.reply_to_message_id_, id_by_reply)
-end end
+end
+send(msg.chat_id_, result.id_, 1, "‏‏📩╏ ⌍ رسائله⌌• *" ..Kpmsgss.. "*\n🗯╏ ⌏ جهاتـه⌎• *"..Kpcontact.."*\n⚙️╏ ⌍ تفاعله⌌• " ..KP_TM_NM(Kpmsgss).. "\n⚠️╏ ⌍ ايديــه⌌• `" ..result.sender_user_id_.. "`\n📌╏ ⌏ موقعه⌎• " ..keeper3.. "\n╍ ╍ ╍ ╍ ╍ ╍ ╍ ╍ ╍ ╍", 1, "md")
+end
+getMessage(msg.chat_id_, msg.reply_to_message_id_,iD_reP)
+end
 -----------------SET BOT Name--------------------------------------------
 if text == "وضع اسم البوت" then
 if not is_KP(msg) then
@@ -6782,125 +6856,51 @@ if is_sudo(msg) and idf:match("-100(%d+)") and text:match("^تفعيل (.*)$")  
 local status = {string.match(text, "^(تفعيل) (.*)$")}
 if status[2] == "active" or status[2] == "جلب الصور" then
 if redis:get(KEEPER.."getpro:" .. msg.chat_id_) == "Active" then
-send(msg.chat_id_, msg.id_, 1, "🌀┊ تم تفعيل جلب الصور\n⚠️┊ بواسطة : "..tmkeeper(msg).."\n‏", 1, "md")
+send(msg.chat_id_, msg.id_, 1, "💬┊ بواسطه » "..tmkeeper(msg).."\n🎟┊ تم تفعيل جلب الصور\n ✓ ", 1, 'md')
 else
-send(msg.chat_id_, msg.id_, 1, "🌀┊ تم تفعيل جلب الصور\n⚠️┊ بواسطة : "..tmkeeper(msg).."\n‏", 1, "md")
+send(msg.chat_id_, msg.id_, 1, "💬┊ بواسطه » "..tmkeeper(msg).."\n🎟┊ تم تفعيل جلب الصور\n ✓ ", 1, 'md')
 redis:set(KEEPER.."getpro:" .. msg.chat_id_, "Active")
 end end end
 if is_sudo(msg) and idf:match("-100(%d+)") and text:match("^تعطيل (.*)$")  then
 local status = {string.match(text, "^(تعطيل) (.*)$")}
 if status[2] == "جلب الصور" then
 if redis:get(KEEPER.."getpro:" .. msg.chat_id_) == "Deactive" then
-send(msg.chat_id_, msg.id_, 1, "🌀┊ تم تعطيل جلب الصور\n⚠️┊ بواسطة : "..tmkeeper(msg).."\n‏", 1, "md")
+send(msg.chat_id_, msg.id_, 1, "💬┊ بواسطه » "..tmkeeper(msg).."\n🎟┊ تم تعطيل جلب الصور\n ✓ ", 1, 'md')
 else
-send(msg.chat_id_, msg.id_, 1, "🌀┊ تم تعطيل جلب الصور\n⚠️┊ بواسطة : "..tmkeeper(msg).."\n‏", 1, "md")
+send(msg.chat_id_, msg.id_, 1, "💬┊ بواسطه » "..tmkeeper(msg).."\n🎟┊ تم تعطيل جلب الصور\n ✓ ", 1, 'md')
 redis:set(KEEPER.."getpro:" .. msg.chat_id_, "Deactive")
 end end end
+---------------------------------------------------------------------
+if text:match("^مسح الصوره") and is_momod(msg.sender_user_id_, msg.chat_id_)  then
+https.request('https://api.telegram.org/bot'..KEEPER_TOKEN..'/deleteChatPhoto?chat_id='..msg.chat_id_)
+send(msg.chat_id_, msg.id_, 1, "💬┊ بواسطه » "..tmkeeper(msg).."\n🎟┊ تم مسح صوره المجموعه\n ✓ ", 1, 'md')
+end
+if text:match("^ضع وصف (.*)$") and is_momod(msg.sender_user_id_, msg.chat_id_)  then
+local text = {string.match(text, "^(ضع وصف) (.*)$")}
+changeChannelAbout(msg.chat_id_,text[2])
+send(msg.chat_id_, msg.id_, 1, "💬┊ بواسطه » "..tmkeeper(msg).."\n🎟┊ تم وضع وصف للمجموعه\n ✓ ", 1, 'md')
+end 
 ---------------------Getpro------------------------------------------------------------------------------
-if text:match("^صوره (%d+)$")  then
-do
+if text:match("^صوره (%d+)$") then
 local pronumb = {string.match(text, "^(صوره) (%d+)$")}
-local gproen = function(extra, result)
 if not is_momod(msg.sender_user_id_, msg.chat_id_) and redis:get(KEEPER.."getpro:" .. msg.chat_id_) == "Deactive" then
-if redis:get(KEEPER.."lang:gp:" .. msg.chat_id_) then
 send(msg.chat_id_, msg.id_, 1, "📛┊ اهلا عزيزي....\n📬┊ جلب الصور معطل\n‏", 1, "md")
+return false
+end
+local Photos = pronumb[2] - 1
+local function gproen(extra, result, success)
+if result.photos_[Photos] then
+sendPhoto(msg.chat_id_, msg.id_, 0, 1, nil, result.photos_[Photos].sizes_[1].photo_.persistent_id_)
 else
-send(msg.chat_id_, msg.id_, 1, "📛┊ اهلا عزيزي....\n📬┊ جلب الصور معطل\n‏", 1, "md")
-end
-elseif pronumb[2] == "1" then
-if result.photos_[0] then
-sendPhoto(msg.chat_id_, msg.id_, 0, 1, nil, result.photos_[0].sizes_[1].photo_.persistent_id_)
-elseif redis:get(KEEPER.."lang:gp:" .. msg.chat_id_) then
-send(msg.chat_id_, msg.id_, 1, "📛┊ انت لا تمتلك صوره لحسابك️", 1, "md")
-else
-send(msg.chat_id_, msg.id_, 1, "📛┊ انت لا تمتلك صوره لحسابك", 1, "md")
-end
-elseif pronumb[2] == "2" then
-if result.photos_[1] then
-sendPhoto(msg.chat_id_, msg.id_, 0, 1, nil, result.photos_[1].sizes_[1].photo_.persistent_id_)
-elseif redis:get(KEEPER.."lang:gp:" .. msg.chat_id_) then
-send(msg.chat_id_, msg.id_, 1, "📛┊ انت لا تمتلك صوره 2 لحسابك", 1, "md")
-else
-send(msg.chat_id_, msg.id_, 1, "📛┊ انت لا تمتلك صوره 2 لحسابك", 1, "md")
-end
-elseif pronumb[2] == "3" then
-if result.photos_[2] then
-sendPhoto(msg.chat_id_, msg.id_, 0, 1, nil, result.photos_[2].sizes_[1].photo_.persistent_id_)
-elseif redis:get(KEEPER.."lang:gp:" .. msg.chat_id_) then
-send(msg.chat_id_, msg.id_, 1, "📛┊ انت لا تمتلك صوره 3 لحسابك", 1, "md")
-else
-send(msg.chat_id_, msg.id_, 1, "📛┊ انت لا تمتلك صوره 3 لحسابك", 1, "md")
-end
-elseif pronumb[2] == "4" then
-if result.photos_[3] then
-sendPhoto(msg.chat_id_, msg.id_, 0, 1, nil, result.photos_[3].sizes_[1].photo_.persistent_id_)
-elseif redis:get(KEEPER.."lang:gp:" .. msg.chat_id_) then
-send(msg.chat_id_, msg.id_, 1, "📛┊ انت لا تمتلك صوره 4 لحسابك️", 1, "md")
-else
-send(msg.chat_id_, msg.id_, 1, "📛┊ انت لا تمتلك صوره 4 لحسابك", 1, "md")
-end
-elseif pronumb[2] == "5" then
-if result.photos_[4] then
-sendPhoto(msg.chat_id_, msg.id_, 0, 1, nil, result.photos_[4].sizes_[1].photo_.persistent_id_)
-elseif redis:get(KEEPER.."lang:gp:" .. msg.chat_id_) then
-send(msg.chat_id_, msg.id_, 1, "📛┊ انت لا تمتلك صوره 5 لحسابك", 1, "md")
-else
-send(msg.chat_id_, msg.id_, 1, "📛┊ انت لا تمتلك صوره 5 لحسابك", 1, "md")
-end
-elseif pronumb[2] == "6" then
-if result.photos_[5] then
-sendPhoto(msg.chat_id_, msg.id_, 0, 1, nil, result.photos_[5].sizes_[1].photo_.persistent_id_)
-elseif redis:get(KEEPER.."lang:gp:" .. msg.chat_id_) then
-send(msg.chat_id_, msg.id_, 1, "📛┊ انت لا تمتلك صوره 6 لحسابك", 1, "md")
-else
-send(msg.chat_id_, msg.id_, 1, "📛┊ انت لا تمتلك صوره 6 لحسابك", 1, "md")
-end
-elseif pronumb[2] == "7" then
-if result.photos_[6] then
-sendPhoto(msg.chat_id_, msg.id_, 0, 1, nil, result.photos_[6].sizes_[1].photo_.persistent_id_)
-elseif redis:get(KEEPER.."lang:gp:" .. msg.chat_id_) then
-send(msg.chat_id_, msg.id_, 1, "📛┊ انت لا تمتلك صوره 7 لحسابك", 1, "md")
-else
-send(msg.chat_id_, msg.id_, 1, "📛┊ انت لا تمتلك صوره 7 لحسابك", 1, "md")
-end
-elseif pronumb[2] == "8" then
-if result.photos_[7] then
-sendPhoto(msg.chat_id_, msg.id_, 0, 1, nil, result.photos_[7].sizes_[1].photo_.persistent_id_)
-elseif redis:get(KEEPER.."lang:gp:" .. msg.chat_id_) then
-send(msg.chat_id_, msg.id_, 1, "📛┊ انت لا تمتلك صوره 8 لحسابك", 1, "md")
-else
-send(msg.chat_id_, msg.id_, 1, "📛┊ انت لا تمتلك صوره 8 لحسابك", 1, "md")
-end
-elseif pronumb[2] == "9" then
-if result.photos_[8] then
-sendPhoto(msg.chat_id_, msg.id_, 0, 1, nil, result.photos_[8].sizes_[1].photo_.persistent_id_)
-elseif redis:get(KEEPER.."lang:gp:" .. msg.chat_id_) then
-send(msg.chat_id_, msg.id_, 1, "📛┊ انت لا تمتلك صوره 9 لحسابك ", 1, "md")
-else
-send(msg.chat_id_, msg.id_, 1, "📛┊ انت لا تمتلك صوره 9 لحسابك ", 1, "md")
-end
-elseif pronumb[2] == "10" then
-if result.photos_[9] then
-sendPhoto(msg.chat_id_, msg.id_, 0, 1, nil, result.photos_[9].sizes_[1].photo_.persistent_id_)
-elseif redis:get(KEEPER.."lang:gp:" .. msg.chat_id_) then
-send(msg.chat_id_, msg.id_, 1, "📛┊ انت لا تمتلك صوره 10 لحسابك", 1, "md")
-else
-send(msg.chat_id_, msg.id_, 1, "📛┊ انت لا تمتلك صوره 10 لحسابك", 1, "md")
-end
-elseif redis:get(KEEPER.."lang:gp:" .. msg.chat_id_) then
-send(msg.chat_id_, msg.id_, 1, "📛┊  يمكن جلب اول 10 صور فقط ", 1, "md")
-else
-send(msg.chat_id_, msg.id_, 1, "📛┊  يمكن جلب اول 10 صور فقط ", 1, "md")
+send(msg.chat_id_, msg.id_, 1, "📛┊ لا توجد صوره في حسابك‏", 1, "md")
 end
 end
-tdcli_function({
+tdcli_function ({
 ID = "GetUserProfilePhotos",
 user_id_ = msg.sender_user_id_,
 offset_ = 0,
 limit_ = pronumb[2]
 }, gproen, nil)
-end
-else
 end
 ---------------------floodstatus------------------------------------------------------------------
 if text:match("^ضع تكرار (%d+)$") and is_owner(msg.sender_user_id_, msg.chat_id_) then
@@ -6916,17 +6916,17 @@ if is_momod(msg.sender_user_id_, msg.chat_id_) and idf:match("-100(%d+)") and te
 local status = { string.match(text, "^(ضع تكرار) (.*)$") }
 if status[2] == "بالطرد" then
 if redis:get(KEEPER.."floodstatus" .. msg.chat_id_) == "Kicked" then
-send(msg.chat_id_, msg.id_, 1, "✸ تم وضع التكرار بالطرد 🐣 ", 1, "md")
+send(msg.chat_id_, msg.id_, 1, "💬┊ بواسطه » "..tmkeeper(msg).."\n🎟┊ تم وضع التكرار بالطرد\n ✓ ", 1, 'md')
 else
-send(msg.chat_id_, msg.id_, 1, "✸ تم وضع التكرار بالطرد 🎐 ", 1, "md")
+send(msg.chat_id_, msg.id_, 1, "💬┊ بواسطه » "..tmkeeper(msg).."\n🎟┊ تم وضع التكرار بالطرد\n ✓ ", 1, 'md')
 redis:set(KEEPER.."floodstatus" .. msg.chat_id_, "Kicked")
 end
 end
 if status[2] == "بالمسح" then
 if redis:get(KEEPER.."floodstatus" .. msg.chat_id_) == "DelMsg" then
-send(msg.chat_id_, msg.id_, 1, "※ تم وضع التكرار بالمسح 📵❗️  ", 1, "md")
+send(msg.chat_id_, msg.id_, 1, "💬┊ بواسطه » "..tmkeeper(msg).."\n🎟┊ تم وضع التكرار بالمسح\n ✓ ", 1, 'md')
 else
-send(msg.chat_id_, msg.id_, 1, "※ تم وضع التكرار بالمسح 📵❗️  ", 1, "md")
+send(msg.chat_id_, msg.id_, 1, "💬┊ بواسطه » "..tmkeeper(msg).."\n🎟┊ تم وضع التكرار بالمسح\n ✓ ", 1, 'md')
 redis:set(KEEPER.."floodstatus" .. msg.chat_id_, "DelMsg")
 end
 end
@@ -6946,16 +6946,16 @@ if is_momod(msg.sender_user_id_, msg.chat_id_) and idf:match("-100(%d+)") and te
 local status = { string.match(text, "^(ضع تحذير) (.*)$") }
 if status[2] == "بالكتم" then
 if redis:get(KEEPER.."warnstatus" .. msg.chat_id_) == "Muteuser" then
-send(msg.chat_id_, msg.id_, 1, "🌀┊ تم وضع التحذير بالكتم", 1, "md")
+send(msg.chat_id_, msg.id_, 1, "💬┊ بواسطه » "..tmkeeper(msg).."\n🎟┊ تم وضع التحذير بالكتم\n ✓ ", 1, 'md')
 else
-send(msg.chat_id_, msg.id_, 1, "🌀┊ تم وضع التحذير بالكتم ♩ ", 1, "md")
+send(msg.chat_id_, msg.id_, 1, "💬┊ بواسطه » "..tmkeeper(msg).."\n🎟┊ تم وضع التحذير بالكتم\n ✓ ", 1, 'md')
 redis:set(KEEPER.."warnstatus" .. msg.chat_id_, "Muteuser")
 end   end
 if status[2] == "بالطرد" then
 if redis:get(KEEPER.."warnstatus" .. msg.chat_id_) == "Remove" then
-send(msg.chat_id_, msg.id_, 1, "🌀┊ تم وضع تحذير بالطرد 🏌️ ", 1, "md")
+send(msg.chat_id_, msg.id_, 1, "💬┊ بواسطه » "..tmkeeper(msg).."\n🎟┊ تم وضع التحذير بالطرد\n ✓ ", 1, 'md')
 else
-send(msg.chat_id_, msg.id_, 1, "🌀┊ تم وضع تحذير بالطرد 🎋 ", 1, "md")
+send(msg.chat_id_, msg.id_, 1, "💬┊ بواسطه » "..tmkeeper(msg).."\n🎟┊ تم وضع التحذير بالطرد\n ✓ ", 1, 'md')
 redis:set(KEEPER.."warnstatus" .. msg.chat_id_, "Remove")
 end end end
 -----------------------getidstatus-----------------------------------------------------------------
@@ -6963,18 +6963,18 @@ if is_momod(msg.sender_user_id_, msg.chat_id_) and idf:match("-100(%d+)") and te
 local status = { string.match(text, "^(تفعيل) (.*)$")}
 if status[2] == "الايدي" then
 if redis:get(KEEPER.."getidstatus" .. msg.chat_id_) == "Photo" then
-send(msg.chat_id_, msg.id_, 1, "🌀┊ تم تفعيل الايدي ✔️\n⚠️┊ بواسطة : "..tmkeeper(msg).."\n‏", 1, "md")
+send(msg.chat_id_, msg.id_, 1, "💬┊ بواسطه » "..tmkeeper(msg).."\n🎟┊ تم تفعيل الايدي بالصوره\n ✓ ", 1, 'md')
 else
-send(msg.chat_id_, msg.id_, 1, "🌀┊ تم تفعيل الايدي ✔️\n⚠️┊ بواسطة : "..tmkeeper(msg).."\n‏", 1, "md")
+send(msg.chat_id_, msg.id_, 1, "💬┊ بواسطه » "..tmkeeper(msg).."\n🎟┊ تم تفعيل الايدي بالصوره\n ✓ ", 1, 'md')
 redis:set(KEEPER.."getidstatus" .. msg.chat_id_, "Photo")
 end end  end
 if is_momod(msg.sender_user_id_, msg.chat_id_) and idf:match("-100(%d+)") and text:match("^تعطيل (.*)$")  then
 local status = {string.match(text, "^(تعطيل) (.*)$")}
 if status[2] == "الايدي" then
 if redis:get(KEEPER.."getidstatus" .. msg.chat_id_) == "Simple" then
-send(msg.chat_id_, msg.id_, 1, "🌀┊ تم تعطيل لايدي ✔️\n⚠️┊ بواسطة : "..tmkeeper(msg).."\n‏", 1, "md")
+send(msg.chat_id_, msg.id_, 1, "💬┊ بواسطه » "..tmkeeper(msg).."\n🎟┊ تم تعطيل الايدي بالصوره\n ✓ ", 1, 'md')
 else
-send(msg.chat_id_, msg.id_, 1, "🌀┊ تم تعطيل لايدي ✔️\n⚠️┊ بواسطة : "..tmkeeper(msg).."\n‏", 1, "md")
+send(msg.chat_id_, msg.id_, 1, "💬┊ بواسطه » "..tmkeeper(msg).."\n🎟┊ تم تعطيل الايدي بالصوره\n ✓ ", 1, 'md')
 redis:set(KEEPER.."getidstatus" .. msg.chat_id_, "Simple")
 end end end
 -------------------autoleave-----------------------------------------------------------------------
@@ -6982,18 +6982,18 @@ if is_sudo(msg) and text:match("^تفعيل (.*)$") then
 local status = {string.match(text, "^(تفعيل) (.*)$")}
 if status[2] == "الخروج التلقائي" then
 if redis:get(KEEPER.."autoleave") == "On" then
-send(msg.chat_id_, msg.id_, 1, "🌀┊ تم تفعيل الخروج التلقائي\n⚠️┊ بواسطة : "..tmkeeper(msg).."\n‏", 1, "md")
+send(msg.chat_id_, msg.id_, 1, "💬┊ بواسطه » "..tmkeeper(msg).."\n🎟┊ تم تفعيل الخروج التلقائي\n ✓ ", 1, 'md')
 else
-send(msg.chat_id_, msg.id_, 1, "🌀┊ الخروج التلقائي مفعل سابقا\n⚠️┊ بواسطة : "..tmkeeper(msg).."\n‏", 1, "md")
+send(msg.chat_id_, msg.id_, 1, "💬┊ بواسطه » "..tmkeeper(msg).."\n🎟┊ تم تفعيل الخروج التلقائي\n ✓ ", 1, 'md')
 redis:set(KEEPER.."autoleave", "On")
 end end end
 if is_sudo(msg) and text:match("^تعطيل (.*)$") then
 local status = { string.match(text, "^(تعطيل) (.*)$")}
 if status[2] == "الخروج التلقائي" then
 if redis:get(KEEPER.."autoleave") == "Off" then
-send(msg.chat_id_, msg.id_, 1, "🌀┊ تم تعطيل الخروج التلقائي للبوت✞ ", 1, "md")
+send(msg.chat_id_, msg.id_, 1, "💬┊ بواسطه » "..tmkeeper(msg).."\n🎟┊ تم تعطيل الخروج التلقائي\n ✓ ", 1, 'md')
 else
-send(msg.chat_id_, msg.id_, 1, "🌀┊ تم تعطيل الخروج التلقائي للبوت✞", 1, "md")
+send(msg.chat_id_, msg.id_, 1, "💬┊ بواسطه » "..tmkeeper(msg).."\n🎟┊ تم تعطيل الخروج التلقائي\n ✓ ", 1, 'md')
 redis:set(KEEPER.."autoleave", "Off")
 end   end  end
 -----------------------------------------------------------
@@ -7011,15 +7011,53 @@ if not is_KP(msg) then
 send(msg.chat_id_, msg.id_, 1, '💲┊ للمطور الاساسي فقــــــــط', 1, 'md')
 else
 send(msg.chat_id_, msg.id_, 1, "🌀┊ ارســل لــي كليــشه المطــور الان 🎗", 1, "md")
-redis:setex(KEEPER.."bot:nerkh" .. msg.chat_id_ .. ":" .. msg.sender_user_id_, 100, true)
+redis:setex(KEEPER.."bot:keeper_dev" .. msg.chat_id_ .. ":" .. msg.sender_user_id_, 370, true)
 end end
+
 if text:match("^المطور$") then
-local nerkh = redis:get(KEEPER.."nerkh")
-if nerkh then
-send(msg.chat_id_, msg.id_, 1, nerkh, 1, "md")
+local get_me = function(extra, result)
+local OwnerKP_ = redis:get(KEEPER.."Bot:KpOwnerBot")
+local user_info_ = redis:get(KEEPER.."user:Name" .. OwnerKP_)
+local UserKeeper = user_info_
+if user_info_ then
+if result.first_name_ then
+if #result.first_name_ < 35 then
 else
-send(msg.chat_id_, msg.id_, 1, " 🌀┊ لم يتم وضع كليشه المطور", 1, "md")
-end end
+for kkkkk in string.gmatch(result.first_name_, "[^%s]+") do
+result.first_name_ = kkkkk
+break
+end end end
+local keeper_dev = redis:get(KEEPER.."keeper_dev")
+if keeper_dev then
+send(msg.chat_id_, msg.id_, 1, "["..keeper_dev.."]", 1, "md")
+else
+local karrar = [[
+
+⚜️» اهلا عزيزي » *]]..result.first_name_..[[*
+
+💢┊ لتفعيل البوت في مجموعتك
+📌┊ قم بأضافة البوت  وارفعه ادمن 
+🗯┊ ثم ارسل كلمه *(تفعيل)*
+🎟┊ سيتم رفع الادمنيه والمنشىء 
+
+⚜️» مطور البوت » []]..UserKeeper..[[]
+〰
+]]
+send(msg.chat_id_, msg.id_, 1, karrar, 1, "md") 
+end
+end
+end
+getUser(msg.sender_user_id_, get_me)
+end
+-----------------------------------------
+if text == 'حذف كليشه المطور' then
+if not is_KP(msg) then
+send(msg.chat_id_, msg.id_, 1, '💲┊ للمطور الاساسي فقــــــــط', 1, 'md')
+else
+redis:del(KEEPER.."keeper_dev")
+send(msg.chat_id_, msg.id_, 1, "💢┊ تم حذف الكليشه ", 1, "md")
+end
+end
 -------------------------SET LINK---------------------------------------------------------------
 if is_momod(msg.sender_user_id_, msg.chat_id_) and idf:match("-100(%d+)") and (text:match("^ضع رابط$"))  then
 send(msg.chat_id_, msg.id_, 1, "🌀┊ ارســــل لي الرابط الان 🎐", 1, "md")
@@ -7092,6 +7130,41 @@ local botnamess = redis:get(KEEPER.."keepernams") or "كيبر"
 send(msg.chat_id_, msg.id_, 1, "*- عدد المشتركين في الخاص»* 👇🏾\n👨🏼┊ اسم البوت » *" .. botnamess .. "*\n🚫┊ عدد المشتركين » *("..users..")*\n‏", 1,"md")
 end
 ----------------------------------------------------------------------------
+if text == 'روابط الكروبات' or text == 'روابط المجموعات' then
+if not is_KP(msg) then
+send(msg.chat_id_, msg.id_, 1, '💲┊ للمطور الاساسي فقــــــــط', 1, 'md')
+else
+local get_me = function(extra, result)
+local num = (redis:scard(KEEPER.."bot:groups"))
+local list = redis:smembers(KEEPER.."bot:groups")
+local text = "~ All_Groups_Bots \n\n"
+for k,v in pairs(list) do
+local GroupsOwner = redis:scard(KEEPER.."bot:owners:"..v) or 0
+local GroupsMod = redis:scard(KEEPER.."bot:momod:"..v) or 0
+local Groupslink = redis:get(KEEPER.."bot:group:link" ..v)
+if result.first_name_ then
+if #result.first_name_ < 35 then
+else
+for kkkkk in string.gmatch(result.first_name_, "[^%s]+") do
+result.first_name_ = kkkkk
+break
+end end end
+text = text..k.."\n📌» Group ID  : [ "..v.." ]\n🔱» Group Link : [ "..(Groupslink or "Not Found").." ]\n🗯» Group Owners  : [ "..GroupsOwner.." ]\n🎟» Group Momods : [ "..GroupsMod.." ] \n---------------------------------------------------\n"
+end
+local file = io.open('Groups_Bot.txt', 'w')
+file:write(text)
+file:close()
+local token_files = 'https://api.telegram.org/bot' .. KEEPER_TOKEN .. '/sendDocument'
+local token_filess = 'curl "' .. token_files .. '" -F "chat_id=' .. msg.chat_id_ .. '" -F "document=@' .. 'Groups_Bot.txt' .. '"'
+io.popen(token_filess)
+send(msg.chat_id_, msg.id_, 1, '🔚┊ اهلا » *'..result.first_name_..'*\n🔰┊ جاري ارسال نسخه للمجموعات \n🌀┊ تحتوي على *('..num..')* مجموعه\n‏〰', 1, 'md')
+sleep(1.5)
+send(msg.chat_id_, msg.id_, 1, token_filess, 1, 'md')
+end
+getUser(msg.sender_user_id_, get_me)
+end
+end
+-----------------------------------------------------------------------------------
 if text == "فحص" then
 if not is_KP(msg) then
 send(msg.chat_id_, msg.id_, 1, '💲┊ للمطور الاساسي فقــــــــط', 1, 'md')
@@ -7111,6 +7184,78 @@ if text:match("^المجموعات$") or text:match("^الكروبات$") and is
 local gps = redis:scard(KEEPER.."bot:groups")
 local users = redis:scard(KEEPER.."bot:userss")
 send(msg.chat_id_, msg.id_, 1, "🚫┊ عدد الكروبات » *"..gps.."*\n🔰┊ عدد المشتركين » *"..users.."*\n‏", 1, 'md')
+end
+-----------------------bc--------------------------------------------------------
+if text == 'اذاعه بالرد' and tonumber(msg.reply_to_message_id_) > 0 then
+if not is_KP(msg) then
+send(msg.chat_id_, msg.id_, 1, '💲┊ للمطور الاساسي فقــــــــط', 1, 'md')
+else
+function cb(a,b,c)
+local text = b.content_.text_
+local gps = redis:scard(KEEPER.."bot:groups") or 0
+local gpss = redis:smembers(KEEPER.."bot:groups") or 0
+local msgs = {
+[0] = id
+}
+for i = 1, #gpss do
+send(gpss[i], 0, 1, text, 1, "md")
+end
+send(msg.chat_id_, msg.id_, 1, "🌀┊ تم نشر رسالتك  في\n` " .. gps .. "` مجموعــه🎈  ", 1, "md")
+end
+getMessage(msg.chat_id_, tonumber(msg.reply_to_message_id_),cb)
+end
+end
+------------------------fwd --------------------------------------------------------
+if text == 'توجيه بالرد' and tonumber(msg.reply_to_message_id_) > 0 then
+if not is_KP(msg) then
+send(msg.chat_id_, msg.id_, 1, '💲┊ للمطور الاساسي فقــــــــط', 1, 'md')
+else
+function cb(a,b,c)
+local gps = redis:scard(KEEPER.."bot:groups") or 0
+local gpss = redis:smembers(KEEPER.."bot:groups") or 0
+for k,v in pairs(gpss) do
+forwardMessages(v, msg.chat_id_, {[0] = b.id_}, 1)
+end
+send(msg.chat_id_, msg.id_, 1, "🌀┊ تم نشر رسالتك  في\n` " .. gps .. "` مجموعــه🎈  ", 1, "md")
+end
+getMessage(msg.chat_id_, tonumber(msg.reply_to_message_id_),cb)
+end
+end
+-----------------------bc user-------------------------------------------------------
+if text == 'اذاعه خاص' and tonumber(msg.reply_to_message_id_) > 0 then
+if not is_KP(msg) then
+send(msg.chat_id_, msg.id_, 1, '💲┊ للمطور الاساسي فقــــــــط', 1, 'md')
+else
+function cb(a,b,c)
+local text = b.content_.text_
+local users = redis:scard(KEEPER.."bot:userss") or 0
+local userss = redis:smembers(KEEPER.."bot:userss") or 0
+local msgs = {
+[0] = id
+}
+for i = 1, #userss do
+send(userss[i], 0, 1, text, 1, "md")
+end
+send(msg.chat_id_, msg.id_, 1, "🌀┊ تم ارسال الرساله الى\n*(" .. users .. ")* مشترك 🎈  ", 1, "md")
+end
+getMessage(msg.chat_id_, tonumber(msg.reply_to_message_id_),cb)
+end
+end
+------------------------fwd  user--------------------------------------------------------
+if text == 'توجيه خاص' and tonumber(msg.reply_to_message_id_) > 0 then
+if not is_KP(msg) then
+send(msg.chat_id_, msg.id_, 1, '💲┊ للمطور الاساسي فقــــــــط', 1, 'md')
+else
+function cb(a,b,c)
+local users = redis:scard(KEEPER.."bot:userss") or 0
+local userss = redis:smembers(KEEPER.."bot:userss") or 0
+for k,v in pairs(userss) do
+forwardMessages(v, msg.chat_id_, {[0] = b.id_}, 1)
+end
+send(msg.chat_id_, msg.id_, 1, "🌀┊ تم توجيه الرساله الى\n*(" .. users .. ")* مشترك 🎈  ", 1, "md")
+end
+getMessage(msg.chat_id_, tonumber(msg.reply_to_message_id_),cb)
+end
 end
 ----------------LOCK FOSHN--------------------------------------------------
 if text:match("كس") or text:match("طيز") or text:match("ديس") or text:match("زب") or text:match("انيجمك") or text:match("انيج") or text:match("نيج") or text:match("ديوس") or text:match("عير") or text:match("كسختك") or text:match("كسمك") or text:match("كسربك") or text:match("بلاع") or text:match("ابو العيوره") or text:match("منيوج") or text:match("كحبه") or text:match("اخ الكحبه") or text:match("اخو الكحبه") or text:match("الكحبه") or text:match("كسك") or text:match("طيزك") or text:match("عير بطيزك") or text:match("كس امك") or text:match("امك الكحبه") or text:match("عيرك") or text:match("عير بيك") or text:match("صرمك") and is_owner(msg.sender_user_id_, msg.chat_id_) then
@@ -7449,8 +7594,10 @@ local text = [[
 🗯┇ ايقاف دقيقه - 30 دقيقه'
 🗯┇ حظر عام - الغاء العـام'
 🗯┇ توجيه - اذاعه - فحص'
+🗯┇ اذاعه - توجيه بالرد'
 🗯┇ اذاعه خاص + النص'
 🗯┇ وضع كليشه ستارت
+🗯┇ روابط الكروبات'
 🗯┇ مسح المطورين'
 
 📌┇ ايقاف ساعه
@@ -7472,8 +7619,7 @@ end end end end
 if text:match('^وضع ترحيب (.*)') and is_momod(msg.sender_user_id_, msg.chat_id_) then
 local welcome = text:match('^وضع ترحيب (.*)')
 redis:set(KEEPER..'welcome:'..msg.chat_id_,welcome)
-local text = '👷┊ تم وضع الترحيب'
-send(msg.chat_id_, msg.id_, 1,text, 1, 'md')
+send(msg.chat_id_, msg.id_, 1, "💬┊ بواسطه » "..tmkeeper(msg).."\n🎟┊ تم وضع الترحيب\n ✓ ", 1, 'md')
 end
 -----------------welcome------------------------------------------
 if text:match("^الترحيب$") and is_momod(msg.sender_user_id_, msg.chat_id_) then
@@ -8770,7 +8916,7 @@ changeChatMemberStatus(msg.chat_id_, data.id_, "Kicked")
 end end end
 getUser(v.user_id_, clean_cb)
 end
-send(msg.chat_id_, msg.id_, 1, '🚫┊تم طرد الحسابات غير متفاعله✓\n🔰┊التي*⧼اخر ظهور  منذ زمن طويل⧽*\n', 1, 'md')
+send(msg.chat_id_, msg.id_, 1, '🚫┊تم طرد الحسابات غير متفاعله✓\n🔰┊التي*اخر ظهور  منذ زمن طويل*\n', 1, 'md')
 end
 tdcli_function ({ID = "GetChannelMembers",channel_id_ = getChatId(msg.chat_id_).ID,offset_ = 0,limit_ = 5000}, check_deactive, nil)
 end end
@@ -9032,7 +9178,7 @@ end end
 ----------DEL rules -----------------------------------------------------------------------------
 if (text:match("^مسح القوانين$"))  then
 if not redis:get(KEEPER..'lock:add'..msg.chat_id_) then
-send(msg.chat_id_, msg.id_, 1, "🌀┊  تــم مسح القوانيـــن  📬", 1 , "md")
+send(msg.chat_id_, msg.id_, 1, "💬┊ بواسطه » "..tmkeeper(msg).."\n🎟┊ تم مسح القوانين\n ✓ ", 1, 'md')
 end
 redis:del(KEEPER.."bot:rules" .. msg.chat_id_)
 end end
@@ -9058,7 +9204,8 @@ if is_momod(msg.sender_user_id_, msg.chat_id_) and idf:match("-100(%d+)") and te
 if not redis:get(KEEPER..'lock:add'..msg.chat_id_) then
 local txt = {string.match(text, "^(ضع اسم) (.*)$")}
 changetitle(msg.chat_id_, txt[2])
-send(msg.chat_id_, msg.id_, 1, "🌀┊ تم تغييــر اسم المجموعــه 📃", 1, "md")
+send(msg.chat_id_, msg.id_, 1, "💬┊ بواسطه » "..tmkeeper(msg).."\n🎟┊ تم تغييــر اسم المجموعــه\n ✓ ", 1, 'md')
+
 end end
 ----------------LEAVE GP------------------------------------------------------------------------------
 if text:match("^غادر (-%d+)$")  then
@@ -9313,7 +9460,7 @@ local id = msg.id_
 local msgs = { [0] = id }
 pinmsg(msg.chat_id_, msg.reply_to_message_id_, 0)
 redis:set(KEEPER.."pinnedmsg" .. msg.chat_id_, msg.reply_to_message_id_)
-send(msg.chat_id_, msg.id_, 1, "🌀┊ تم تثبــيت الرسالــۿ 💌🎈", 1, "md")
+send(msg.chat_id_, msg.id_, 1, "💬┊ بواسطه » "..tmkeeper(msg).."\n🎟┊ تم  تثبيــت الرسالــۿ\n ✓ ", 1, 'md')
 end end
 ----------info gp --------------------------------------------------
 if is_momod(msg.sender_user_id_, msg.chat_id_) and idf:match("-100(%d+)") and text:match('احصائيات المجموعه')  then
@@ -9514,7 +9661,7 @@ end end
 if is_momod(msg.sender_user_id_, msg.chat_id_) and idf:match("-100(%d+)") and (text:match("^الغاء تثبيت$"))  then
 if not redis:get(KEEPER..'lock:add'..msg.chat_id_) then
 unpinmsg(msg.chat_id_)
-send(msg.chat_id_, msg.id_, 1, "🌀┊  تم الغاء تثبيــت الرسالــۿ 🎌", 1, "md")
+send(msg.chat_id_, msg.id_, 1, "💬┊ بواسطه » "..tmkeeper(msg).."\n🎟┊ تم الغاء تثبيــت الرسالــۿ\n ✓ ", 1, 'md')
 end   end
 ------------SEND FILE------------------------------------------
 if text == 'ارسال نسخه' then
@@ -9643,26 +9790,33 @@ if not redis:get(KEEPER.."lock_kickme"..msg.chat_id_) then
 send(msg.chat_id_, msg.id_, 1, "🌀┊ امر اطردني معطل 🍃", 1, "md")
 return false
 end
-redis:set(KEEPER.."kick_me"..msg.sender_user_id_, msg.chat_id_)
-redis:set(KEEPER.."unkick_me"..msg.sender_user_id_, msg.chat_id_)
+redis:set(KEEPER.."kick_me"..msg.sender_user_id_..""..msg.chat_id_.."","kick_mee")
+redis:set(KEEPER.."unkick_me"..msg.sender_user_id_..""..msg.chat_id_.."","kick_no")
 send(msg.chat_id_, msg.id_, 1, "🔰┊ ارسل *{ نعم }* لطردك\n🚫┊ ارسل *{ لا } *لالغاء طردك", 1, "md")
 end
-local Kpkick = redis:get(KEEPER.."kick_me"..msg.sender_user_id_)
+local Kpkick = redis:get(KEEPER.."kick_me"..msg.sender_user_id_..""..msg.chat_id_.."")
+if Kpkick == "kick_mee" then
 if text:match("^نعم$") then
 if is_vipmem(msg.sender_user_id_, msg.chat_id_) then
 send(msg.chat_id_, msg.id_, 1, '🌀┊ عذرا لا استطيع (حظر،طرد،كتم)المدراء والادمنيه والاعضاء المميزين ❗️', 1, 'md')
 else
-local Kpkick = redis:get(KEEPER.."kick_me"..msg.sender_user_id_)
+local Kpkick = redis:get(KEEPER.."kick_me"..msg.sender_user_id_..""..msg.chat_id_.."")
+if Kpkick == "kick_mee" then
 chat_kick(msg.chat_id_, msg.sender_user_id_)
-redis:del(KEEPER.."kick_me"..msg.sender_user_id_, msg.chat_id_)
-redis:del(KEEPER.."unkick_me"..msg.sender_user_id_, msg.chat_id_)
+redis:del(KEEPER.."kick_me"..msg.sender_user_id_..""..msg.chat_id_.."","kick_mee")
+redis:del(KEEPER.."unkick_me"..msg.sender_user_id_..""..msg.chat_id_.."","kick_no")
 send(msg.chat_id_, msg.id_, 1, "🔰┊ تم طردتك حياتي", 1, "md")
-end end
+end 
+end
+end
 if text:match("^لا$") then
-local Kpunkick = redis:get(KEEPER.."unkick_me"..msg.sender_user_id_)
-redis:del(KEEPER.."kick_me"..msg.sender_user_id_, msg.chat_id_)
-redis:del(KEEPER.."unkick_me"..msg.sender_user_id_, msg.chat_id_)
+local Kpunkick = redis:get(KEEPER.."unkick_me"..msg.sender_user_id_..""..msg.chat_id_.."")
+if Kpunkick == "kick_no" then
+redis:del(KEEPER.."kick_me"..msg.sender_user_id_..""..msg.chat_id_.."","kick_mee")
+redis:del(KEEPER.."unkick_me"..msg.sender_user_id_..""..msg.chat_id_.."","kick_no")
 send(msg.chat_id_, msg.id_, 1, "🔰┊ تم الغاء طردك", 1, "md")
+end
+end
 end
 ---------------------SEE viewget----------------------------------------
 if is_momod(msg.sender_user_id_, msg.chat_id_) and  (text:match("^عدد المشاهدات$")) then
@@ -9703,7 +9857,7 @@ else
 local list = redis:smembers(KEEPER.."bot:groups")
 local t = '🌀┊ ايديات المجموعات \n'
 for k,v in pairs(list) do
-t = t..k.." » "..v.."\n"  end
+t = t..k.." » `"..v.."`\n"  end
 t = t..''
 if #list == 0 then
 t = '🌀┊ لا توجد مجموعات مفعله' end
@@ -9724,12 +9878,12 @@ if not is_KP(msg) then
 send(msg.chat_id_, msg.id_, 1, '💲┊ للمطور الاساسي فقــــــــط', 1, 'md')
 else
 send(msg.chat_id_, msg.id_, 1, '🌀┊ ارسال الان الكليشه ليتم حفظها🍃', 1, 'md')
-redis:set(KEEPER.."addstart1"..msg.sender_user_id_, "yes")
+redis:set(KEEPER.."addstart1"..msg.sender_user_id_, "theaddstarts")
 return false
 end end
 if text then
 local theaddstart = redis:get(KEEPER.."addstart1"..msg.sender_user_id_)
-if theaddstart == 'yes' then
+if theaddstart == 'theaddstarts' then
 send(msg.chat_id_, msg.id_, 1, "🌀┊ تم حفظ الكليشه 🍃", 1, 'md')
 redis:del(KEEPER.."addstart1"..msg.sender_user_id_)
 redis:set(KEEPER.."startbot", text)
@@ -9981,10 +10135,6 @@ if not redis:get(KEEPER..'lock:add'..msg.chat_id_) then
 local KEEPER = {"شطبخلك/ج  🙊😋" }
 send(msg.chat_id_, msg.id_, 1,''..KEEPER[math.random(#KEEPER)]..'', 1, 'md')
 end
-end
-if text == "جج" and msg.reply_to_message_id_ ~= 0 then
-send(msg.chat_id_, msg.id_, 1, "ppppppppppppp" , 1, "md")
-redis:set(KEEPER.."bot:photo:mute" .. msg.chat_id_, true)
 end
 -----------------------------------------
 if text == "ههه" or text == "هههه" or text == "ههههه" or text == "هههههه" or text == "ههههههه" then
