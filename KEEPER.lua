@@ -999,7 +999,7 @@ end
 function Kp_JoinCh(msg)
 local var = true
 if redis:get(KEEPER.."Kpjoin1") then
-local channel = ''..(redis:get(KEEPER..'Kpch1') or '@keePer_ch')..''
+local channel = ''..(redis:get(KEEPER..'Kpch1'))..''
 local url , res = https.request('https://api.telegram.org/bot'..KEEPER_TOKEN..'/getchatmember?chat_id='..channel..'&user_id='..msg.sender_user_id_)
 local data = KPJS:decode(url)
 if res ~= 200 or data.result.status == "left" or data.result.status == "kicked" then
@@ -6043,9 +6043,9 @@ send(msg.chat_id_, msg.id_, 1, '💲┊ للمطور الاساسي فقــــ
 else
 if not redis:get(KEEPER.."Kpjoin1") then
 redis:set(KEEPER.."Kpjoin1", true)
-send(msg.chat_id_, msg.id_, 1, '🚫┊تمُٓ تفعيلٰٓ الاشُِتراكِٰ الاَِجباريِٰ\n🔰┊قناْة الاشتراْگ » ['..(redis:get(KEEPER..'Kpch1') or '@keePer_ch')..']\n🔱┊لتٓغير القناْة ارسٓل : 👇🏽\n💠┊-{ تعين قناة الاشتراك }- 🍃', 1, 'md')
+send(msg.chat_id_, msg.id_, 1, '🚫┊تمُٓ تفعيلٰٓ الاشُِتراكِٰ الاَِجباريِٰ\n🔰┊قناْة الاشتراْگ » ['..(redis:get(KEEPER..'Kpch1'))..']\n🔱┊لتٓغير القناْة ارسٓل : 👇🏽\n💠┊-{ تعين قناة الاشتراك }- 🍃', 1, 'md')
 else
-send(msg.chat_id_, msg.id_, 1, '🚫┊تمُٓ تفعيلٰٓ الاشُِتراكِٰ الاَِجباريِٰ\n🔰┊قناْة الاشتراْگ » ['..(redis:get(KEEPER..'Kpch1') or '@keePer_ch')..']\n🔱┊لتٓغير القناْة ارسٓل : 👇🏽\n💠┊-{ تعين قناة الاشتراك }- 🍃', 1, 'md')
+send(msg.chat_id_, msg.id_, 1, '🚫┊تمُٓ تفعيلٰٓ الاشُِتراكِٰ الاَِجباريِٰ\n🔰┊قناْة الاشتراْگ » ['..(redis:get(KEEPER..'Kpch1'))..']\n🔱┊لتٓغير القناْة ارسٓل : 👇🏽\n💠┊-{ تعين قناة الاشتراك }- 🍃', 1, 'md')
 end end end
 if text == 'تعطيل الاشتراك الاجباري' then
 if not is_KP(msg) then
@@ -6150,7 +6150,7 @@ if text == 'جلب قناة الاشتراك' or text == 'قناة الاشتر�
 if not is_KP(msg) then
 send(msg.chat_id_, msg.id_, 1, '💲┊ للمطور الاساسي فقــــــــط', 1, 'md')
 else
-local Kpch2 = redis:get(KEEPER.."Kpch1") or "@keeper_ch"
+local Kpch2 = redis:get(KEEPER.."Kpch1")
 if Kpch2 then
 send(msg.chat_id_, msg.id_, 1, '🔱┊ *قناة الاشتراك* : ['..Kpch2..']', 1, 'md')
 else
