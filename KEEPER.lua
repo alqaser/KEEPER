@@ -999,7 +999,7 @@ end
 function Kp_JoinCh(msg)
 local var = true
 if redis:get(KEEPER.."Kpjoin1") then
-local channel = ''..(redis:get(KEEPER..'Kpch1'))..''
+local channel = ''..(redis:get(KEEPER..'Kpch1') or '@keeper_ch')..''
 local url , res = https.request('https://api.telegram.org/bot'..KEEPER_TOKEN..'/getchatmember?chat_id='..channel..'&user_id='..msg.sender_user_id_)
 local data = KPJS:decode(url)
 if res ~= 200 or data.result.status == "left" or data.result.status == "kicked" then
@@ -6004,29 +6004,25 @@ end end
 -------------------welcome on---------------------------------------------------------
 if text:match("^تفعيل الترحيب$") and is_momod(msg.sender_user_id_, msg.chat_id_) then
 redis:set(KEEPER..'status:welcome:'..msg.chat_id_,'enable')
-send(msg.chat_id_, msg.id_, 1,'👷┊ تم تفعيل الترحيب ✔️\n🚫┊ بواسطه ◂ *'..tmkeeper(msg)..'*\n🔑┊ الايدي ◂ (`'..msg.sender_user_id_..'`)\n', 1, 'md')
+send(msg.chat_id_, msg.id_, 1, "💬┊ بواسطه » "..tmkeeper(msg).."\n🎟┊ تم تفعيل الترحيب\n ✓ ", 1, 'md')
+return false 
 end
 -------------------of welcome-------------------------------------------------------------
 if text:match("^تعطيل الترحيب$") and is_momod(msg.sender_user_id_, msg.chat_id_) then
 redis:set(KEEPER..'status:welcome:'..msg.chat_id_,'disable')
-send(msg.chat_id_, msg.id_, 1,'👷┊ تم تعطيل الترحيب ✔️\n🚫┊ بواسطه ◂ *'..tmkeeper(msg)..'*\n🔑┊ الايدي ◂ (`'..msg.sender_user_id_..'`)\n', 1, 'md')
+send(msg.chat_id_, msg.id_, 1, "💬┊ بواسطه » "..tmkeeper(msg).."\n🎟┊ تم تعطيل الترحيب\n ✓ ", 1, 'md')
+return false 
 end
 ---------------------set kick me-----------------------------------
 if text == 'تفعيل اطردني' and is_owner(msg.sender_user_id_, msg.chat_id_) then
-if not redis:get(KEEPER.."lock_kickme"..msg.chat_id_) then
+send(msg.chat_id_, msg.id_, 1, "💬┊ بواسطه » "..tmkeeper(msg).."\n🎟┊ تم تفعيل امر اطردني\n ✓ ", 1, 'md')
 redis:set(KEEPER.."lock_kickme"..msg.chat_id_, true)
-send(msg.chat_id_, msg.id_, 1, "🌀┊ تم تفعيل اطردني ❗️\n🚫┊ بواسطه ◂ *"..tmkeeper(msg).."*\n🔑┊ الايدي ◂ (`"..msg.sender_user_id_.."`)\n‏", 1, 'md')
-else
-send(msg.chat_id_, msg.id_, 1, "🌀┊ تم تفعيل اطردني ❗️\n🚫┊ بواسطه ◂ *"..tmkeeper(msg).."*\n🔑┊ الايدي ◂ (`"..msg.sender_user_id_.."`)\n‏", 1, 'md')
-end
+return false 
 end
 if text == 'تعطيل اطردني' and is_owner(msg.sender_user_id_, msg.chat_id_) then
-if redis:get(KEEPER.."lock_kickme"..msg.chat_id_) then
+send(msg.chat_id_, msg.id_, 1, "💬┊ بواسطه » "..tmkeeper(msg).."\n🎟┊ تم تعطيل امر اطردني\n ✓ ", 1, 'md')
 redis:del(KEEPER.."lock_kickme"..msg.chat_id_)
-send(msg.chat_id_, msg.id_, 1, "🌀┊ تم تعطيل اطردني ❗️\n🚫┊ بواسطه ◂ *"..tmkeeper(msg).."*\n🔑┊ الايدي ◂ (`"..msg.sender_user_id_.."`)\n‏", 1, 'md')
-else
-send(msg.chat_id_, msg.id_, 1, "🌀┊ تم تعطيل اطردني ❗️\n🚫┊ بواسطه ◂ *"..tmkeeper(msg).."*\n🔑┊ الايدي ◂ (`"..msg.sender_user_id_.."`)\n‏", 1, 'md')
-end
+return false 
 end
 -------------------add ch --------------------------
 if text == "تعين قناة الاشتراك" or text == "تغيير قناة الاشتراك" then
@@ -6041,56 +6037,49 @@ if text == 'تفعيل الاشتراك الاجباري' then
 if not is_KP(msg) then
 send(msg.chat_id_, msg.id_, 1, '💲┊ للمطور الاساسي فقــــــــط', 1, 'md')
 else
-if not redis:get(KEEPER.."Kpjoin1") then
+send(msg.chat_id_, msg.id_, 1, "💬┊ بواسطه » "..tmkeeper(msg).."\n🎟┊ تم تفعيل الاشتراك الاجباري\n ✓ ", 1, 'md')
+send(msg.chat_id_, msg.id_, 1, '™️┊قناة الاشتراك» ['..(redis:get(KEEPER..'Kpch1') or '@keeper_ch')..']\n📌┊ لتغيير قناة الاشتراك ارسل »\n⚠️┊ `تعين قناة الاشتراك `\n➖', 1, 'md')
 redis:set(KEEPER.."Kpjoin1", true)
-send(msg.chat_id_, msg.id_, 1, '🚫┊تمُٓ تفعيلٰٓ الاشُِتراكِٰ الاَِجباريِٰ\n🔰┊قناْة الاشتراْگ » ['..(redis:get(KEEPER..'Kpch1'))..']\n🔱┊لتٓغير القناْة ارسٓل : 👇🏽\n💠┊-{ تعين قناة الاشتراك }- 🍃', 1, 'md')
-else
-send(msg.chat_id_, msg.id_, 1, '🚫┊تمُٓ تفعيلٰٓ الاشُِتراكِٰ الاَِجباريِٰ\n🔰┊قناْة الاشتراْگ » ['..(redis:get(KEEPER..'Kpch1'))..']\n🔱┊لتٓغير القناْة ارسٓل : 👇🏽\n💠┊-{ تعين قناة الاشتراك }- 🍃', 1, 'md')
-end end end
+return false 
+end
+end
 if text == 'تعطيل الاشتراك الاجباري' then
 if not is_KP(msg) then
 send(msg.chat_id_, msg.id_, 1, '💲┊ للمطور الاساسي فقــــــــط', 1, 'md')
 else
-if redis:get(KEEPER.."Kpjoin1") then
+send(msg.chat_id_, msg.id_, 1, "💬┊ بواسطه » "..tmkeeper(msg).."\n🎟┊ تم تعطيل الاشتراك الاجباري\n ✓ ", 1, 'md')
 redis:del(KEEPER.."Kpjoin1")
-send(msg.chat_id_, msg.id_, 1, "🌀┊ تم تعطيل الاشتراك الاجباري ❗️\n🔑┊ الايدي ◂ (*"..msg.sender_user_id_.."*)\n‏", 1, 'md')
-else
-send(msg.chat_id_, msg.id_, 1, "🌀┊ تم تعطيل الاشتراك الاجباري ❗️\n🔑┊ الايدي ◂ (*"..msg.sender_user_id_.."*)\n‏", 1, 'md')
-end end end
+return false 
+end 
+end
 ------------------ADD REPLY IN GP------------------------------------------
 if text == 'تفعيل الردود' and is_owner(msg.sender_user_id_, msg.chat_id_) then
-send(msg.chat_id_, msg.id_, 1, "🌀┊ تم تفعيل ردود البوت ❗️\n🚫┊ بواسطه ◂ *"..tmkeeper(msg).."*\n🔑┊ الايدي ◂ (`"..msg.sender_user_id_.."`)\n‏", 1, 'md')
+send(msg.chat_id_, msg.id_, 1, "💬┊ بواسطه » "..tmkeeper(msg).."\n🎟┊ تم تفعيل الردود\n ✓ ", 1, 'md')
 redis:del(KEEPER.."lock_reeeep"..msg.chat_id_)
 end
 if text == 'تعطيل الردود' and is_owner(msg.sender_user_id_, msg.chat_id_) then
-send(msg.chat_id_, msg.id_, 1, "🌀┊ تم تعطيل ردود البوت ❗️\n🚫┊ بواسطه ◂ *"..tmkeeper(msg).."*\n🔑┊ الايدي ◂ (`"..msg.sender_user_id_.."`)\n‏", 1, 'md')
+send(msg.chat_id_, msg.id_, 1, "💬┊ بواسطه » "..tmkeeper(msg).."\n🎟┊ تم تعطيل الردود\n ✓ ", 1, 'md')
 redis:set(KEEPER.."lock_reeeep"..msg.chat_id_, true)
 end
 ---------------ADD PIN----------------------------------------------------
 if text == 'تفعيل التثبيت' and is_owner(msg.sender_user_id_, msg.chat_id_) then
-if not redis:get(KEEPER.."lock_pinn"..msg.chat_id_) then
+send(msg.chat_id_, msg.id_, 1, "💬┊ بواسطه » "..tmkeeper(msg).."\n🎟┊ تم تفعيل التثبيت\n ✓ ", 1, 'md')
 redis:set(KEEPER.."lock_pinn"..msg.chat_id_, true)
-send(msg.chat_id_, msg.id_, 1, "🌀┊ تم تفعيل التثبيت ❗️\n🚫┊ بواسطه ◂ *"..tmkeeper(msg).."*\n🔑┊ الايدي ◂ (`"..msg.sender_user_id_.."`)\n‏", 1, 'md')
-else
-send(msg.chat_id_, msg.id_, 1, "🌀┊ تم تفعيل التثبيت ❗️\n🚫┊ بواسطه ◂ *"..tmkeeper(msg).."*\n🔑┊ الايدي ◂ (`"..msg.sender_user_id_.."`)\n‏", 1, 'md')
-end
+return false
 end
 if text == 'تعطيل التثبيت' and is_owner(msg.sender_user_id_, msg.chat_id_) then
-if redis:get(KEEPER.."lock_pinn"..msg.chat_id_) then
+send(msg.chat_id_, msg.id_, 1, "💬┊ بواسطه » "..tmkeeper(msg).."\n🎟┊ تم تعطيل التثبيت\n ✓ ", 1, 'md')
 redis:del(KEEPER.."lock_pinn"..msg.chat_id_)
-send(msg.chat_id_, msg.id_, 1, "🌀┊ تم تعطيل التثبيت ❗️\n🚫┊ بواسطه ◂ *"..tmkeeper(msg).."*\n🔑┊ الايدي ◂ (`"..msg.sender_user_id_.."`)\n‏", 1, 'md')
-else
-send(msg.chat_id_, msg.id_, 1, "🌀┊ تم تعطيل التثبيت ❗️\n🚫┊ بواسطه ◂ *"..tmkeeper(msg).."*\n🔑┊ الايدي ◂ (`"..msg.sender_user_id_.."`)\n‏", 1, 'md')
-end
+return false
 end
 --------------REM DEL MSG--------------------------------------------
 if text == 'تعطيل مسح الرسائل' or text == 'تعطيل تنضيف الرسائل' and is_owner(msg.sender_user_id_, msg.chat_id_) then
-send(msg.chat_id_, msg.id_, 1, "🌀┊ مسح الرسائل معطل ❗️\n🚫┊ بواسطه ◂ *"..tmkeeper(msg).."*\n🔑┊ الايدي ◂ (`"..msg.sender_user_id_.."`)\n‏", 1, 'md')
+send(msg.chat_id_, msg.id_, 1, "💬┊ بواسطه » "..tmkeeper(msg).."\n🎟┊ تم تعطيل مسح الرسائل\n ✓ ", 1, 'md')
 redis:del(KEEPER.."dellmssg"..msg.chat_id_)
 end
 ----------------ADD DEL MSG------------------------------------------------------------
 if text == 'تفعيل مسح الرسائل' or text == 'تفعيل تنضيف الرسائل' and is_owner(msg.sender_user_id_, msg.chat_id_) then
-send(msg.chat_id_, msg.id_, 1, "🌀┊ مسح الرسائل مفعل ❗️\n🚫┊ بواسطه ◂ *"..tmkeeper(msg).."*\n🔑┊ الايدي ◂ (`"..msg.sender_user_id_.."`)\n‏", 1, 'md')
+send(msg.chat_id_, msg.id_, 1, "💬┊ بواسطه » "..tmkeeper(msg).."\n🎟┊ تم تفعيل مسح الرسائل\n ✓ ", 1, 'md')
 redis:set(KEEPER.."dellmssg"..msg.chat_id_, true)
 end
 ----------add - rem bot free----------------------------------
@@ -6098,14 +6087,14 @@ if text == 'تفعيل البوت خدمي' then
 if not is_KP(msg) then
 send(msg.chat_id_, msg.id_, 1, '💲┊ للمطور الاساسي فقــــــــط', 1, 'md')
 else
-send(msg.chat_id_, msg.id_, 1, "🌀┊ *تم تفعيل البوت خدمي* ❗️\n🔑┊ *الايدي *◂ (`"..msg.sender_user_id_.."`)", 1, 'md')
+send(msg.chat_id_, msg.id_, 1, "💬┊ بواسطه » "..tmkeeper(msg).."\n🎟┊ تم تفعيل البوت خدمي\n ✓ ", 1, 'md')
 redis:set(KEEPER.."bot:free", true)
 end end
 if text == 'تعطيل البوت خدمي' then
 if not is_KP(msg) then
 send(msg.chat_id_, msg.id_, 1, '💲┊ للمطور الاساسي فقــــــــط', 1, 'md')
 else
-send(msg.chat_id_, msg.id_, 1, "🌀┊ *تم تعطيل البوت خدمي* ❗️\n🔑┊ *الايدي *◂ (`"..msg.sender_user_id_.."`)", 1, 'md')
+send(msg.chat_id_, msg.id_, 1, "💬┊ بواسطه » "..tmkeeper(msg).."\n🎟┊ تم تعطيل البوت خدمي\n ✓ ", 1, 'md')
 redis:del(KEEPER.."bot:free")
 end end
 ----------start--------------------------------------------------------------
@@ -6703,20 +6692,40 @@ local name = fname .. " " .. lname
 local _nl, ctrl_chars = string.gsub(text, "%c", "")
 if string.len(name) > 88899 or ctrl_chars > 7767667 then
 end
-send(msg.chat_id_, msg.id_, 1, "🌀┊ اســمك  : " .. name .. " " , 1, "md")
+send(msg.chat_id_, msg.id_, 1, "🌀┊ اســمك »\n `" .. name .. "`" , 1, "md")
 end
 getUser(msg.sender_user_id_, get_me)
 end
 -------------------RETBA-------------------------
 if idf:match("-100(%d+)") and text:match("^رتبتي$") and msg.reply_to_message_id_ == 0   then
 local get_me = function(extra, result)
-local fname = result.first_name_ or ""
-local lname = result.last_name_ or ""
-local name = fname .. " " .. lname
-local _nl, ctrl_chars = string.gsub(text, "%c", "")
-if string.len(name) > 88899 or ctrl_chars > 7767667 then
+if is_KpiD(result.id_) then
+tar = "مطور اساسي 🍃"
+elseif is_sudoid(result.id_) then
+tar = "مطور 🐯"
+elseif is_vipmems(result.id_) then
+tar = "مميز عام 🍃"
+elseif is_admin(result.id_) then
+tar = "ادمن في البوت 🍃"
+elseif is_monshi(result.id_, msg.chat_id_) then
+tar = "منشىء 🍃"
+elseif is_owner(result.id_, msg.chat_id_) then
+tar = "المدير 🍃"
+elseif is_momod(result.id_, msg.chat_id_) then
+tar = "ادمن المجموعه 🍃"
+elseif is_vipmem(result.id_, msg.chat_id_) then
+tar = "عضو مميز 🍃"
+else
+tar = "عـضـو 🍃"
 end
-send(msg.chat_id_, msg.id_, 1, "🌀┊ اســمك : " .. name .. "\n💲┊ رتبتـك :" .. tmkeeper(msg) .. "" , 1, "md")
+if result.first_name_ then
+if #result.first_name_ < 35 then
+else
+for kkkkk in string.gmatch(result.first_name_, "[^%s]+") do
+result.first_name_ = kkkkk
+break
+end end end
+send(msg.chat_id_, msg.id_, 1, "🌀┊ اســمك » " .. result.first_name_ .. "\n💲┊ رتبتـك » " ..tar.. "\n✓" , 1, "md")
 end
 getUser(msg.sender_user_id_, get_me)
 end
@@ -7055,7 +7064,7 @@ if not is_KP(msg) then
 send(msg.chat_id_, msg.id_, 1, '💲┊ للمطور الاساسي فقــــــــط', 1, 'md')
 else
 redis:del(KEEPER.."keeper_dev")
-send(msg.chat_id_, msg.id_, 1, "💢┊ تم حذف الكليشه ", 1, "md")
+send(msg.chat_id_, msg.id_, 1, "💬┊ بواسطه » "..tmkeeper(msg).."\n🎟┊ تم حذف كليشه المطور\n ✓ ", 1, 'md')
 end
 end
 -------------------------SET LINK---------------------------------------------------------------
@@ -7064,7 +7073,7 @@ send(msg.chat_id_, msg.id_, 1, "🌀┊ ارســــل لي الرابط ال�
 redis:setex(KEEPER.."bot:group:link" .. msg.chat_id_ .. ":" .. msg.sender_user_id_, 120, true)
 end
 if is_momod(msg.sender_user_id_, msg.chat_id_) and idf:match("-100(%d+)") and (text:match("^حذف الرابط$"))  then
-send(msg.chat_id_, msg.id_, 1, "🌀┊ تم حذف الرابط بنجاح ", 1, "md")
+send(msg.chat_id_, msg.id_, 1, "💬┊ بواسطه » "..tmkeeper(msg).."\n🎟┊ تم حذف الرابط بنجاح\n ✓ ", 1, 'md')
 redis:del(KEEPER.."bot:group:link" .. msg.chat_id_)
 end
 if text:match("^الرابط$") then
@@ -7127,7 +7136,7 @@ end end
 if text == 'المشتركين' or text == 'عدد المشتركين' and is_KP(msg) then
 local users = redis:scard(KEEPER.."bot:userss")
 local botnamess = redis:get(KEEPER.."keepernams") or "كيبر"
-send(msg.chat_id_, msg.id_, 1, "*- عدد المشتركين في الخاص»* 👇🏾\n👨🏼┊ اسم البوت » *" .. botnamess .. "*\n🚫┊ عدد المشتركين » *("..users..")*\n‏", 1,"md")
+send(msg.chat_id_, msg.id_, 1, "*- عدد المشتركين في الخاص»* 👇🏾\n👨🏼┊ اسم البوت » *" .. botnamess .. "*\n🚫┊ عدد المشتركين » *("..users..")* مشترك\n‏", 1,"md")
 end
 ----------------------------------------------------------------------------
 if text == 'روابط الكروبات' or text == 'روابط المجموعات' then
@@ -7176,14 +7185,14 @@ local kpgban = redis:scard(KEEPER.."bot:gban:") or "0"
 local kpvipmems = redis:scard(KEEPER.."bot:vipmems:") or "0"
 local kpgps = redis:scard(KEEPER.."bot:groups") or "0"
 local kpusers = redis:scard(KEEPER.."bot:userss") or "0"
-send(msg.chat_id_, msg.id_, 1, "*- احصائيات البـــــوت ≈*\n*ﮧ -------------------»*\n👨🏼┊اسم البوت ≈ *" .. botnamess .. "*\n🃏┊عدد المطورين ≈ *"..kpSudos1.."*\n🔰┊عدد الادمنيه ≈ *"..kpAdmins.."*\n🔚┊عدد الكروبات ≈ * "..kpgps.."*\n👪┊عدد المشتركين خاص ≈ *" .. kpusers .. "*\n🔔┊عدد المحظورين عام ≈ *"..kpgban.."*\n🔘┊عدد المميزين عام ≈ * "..kpvipmems.."*\n🗯┊قناة السورس ≈ [keeper](t.me/keeper_ch)\n", 1,"md")
+send(msg.chat_id_, msg.id_, 1, "*- احصائيات البـــــوت ≈*\n*ﮧ -------------------»*\n👨🏼┊اسم البوت ≈ *" .. botnamess .. "*\n🃏┊عدد المطورين ≈ *"..kpSudos1.."*\n🔰┊عدد الادمنيه ≈ *"..kpAdmins.."*\n🔚┊عدد الكروبات ≈ * "..kpgps.."*\n👪┊عدد المشتركين خاص ≈ *" .. kpusers .. "*\n🔔┊عدد المحظورين عام ≈ *"..kpgban.."*\n🔘┊عدد المميزين عام ≈ * "..kpvipmems.."*\n🗯┊قناة السورس ≈ [keeper](t.me/keeper_ch)\n✓", 1,"md")
 end
 end
 ------------------GPS AND USERS-------------------------------------------
 if text:match("^المجموعات$") or text:match("^الكروبات$") and is_admin(msg.sender_user_id_, msg.chat_id_) then
 local gps = redis:scard(KEEPER.."bot:groups")
 local users = redis:scard(KEEPER.."bot:userss")
-send(msg.chat_id_, msg.id_, 1, "🚫┊ عدد الكروبات » *"..gps.."*\n🔰┊ عدد المشتركين » *"..users.."*\n‏", 1, 'md')
+send(msg.chat_id_, msg.id_, 1, "🚫┊ عدد الكروبات المفعله» *"..gps.."*\n🔰┊ عدد المشتركين » *"..users.."* مشترك\n✓‏", 1, 'md')
 end
 -----------------------bc--------------------------------------------------------
 if text == 'اذاعه بالرد' and tonumber(msg.reply_to_message_id_) > 0 then
@@ -7267,11 +7276,11 @@ delete_msg(chat, msgs)
 end end
 ----------------LOCK FOSHN--------------------------------------------------
 if text == 'قفل الفشار' and is_owner(msg.sender_user_id_, msg.chat_id_) then
-send(msg.chat_id_, msg.id_, 1, "🌀┊ تم قفل الفشار ❗️\n🚫┊ بواسطه ◂ *"..tmkeeper(msg).."*\n🔑┊ الايدي ◂ (`"..msg.sender_user_id_.."`)", 1, 'md')
+send(msg.chat_id_, msg.id_, 1, "🌀┊ تم قفل الفشار ❗️\n🚫┊ بواسطه ◂ "..tmkeeper(msg).."\n🔑┊ الايدي ◂ (`"..msg.sender_user_id_.."`)", 1, 'md')
 redis:del(KEEPER.."ffosh"..msg.chat_id_)
 end
 if text == 'فتح الفشار' and is_owner(msg.sender_user_id_, msg.chat_id_) then
-send(msg.chat_id_, msg.id_, 1, "🌀┊ تم فتح الفشار ❗️\n🚫┊ بواسطه ◂ *"..tmkeeper(msg).."*\n🔑┊ الايدي ◂ (`"..msg.sender_user_id_.."`)", 1, 'md')
+send(msg.chat_id_, msg.id_, 1, "🌀┊ تم فتح الفشار ❗️\n🚫┊ بواسطه ◂ "..tmkeeper(msg).."\n🔑┊ الايدي ◂ (`"..msg.sender_user_id_.."`)", 1, 'md')
 redis:set(KEEPER.."ffosh"..msg.chat_id_, true)
 end
 --------------RETBA----------------------------------------------------
@@ -7708,275 +7717,275 @@ send(msg.chat_id_, msg.id_, 1, '💲┊ للأدمنيـــــــه فقــ�
 else
 if lockKeeper[2] == "التعديل" then
 if not redis:get(KEEPER.."editmsg" .. msg.chat_id_) then
-send(msg.chat_id_, msg.id_, 1, "📌┊ تم قفل التعديل ✓\n🗯┊ بواسطة ◂ `"..tmkeeper(msg).."`\n📛┊  الايدي  ◂ (`"..msg.sender_user_id_.."`)\n‏", 1, "md")
+send(msg.chat_id_, msg.id_, 1, "💬┊ تم قفل التعديل \n🎟┊ الأمر بواسطه » "..tmkeeper(msg).."\n ‏ ", 1, "md")
 redis:set(KEEPER..'editmsg'..msg.chat_id_,'delmsg')
 else
-send(msg.chat_id_, msg.id_, 1, "📌┊ التعديل مقفول سابقا ✓\n🗯┊ بواسطة ◂ `"..tmkeeper(msg).."`\n📛┊  الايدي  ◂ (`"..msg.sender_user_id_.."`)\n‏", 1, "md")
+send(msg.chat_id_, msg.id_, 1, "💬┊ التعديل مقفول سابقا \n🎟┊ الأمر بواسطه » "..tmkeeper(msg).."\n ‏ ", 1, "md")
 end
 end
 if lockKeeper[2] == "الاوامر" then
 if not redis:get(KEEPER.."bot:cmds" .. msg.chat_id_) then
-send(msg.chat_id_, msg.id_, 1, "📌┊ تم قفل الاوامر ✓\n🗯┊ بواسطة ◂ `"..tmkeeper(msg).."`\n📛┊  الايدي  ◂ (`"..msg.sender_user_id_.."`)\n‏", 1, "md")
+send(msg.chat_id_, msg.id_, 1, "💬┊ تم قفل الاوامر \n🎟┊ الأمر بواسطه » "..tmkeeper(msg).."\n ‏ ", 1, "md")
 else
-send(msg.chat_id_, msg.id_, 1, "📌┊ الاوامر مقفوله سابقا ✓\n🗯┊ بواسطة ◂ `"..tmkeeper(msg).."`\n📛┊  الايدي  ◂ (`"..msg.sender_user_id_.."`)\n‏", 1, "md")
+send(msg.chat_id_, msg.id_, 1, "💬┊ الاوامر مقفوله سابقا \n🎟┊ الأمر بواسطه » "..tmkeeper(msg).."\n ‏ ", 1, "md")
 end
 redis:set(KEEPER.."bot:cmds" .. msg.chat_id_, true)
 end
 if lockKeeper[2] == "البوتات" then
 if not redis:get(KEEPER.."bot:bots:mute" .. msg.chat_id_) then
-send(msg.chat_id_, msg.id_, 1, "📌┊ تم قفل البوتات ✓\n🗯┊ بواسطة ◂ `"..tmkeeper(msg).."`\n📛┊  الايدي  ◂ (`"..msg.sender_user_id_.."`)\n‏", 1, "md")
+send(msg.chat_id_, msg.id_, 1, "💬┊ تم قفل البوتات \n🎟┊ الأمر بواسطه » "..tmkeeper(msg).."\n ‏ ", 1, "md")
 else
-send(msg.chat_id_, msg.id_, 1, "📌┊ البوتات مقفوله سابقا ✓\n🗯┊ بواسطة ◂ `"..tmkeeper(msg).."`\n📛┊  الايدي  ◂ (`"..msg.sender_user_id_.."`)\n‏", 1, "md")
+send(msg.chat_id_, msg.id_, 1, "💬┊ البوتات مقفوله سابقا \n🎟┊ الأمر بواسطه » "..tmkeeper(msg).."\n ‏ ", 1, "md")
 end
 redis:set(KEEPER.."bot:bots:mute" .. msg.chat_id_, true)
 end
 if lockKeeper[2] == "البوتات بالطرد" then
 if not redis:get(KEEPER.."bot:botskick" .. msg.chat_id_) then
-send(msg.chat_id_, msg.id_, 1, "📌┊ تم قفل البوتات بالطرد ✓\n🗯┊ بواسطة ◂ `"..tmkeeper(msg).."`\n📛┊  الايدي  ◂ (`"..msg.sender_user_id_.."`)\n‏", 1, "md")
+send(msg.chat_id_, msg.id_, 1, "💬┊ تم قفل البوتات بالطرد \n🎟┊ الأمر بواسطه » "..tmkeeper(msg).."\n ‏ ", 1, "md")
 else
-send(msg.chat_id_, msg.id_, 1, "📌┊البوتات بالطرد مقفوله سابقا ✓\n🗯┊ بواسطة ◂ `"..tmkeeper(msg).."`\n📛┊  الايدي  ◂ (`"..msg.sender_user_id_.."`)\n‏", 1, "md")
+send(msg.chat_id_, msg.id_, 1, "💬┊البوتات بالطرد مقفوله سابقا \n🎟┊ الأمر بواسطه » "..tmkeeper(msg).."\n ‏ ", 1, "md")
 end
 redis:set(KEEPER.."bot:botskick" .. msg.chat_id_, true)
 end
 if lockKeeper[2] == "التكرار" then
 if not redis:get(KEEPER.."anti-flood:" .. msg.chat_id_) then
-send(msg.chat_id_, msg.id_, 1, "📌┊ تم قفل التكرار ✓\n🗯┊ بواسطة ◂ `"..tmkeeper(msg).."`\n📛┊  الايدي  ◂ (`"..msg.sender_user_id_.."`)\n‏", 1, "md")
+send(msg.chat_id_, msg.id_, 1, "💬┊ تم قفل التكرار \n🎟┊ الأمر بواسطه » "..tmkeeper(msg).."\n ‏ ", 1, "md")
 else
-send(msg.chat_id_, msg.id_, 1, "📌┊ التكرار مقفول سابقا ✓\n🗯┊ بواسطة ◂ `"..tmkeeper(msg).."`\n📛┊  الايدي  ◂ (`"..msg.sender_user_id_.."`)\n‏", 1, "md")
+send(msg.chat_id_, msg.id_, 1, "💬┊ التكرار مقفول سابقا \n🎟┊ الأمر بواسطه » "..tmkeeper(msg).."\n ‏ ", 1, "md")
 end
 redis:set(KEEPER.."anti-flood:" .. msg.chat_id_, true)
 end
 if lockKeeper[2] == "التثبيت" then
 if not redis:get(KEEPER.."bot:pin:mute" .. msg.chat_id_) then
-send(msg.chat_id_, msg.id_, 1, "📌┊ تم قفل التثبيت ✓\n🗯┊ بواسطة ◂ `"..tmkeeper(msg).."`\n📛┊  الايدي  ◂ (`"..msg.sender_user_id_.."`)\n‏", 1, "md")
+send(msg.chat_id_, msg.id_, 1, "💬┊ تم قفل التثبيت \n🎟┊ الأمر بواسطه » "..tmkeeper(msg).."\n ‏ ", 1, "md")
 else
-send(msg.chat_id_, msg.id_, 1, "📌┊ التثبيت مقفول سابقا ✓\n🗯┊ بواسطة ◂ `"..tmkeeper(msg).."`\n📛┊  الايدي  ◂ (`"..msg.sender_user_id_.."`)\n‏", 1, "md")
+send(msg.chat_id_, msg.id_, 1, "💬┊ التثبيت مقفول سابقا \n🎟┊ الأمر بواسطه » "..tmkeeper(msg).."\n ‏ ", 1, "md")
 end
 redis:set(KEEPER.."bot:pin:mute" .. msg.chat_id_, true)
 end
 if lockKeeper[2] == "الكل" then
 if not redis:get(KEEPER.."bot:muteall" .. msg.chat_id_) then
-send(msg.chat_id_, msg.id_, 1, "📌┊ تم قفل الكل ✓\n🗯┊ بواسطة ◂ `"..tmkeeper(msg).."`\n📛┊  الايدي  ◂ (`"..msg.sender_user_id_.."`)\n‏", 1, "md")
+send(msg.chat_id_, msg.id_, 1, "💬┊ تم قفل الكل \n🎟┊ الأمر بواسطه » "..tmkeeper(msg).."\n ‏ ", 1, "md")
 else
-send(msg.chat_id_, msg.id_, 1,  "📌┊ الكل مقفوله سابقا ✓\n🗯┊ بواسطة ◂ `"..tmkeeper(msg).."`\n📛┊  الايدي  ◂ (`"..msg.sender_user_id_.."`)\n‏", 1, "md")
+send(msg.chat_id_, msg.id_, 1,  "💬┊ الكل مقفوله سابقا \n🎟┊ الأمر بواسطه » "..tmkeeper(msg).."\n ‏ ", 1, "md")
 end
 redis:set(KEEPER.."bot:muteall" .. msg.chat_id_, true)
 redis:set(KEEPER.."bot:gtime:say" .. msg.chat_id_, true, true)
 end
 if lockKeeper[2] == "الدردشه" then
 if not redis:get(KEEPER.."bot:text:mute" .. msg.chat_id_) then
-send(msg.chat_id_, msg.id_, 1,  "📌┊ تم قفل الدردشه ✓\n🗯┊ بواسطة ◂ `"..tmkeeper(msg).."`\n📛┊  الايدي  ◂ (`"..msg.sender_user_id_.."`)\n‏", 1, "md")
+send(msg.chat_id_, msg.id_, 1,  "💬┊ تم قفل الدردشه \n🎟┊ الأمر بواسطه » "..tmkeeper(msg).."\n ‏ ", 1, "md")
 else
-send(msg.chat_id_, msg.id_, 1,  "📌┊ الدردشه مقفوله سابقا ✓\n🗯┊ بواسطة ◂ `"..tmkeeper(msg).."`\n📛┊  الايدي  ◂ (`"..msg.sender_user_id_.."`)\n‏", 1, "md")
+send(msg.chat_id_, msg.id_, 1,  "💬┊ الدردشه مقفوله سابقا \n🎟┊ الأمر بواسطه » "..tmkeeper(msg).."\n ‏ ", 1, "md")
 end
 redis:set(KEEPER.."bot:text:mute" .. msg.chat_id_, true)
 end
 if lockKeeper[2] == "الصور" then
 if not redis:get(KEEPER.."bot:photo:mute" .. msg.chat_id_) then
-send(msg.chat_id_, msg.id_, 1,  "📌┊ تم قفل الصور ✓\n🗯┊ بواسطة ◂ `"..tmkeeper(msg).."`\n📛┊  الايدي  ◂ (`"..msg.sender_user_id_.."`)\n‏", 1, "md")
+send(msg.chat_id_, msg.id_, 1,  "💬┊ تم قفل الصور \n🎟┊ الأمر بواسطه » "..tmkeeper(msg).."\n ‏ ", 1, "md")
 else
-send(msg.chat_id_, msg.id_, 1,  "📌┊ الصور مقفوله سابقا ✓\n🗯┊ بواسطة ◂ `"..tmkeeper(msg).."`\n📛┊  الايدي  ◂ (`"..msg.sender_user_id_.."`)\n‏", 1, "md")
+send(msg.chat_id_, msg.id_, 1,  "💬┊ الصور مقفوله سابقا \n🎟┊ الأمر بواسطه » "..tmkeeper(msg).."\n ‏ ", 1, "md")
 end
 redis:set(KEEPER.."bot:photo:mute" .. msg.chat_id_, true)
 end
 if lockKeeper[2] == "المشاركه" then
 if not redis:get(KEEPER.."bot:duplipost:mute" .. msg.chat_id_) then
-send(msg.chat_id_, msg.id_, 1,  "📌┊ تم قفل المشاركه ✓\n🗯┊ بواسطة ◂ `"..tmkeeper(msg).."`\n📛┊  الايدي  ◂ (`"..msg.sender_user_id_.."`)\n‏", 1, "md")
+send(msg.chat_id_, msg.id_, 1,  "💬┊ تم قفل المشاركه \n🎟┊ الأمر بواسطه » "..tmkeeper(msg).."\n ‏ ", 1, "md")
 else
-send(msg.chat_id_, msg.id_, 1,  "📌┊ المشاركه مقفوله سابقا ✓\n🗯┊ بواسطة ◂ `"..tmkeeper(msg).."`\n📛┊  الايدي  ◂ (`"..msg.sender_user_id_.."`)\n‏", 1, "md")
+send(msg.chat_id_, msg.id_, 1,  "💬┊ المشاركه مقفوله سابقا \n🎟┊ الأمر بواسطه » "..tmkeeper(msg).."\n ‏ ", 1, "md")
 end
 redis:set(KEEPER.."bot:duplipost:mute" .. msg.chat_id_, true)
 end
 if lockKeeper[2] == "الكلايش" then
 if not redis:get(KEEPER.."bot:spam:mute" .. msg.chat_id_) then
-send(msg.chat_id_, msg.id_, 1,  "📌┊ تم قفل الكلايش ✓\n🗯┊ بواسطة ◂ `"..tmkeeper(msg).."`\n📛┊  الايدي  ◂ (`"..msg.sender_user_id_.."`)\n‏", 1, "md")
+send(msg.chat_id_, msg.id_, 1,  "💬┊ تم قفل الكلايش \n🎟┊ الأمر بواسطه » "..tmkeeper(msg).."\n ‏ ", 1, "md")
 else
-send(msg.chat_id_, msg.id_, 1,  "📌┊ الكلايش مقفوله سابقا ✓\n🗯┊ بواسطة ◂ `"..tmkeeper(msg).."`\n📛┊  الايدي  ◂ (`"..msg.sender_user_id_.."`)\n‏", 1, "md")
+send(msg.chat_id_, msg.id_, 1,  "💬┊ الكلايش مقفوله سابقا \n🎟┊ الأمر بواسطه » "..tmkeeper(msg).."\n ‏ ", 1, "md")
 end
 redis:set(KEEPER.."bot:spam:mute" .. msg.chat_id_, true)
 end
 if lockKeeper[2] == "الفيديو" then
 if not redis:get(KEEPER.."bot:video:mute" .. msg.chat_id_) then
-send(msg.chat_id_, msg.id_, 1,  "📌┊ تم قفل الفيديو ✓\n🗯┊ بواسطة ◂ `"..tmkeeper(msg).."`\n📛┊  الايدي  ◂ (`"..msg.sender_user_id_.."`)\n‏", 1, "md")
+send(msg.chat_id_, msg.id_, 1,  "💬┊ تم قفل الفيديو \n🎟┊ الأمر بواسطه » "..tmkeeper(msg).."\n ‏ ", 1, "md")
 else
-send(msg.chat_id_, msg.id_, 1,  "📌┊ الفيديو مقفول سابقا ✓\n🗯┊ بواسطة ◂ `"..tmkeeper(msg).."`\n📛┊  الايدي  ◂ (`"..msg.sender_user_id_.."`)\n‏", 1, "md")
+send(msg.chat_id_, msg.id_, 1,  "💬┊ الفيديو مقفول سابقا \n🎟┊ الأمر بواسطه » "..tmkeeper(msg).."\n ‏ ", 1, "md")
 end
 redis:set(KEEPER.."bot:video:mute" .. msg.chat_id_, true)
 end
 
 if lockKeeper[2] == "السيلفي" then
 if not redis:get(KEEPER.."bot:selfvideo:mute" .. msg.chat_id_) then
-send(msg.chat_id_, msg.id_, 1, "📌┊ تم قفل السيلفي ✓\n🗯┊ بواسطة ◂ `"..tmkeeper(msg).."`\n📛┊  الايدي  ◂ (`"..msg.sender_user_id_.."`)\n‏", 1, "md")
+send(msg.chat_id_, msg.id_, 1, "💬┊ تم قفل السيلفي \n🎟┊ الأمر بواسطه » "..tmkeeper(msg).."\n ‏ ", 1, "md")
 else
-send(msg.chat_id_, msg.id_, 1, "📌┊ السيلفي مقفول سابقا ✓\n🗯┊ بواسطة ◂ `"..tmkeeper(msg).."`\n📛┊  الايدي  ◂ (`"..msg.sender_user_id_.."`)\n‏", 1, "md")
+send(msg.chat_id_, msg.id_, 1, "💬┊ السيلفي مقفول سابقا \n🎟┊ الأمر بواسطه » "..tmkeeper(msg).."\n ‏ ", 1, "md")
 end
 redis:set(KEEPER.."bot:selfvideo:mute" .. msg.chat_id_, true)
 end
 if lockKeeper[2] == "الفايلات" then
 if not redis:get(KEEPER.."bot:document:mute" .. msg.chat_id_) then
-send(msg.chat_id_, msg.id_, 1, "📌┊ تم قفل الفايلات ✓\n🗯┊ بواسطة ◂ `"..tmkeeper(msg).."`\n📛┊  الايدي  ◂ (`"..msg.sender_user_id_.."`)\n‏", 1, "md")
+send(msg.chat_id_, msg.id_, 1, "💬┊ تم قفل الفايلات \n🎟┊ الأمر بواسطه » "..tmkeeper(msg).."\n ‏ ", 1, "md")
 else
-send(msg.chat_id_, msg.id_, 1, "📌┊ الفايلات مقفوله سابقا ✓\n🗯┊ بواسطة ◂ `"..tmkeeper(msg).."`\n📛┊  الايدي  ◂ (`"..msg.sender_user_id_.."`)\n‏", 1, "md")
+send(msg.chat_id_, msg.id_, 1, "💬┊ الفايلات مقفوله سابقا \n🎟┊ الأمر بواسطه » "..tmkeeper(msg).."\n ‏ ", 1, "md")
 end
 redis:set(KEEPER.."bot:document:mute" .. msg.chat_id_, true)
 end
 if lockKeeper[2] == "الالعاب" then
 if not redis:get(KEEPER.."Game:lock" .. msg.chat_id_) then
-send(msg.chat_id_, msg.id_, 1, "📌┊ تم قفل الالعاب ✓\n🗯┊ بواسطة ◂ `"..tmkeeper(msg).."`\n📛┊  الايدي  ◂ (`"..msg.sender_user_id_.."`)\n‏", 1, "md")
+send(msg.chat_id_, msg.id_, 1, "💬┊ تم قفل الالعاب \n🎟┊ الأمر بواسطه » "..tmkeeper(msg).."\n ‏ ", 1, "md")
 else
-send(msg.chat_id_, msg.id_, 1, "📌┊ الالعاب مقفوله سابقا ✓\n🗯┊ بواسطة ◂ `"..tmkeeper(msg).."`\n📛┊  الايدي  ◂ (`"..msg.sender_user_id_.."`)\n‏", 1, "md")
+send(msg.chat_id_, msg.id_, 1, "💬┊ الالعاب مقفوله سابقا \n🎟┊ الأمر بواسطه » "..tmkeeper(msg).."\n ‏ ", 1, "md")
 end
 redis:set(KEEPER.."Game:lock" .. msg.chat_id_, true)
 end
 if lockKeeper[2] == "الانلاين" then
 if not redis:get(KEEPER.."bot:inline:mute" .. msg.chat_id_) then
-send(msg.chat_id_, msg.id_, 1, "📌┊ تم قفل الانلاين ✓\n🗯┊ بواسطة ◂ `"..tmkeeper(msg).."`\n📛┊  الايدي  ◂ (`"..msg.sender_user_id_.."`)\n‏", 1, "md")
+send(msg.chat_id_, msg.id_, 1, "💬┊ تم قفل الانلاين \n🎟┊ الأمر بواسطه » "..tmkeeper(msg).."\n ‏ ", 1, "md")
 else
-send(msg.chat_id_, msg.id_, 1, "📌┊ الانلاين مقفوله سابقا ✓\n🗯┊ بواسطة ◂ `"..tmkeeper(msg).."`\n📛┊  الايدي  ◂ (`"..msg.sender_user_id_.."`)\n‏", 1, "md")
+send(msg.chat_id_, msg.id_, 1, "💬┊ الانلاين مقفوله سابقا \n🎟┊ الأمر بواسطه » "..tmkeeper(msg).."\n ‏ ", 1, "md")
 end
 redis:set(KEEPER.."bot:inline:mute" .. msg.chat_id_, true)
 end
 if lockKeeper[2] == "البوست" then
 if not redis:get(KEEPER.."post:lock" .. msg.chat_id_) then
-send(msg.chat_id_, msg.id_, 1, "📌┊ تم قفل البوست ✓\n🗯┊ بواسطة ◂ `"..tmkeeper(msg).."`\n📛┊  الايدي  ◂ (`"..msg.sender_user_id_.."`)\n‏", 1, "md")
+send(msg.chat_id_, msg.id_, 1, "💬┊ تم قفل البوست \n🎟┊ الأمر بواسطه » "..tmkeeper(msg).."\n ‏ ", 1, "md")
 else
-send(msg.chat_id_, msg.id_, 1, "📌┊ البوست مقفوله سابقا ✓\n🗯┊ بواسطة ◂ `"..tmkeeper(msg).."`\n📛┊  الايدي  ◂ (`"..msg.sender_user_id_.."`)\n‏", 1, "md")
+send(msg.chat_id_, msg.id_, 1, "💬┊ البوست مقفوله سابقا \n🎟┊ الأمر بواسطه » "..tmkeeper(msg).."\n ‏ ", 1, "md")
 end
 redis:set(KEEPER.."post:lock" .. msg.chat_id_, true)
 end
 if lockKeeper[2] == "الماركدون" then
 if not redis:get(KEEPER.."markdown:lock" .. msg.chat_id_) then
-send(msg.chat_id_, msg.id_, 1, "📌┊ تم قفل الماركدون ✓\n🗯┊ بواسطة ◂ `"..tmkeeper(msg).."`\n📛┊  الايدي  ◂ (`"..msg.sender_user_id_.."`)\n‏", 1, "md")
+send(msg.chat_id_, msg.id_, 1, "💬┊ تم قفل الماركدون \n🎟┊ الأمر بواسطه » "..tmkeeper(msg).."\n ‏ ", 1, "md")
 else
-send(msg.chat_id_, msg.id_, 1, "📌┊ الماركدون مقفوله سابقا ✓\n🗯┊ بواسطة ◂ `"..tmkeeper(msg).."`\n📛┊  الايدي  ◂ (`"..msg.sender_user_id_.."`)\n‏", 1, "md")
+send(msg.chat_id_, msg.id_, 1, "💬┊ الماركدون مقفوله سابقا \n🎟┊ الأمر بواسطه » "..tmkeeper(msg).."\n ‏ ", 1, "md")
 end
 redis:set(KEEPER.."markdown:lock" .. msg.chat_id_, true)
 end
 if lockKeeper[2] == "المتحركه" then
 if not redis:get(KEEPER.."bot:gifs:mute" .. msg.chat_id_) then
-send(msg.chat_id_, msg.id_, 1, "📌┊ تم قفل المتحركه ✓\n🗯┊ بواسطة ◂ `"..tmkeeper(msg).."`\n📛┊  الايدي  ◂ (`"..msg.sender_user_id_.."`)\n‏", 1, "md")
+send(msg.chat_id_, msg.id_, 1, "💬┊ تم قفل المتحركه \n🎟┊ الأمر بواسطه » "..tmkeeper(msg).."\n ‏ ", 1, "md")
 else
-send(msg.chat_id_, msg.id_, 1, "📌┊ المتحركه مقفوله سابقا ✓\n🗯┊ بواسطة ◂ `"..tmkeeper(msg).."`\n📛┊  الايدي  ◂ (`"..msg.sender_user_id_.."`)\n‏", 1, "md")
+send(msg.chat_id_, msg.id_, 1, "💬┊ المتحركه مقفوله سابقا \n🎟┊ الأمر بواسطه » "..tmkeeper(msg).."\n ‏ ", 1, "md")
 end
 redis:set(KEEPER.."bot:gifs:mute" .. msg.chat_id_, true)
 end
 if lockKeeper[2] == "الاغاني" then
 if not redis:get(KEEPER.."bot:music:mute" .. msg.chat_id_) then
-send(msg.chat_id_, msg.id_, 1, "📌┊ تم قفل الاغاني ✓\n🗯┊ بواسطة ◂ `"..tmkeeper(msg).."`\n📛┊  الايدي  ◂ (`"..msg.sender_user_id_.."`)\n‏", 1, "md")
+send(msg.chat_id_, msg.id_, 1, "💬┊ تم قفل الاغاني \n🎟┊ الأمر بواسطه » "..tmkeeper(msg).."\n ‏ ", 1, "md")
 else
-send(msg.chat_id_, msg.id_, 1, "📌┊ الاغاني مقفوله سابقا ✓\n🗯┊ بواسطة ◂ `"..tmkeeper(msg).."`\n📛┊  الايدي  ◂ (`"..msg.sender_user_id_.."`)\n‏", 1, "md")
+send(msg.chat_id_, msg.id_, 1, "💬┊ الاغاني مقفوله سابقا \n🎟┊ الأمر بواسطه » "..tmkeeper(msg).."\n ‏ ", 1, "md")
 end
 redis:set(KEEPER.."bot:music:mute" .. msg.chat_id_, true)
 end
 if lockKeeper[2] == "الصوت" then
 if not redis:get(KEEPER.."bot:voice:mute" .. msg.chat_id_) then
-send(msg.chat_id_, msg.id_, 1, "📌┊ تم قفل الصوت ✓\n🗯┊ بواسطة ◂ `"..tmkeeper(msg).."`\n📛┊  الايدي  ◂ (`"..msg.sender_user_id_.."`)\n‏", 1, "md")
+send(msg.chat_id_, msg.id_, 1, "💬┊ تم قفل الصوت \n🎟┊ الأمر بواسطه » "..tmkeeper(msg).."\n ‏ ", 1, "md")
 else
-send(msg.chat_id_, msg.id_, 1, "📌┊ الصوت مقفول سابقا ✓\n🗯┊ بواسطة ◂ `"..tmkeeper(msg).."`\n📛┊  الايدي  ◂ (`"..msg.sender_user_id_.."`)\n‏", 1, "md")
+send(msg.chat_id_, msg.id_, 1, "💬┊ الصوت مقفول سابقا \n🎟┊ الأمر بواسطه » "..tmkeeper(msg).."\n ‏ ", 1, "md")
 end
 redis:set(KEEPER.."bot:voice:mute" .. msg.chat_id_, true)
 end
 if lockKeeper[2] == "الروابط" then
 if not redis:get(KEEPER.."bot:links:mute" .. msg.chat_id_) then
-send(msg.chat_id_, msg.id_, 1, "📌┊ تم قفل الروابط ✓\n🗯┊ بواسطة ◂ `"..tmkeeper(msg).."`\n📛┊  الايدي  ◂ (`"..msg.sender_user_id_.."`)\n‏", 1, "md")
+send(msg.chat_id_, msg.id_, 1, "💬┊ تم قفل الروابط \n🎟┊ الأمر بواسطه » "..tmkeeper(msg).."\n ‏ ", 1, "md")
 else
-send(msg.chat_id_, msg.id_, 1, "📌┊ الروابط مقفوله سابقا ✓\n🗯┊ بواسطة ◂ `"..tmkeeper(msg).."`\n📛┊  الايدي  ◂ (`"..msg.sender_user_id_.."`)\n‏", 1, "md")
+send(msg.chat_id_, msg.id_, 1, "💬┊ الروابط مقفوله سابقا \n🎟┊ الأمر بواسطه » "..tmkeeper(msg).."\n ‏ ", 1, "md")
 end
 redis:set(KEEPER.."bot:links:mute" .. msg.chat_id_, true)
 end
 if lockKeeper[2] == "المواقع" then
 if not redis:get(KEEPER.."bot:location:mute" .. msg.chat_id_) then
-send(msg.chat_id_, msg.id_, 1, "📌┊ تم قفل المواقع ✓\n🗯┊ بواسطة ◂ `"..tmkeeper(msg).."`\n📛┊  الايدي  ◂ (`"..msg.sender_user_id_.."`)\n‏", 1, "md")
+send(msg.chat_id_, msg.id_, 1, "💬┊ تم قفل المواقع \n🎟┊ الأمر بواسطه » "..tmkeeper(msg).."\n ‏ ", 1, "md")
 else
-send(msg.chat_id_, msg.id_, 1, "📌┊ المواقع مقفوله سابقا ✓\n🗯┊ بواسطة ◂ `"..tmkeeper(msg).."`\n📛┊  الايدي  ◂ (`"..msg.sender_user_id_.."`)\n‏", 1, "md")
+send(msg.chat_id_, msg.id_, 1, "💬┊ المواقع مقفوله سابقا \n🎟┊ الأمر بواسطه » "..tmkeeper(msg).."\n ‏ ", 1, "md")
 end
 redis:set(KEEPER.."bot:location:mute" .. msg.chat_id_, true)
 end
 if lockKeeper[2] == "التاك" then
 if not redis:get(KEEPER.."tags:lock" .. msg.chat_id_) then
-send(msg.chat_id_, msg.id_, 1, "📌┊ تم قفل التاك ✓\n🗯┊ بواسطة ◂ `"..tmkeeper(msg).."`\n📛┊  الايدي  ◂ (`"..msg.sender_user_id_.."`)\n‏", 1, "md")
+send(msg.chat_id_, msg.id_, 1, "💬┊ تم قفل التاك \n🎟┊ الأمر بواسطه » "..tmkeeper(msg).."\n ‏ ", 1, "md")
 else
-send(msg.chat_id_, msg.id_, 1, "📌┊ التاك مقفول سابقا ✓\n🗯┊ بواسطة ◂ `"..tmkeeper(msg).."`\n📛┊  الايدي  ◂ (`"..msg.sender_user_id_.."`)\n‏", 1, "md")
+send(msg.chat_id_, msg.id_, 1, "💬┊ التاك مقفول سابقا \n🎟┊ الأمر بواسطه » "..tmkeeper(msg).."\n ‏ ", 1, "md")
 end
 redis:set(KEEPER.."tags:lock" .. msg.chat_id_, true)
 end
 if lockKeeper[2] == "المعرف" then
 if not redis:get(KEEPER.."tags:lock" .. msg.chat_id_) then
-send(msg.chat_id_, msg.id_, 1, "📌┊ تم قفل المعرف ✓\n🗯┊ بواسطة ◂ `"..tmkeeper(msg).."`\n📛┊  الايدي  ◂ (`"..msg.sender_user_id_.."`)\n‏", 1, "md")
+send(msg.chat_id_, msg.id_, 1, "💬┊ تم قفل المعرف \n🎟┊ الأمر بواسطه » "..tmkeeper(msg).."\n ‏ ", 1, "md")
 else
-send(msg.chat_id_, msg.id_, 1, "📌┊ المعرف مقفول سابقا ✓\n🗯┊ بواسطة ◂ `"..tmkeeper(msg).."`\n📛┊  الايدي  ◂ (`"..msg.sender_user_id_.."`)\n‏", 1, "md")
+send(msg.chat_id_, msg.id_, 1, "💬┊ المعرف مقفول سابقا \n🎟┊ الأمر بواسطه » "..tmkeeper(msg).."\n ‏ ", 1, "md")
 end
 redis:set(KEEPER.."tags:lock" .. msg.chat_id_, true)
 end
 if lockKeeper[2] == "الهاشتاك" then
 if not redis:get(KEEPER.."bot:hashtag:mute" .. msg.chat_id_) then
-send(msg.chat_id_, msg.id_, 1, "📌┊ تم قفل الهاشتاك ✓\n🗯┊ بواسطة ◂ `"..tmkeeper(msg).."`\n📛┊  الايدي  ◂ (`"..msg.sender_user_id_.."`)\n‏", 1, "md")
+send(msg.chat_id_, msg.id_, 1, "💬┊ تم قفل الهاشتاك \n🎟┊ الأمر بواسطه » "..tmkeeper(msg).."\n ‏ ", 1, "md")
 else
-send(msg.chat_id_, msg.id_, 1, "📌┊ الهاشتاك مقفوله سابقا ✓\n🗯┊ بواسطة ◂ `"..tmkeeper(msg).."`\n📛┊  الايدي  ◂ (`"..msg.sender_user_id_.."`)\n‏", 1, "md")
+send(msg.chat_id_, msg.id_, 1, "💬┊ الهاشتاك مقفوله سابقا \n🎟┊ الأمر بواسطه » "..tmkeeper(msg).."\n ‏ ", 1, "md")
 end
 redis:set(KEEPER.."bot:hashtag:mute" .. msg.chat_id_, true)
 end
 if lockKeeper[2] == "الجهات" then
 if not redis:get(KEEPER.."bot:contact:mute" .. msg.chat_id_) then
-send(msg.chat_id_, msg.id_, 1, "📌┊ تم قفل الجهات ✓\n🗯┊ بواسطة ◂ `"..tmkeeper(msg).."`\n📛┊  الايدي  ◂ (`"..msg.sender_user_id_.."`)\n‏", 1, "md")
+send(msg.chat_id_, msg.id_, 1, "💬┊ تم قفل الجهات \n🎟┊ الأمر بواسطه » "..tmkeeper(msg).."\n ‏ ", 1, "md")
 else
-send(msg.chat_id_, msg.id_, 1, "📌┊ الجهات مقفوله سابقا ✓\n🗯┊ بواسطة ◂ `"..tmkeeper(msg).."`\n📛┊  الايدي  ◂ (`"..msg.sender_user_id_.."`)\n‏", 1, "md")
+send(msg.chat_id_, msg.id_, 1, "💬┊ الجهات مقفوله سابقا \n🎟┊ الأمر بواسطه » "..tmkeeper(msg).."\n ‏ ", 1, "md")
 end
 redis:set(KEEPER.."bot:contact:mute" .. msg.chat_id_, true)
 end
 if lockKeeper[2] == "الويب" then
 if not redis:get(KEEPER.."bot:webpage:mute" .. msg.chat_id_) then
-send(msg.chat_id_, msg.id_, 1, "📌┊ تم قفل الويب ✓\n🗯┊ بواسطة ◂ `"..tmkeeper(msg).."`\n📛┊  الايدي  ◂ (`"..msg.sender_user_id_.."`)\n‏", 1, "md")
+send(msg.chat_id_, msg.id_, 1, "💬┊ تم قفل الويب \n🎟┊ الأمر بواسطه » "..tmkeeper(msg).."\n ‏ ", 1, "md")
 else
-send(msg.chat_id_, msg.id_, 1, "📌┊ الويب مقفوله سابقا ✓\n🗯┊ بواسطة ◂ `"..tmkeeper(msg).."`\n📛┊  الايدي  ◂ (`"..msg.sender_user_id_.."`)\n‏", 1, "md")
+send(msg.chat_id_, msg.id_, 1, "💬┊ الويب مقفوله سابقا \n🎟┊ الأمر بواسطه » "..tmkeeper(msg).."\n ‏ ", 1, "md")
 end
 redis:set(KEEPER.."bot:webpage:mute" .. msg.chat_id_, true)
 end
 if lockKeeper[2] == "العربيه" then
 if not redis:get(KEEPER.."bot:arabic:mute" .. msg.chat_id_) then
-send(msg.chat_id_, msg.id_, 1, "📌┊ تم قفل العربيه ✓\n🗯┊ بواسطة ◂ `"..tmkeeper(msg).."`\n📛┊  الايدي  ◂ (`"..msg.sender_user_id_.."`)\n‏", 1, "md")
+send(msg.chat_id_, msg.id_, 1, "💬┊ تم قفل العربيه \n🎟┊ الأمر بواسطه » "..tmkeeper(msg).."\n ‏ ", 1, "md")
 else
-send(msg.chat_id_, msg.id_, 1, "📌┊ العربيه مقفوله سابقا ✓\n🗯┊ بواسطة ◂ `"..tmkeeper(msg).."`\n📛┊  الايدي  ◂ (`"..msg.sender_user_id_.."`)\n‏", 1, "md")
+send(msg.chat_id_, msg.id_, 1, "💬┊ العربيه مقفوله سابقا \n🎟┊ الأمر بواسطه » "..tmkeeper(msg).."\n ‏ ", 1, "md")
 end
 redis:set(KEEPER.."bot:arabic:mute" .. msg.chat_id_, true)
 end
 if lockKeeper[2] == "الانظمام" then
 if not redis:get(KEEPER.."bot:member:lock" .. msg.chat_id_) then
-send(msg.chat_id_, msg.id_, 1, "📌┊ تم قفل الانظمام ✓\n🗯┊ بواسطة ◂ `"..tmkeeper(msg).."`\n📛┊  الايدي  ◂ (`"..msg.sender_user_id_.."`)\n‏", 1, "md")
+send(msg.chat_id_, msg.id_, 1, "💬┊ تم قفل الانظمام \n🎟┊ الأمر بواسطه » "..tmkeeper(msg).."\n ‏ ", 1, "md")
 else
-send(msg.chat_id_, msg.id_, 1, "📌┊ الانظمام مقفوله سابقا ✓\n🗯┊ بواسطة ◂ `"..tmkeeper(msg).."`\n📛┊  الايدي  ◂ (`"..msg.sender_user_id_.."`)\n‏", 1, "md")
+send(msg.chat_id_, msg.id_, 1, "💬┊ الانظمام مقفوله سابقا \n🎟┊ الأمر بواسطه » "..tmkeeper(msg).."\n ‏ ", 1, "md")
 end
 redis:set(KEEPER.."bot:member:lock" .. msg.chat_id_, true)
 end
 if lockKeeper[2] == "الانكليزيه" then
 if not redis:get(KEEPER.."bot:english:mute" .. msg.chat_id_) then
-send(msg.chat_id_, msg.id_, 1, "📌┊ تم قفل الانكليزي ✓\n🗯┊ بواسطة ◂ `"..tmkeeper(msg).."`\n📛┊  الايدي  ◂ (`"..msg.sender_user_id_.."`)\n‏", 1, "md")
+send(msg.chat_id_, msg.id_, 1, "💬┊ تم قفل الانكليزي \n🎟┊ الأمر بواسطه » "..tmkeeper(msg).."\n ‏ ", 1, "md")
 else
-send(msg.chat_id_, msg.id_, 1, "📌┊ الانكليزيه مقفوله سابقا ✓\n🗯┊ بواسطة ◂ `"..tmkeeper(msg).."`\n📛┊  الايدي  ◂ (`"..msg.sender_user_id_.."`)\n‏", 1, "md")
+send(msg.chat_id_, msg.id_, 1, "💬┊ الانكليزيه مقفوله سابقا \n🎟┊ الأمر بواسطه » "..tmkeeper(msg).."\n ‏ ", 1, "md")
 end
 redis:set(KEEPER.."bot:english:mute" .. msg.chat_id_, true)
 end
 if lockKeeper[2] == "الاشعارات" then
 if not redis:get(KEEPER.."bot:tgservice:mute" .. msg.chat_id_) then
-send(msg.chat_id_, msg.id_, 1, "📌┊ تم قفل الاشعارات ✓\n🗯┊ بواسطة ◂ `"..tmkeeper(msg).."`\n📛┊  الايدي  ◂ (`"..msg.sender_user_id_.."`)\n‏", 1, "md")
+send(msg.chat_id_, msg.id_, 1, "💬┊ تم قفل الاشعارات \n🎟┊ الأمر بواسطه » "..tmkeeper(msg).."\n ‏ ", 1, "md")
 else
-send(msg.chat_id_, msg.id_, 1, "📌┊ الاشعارات مقفوله سابقا ✓\n🗯┊ بواسطة ◂ `"..tmkeeper(msg).."`\n📛┊  الايدي  ◂ (`"..msg.sender_user_id_.."`)\n‏", 1, "md")
+send(msg.chat_id_, msg.id_, 1, "💬┊ الاشعارات مقفوله سابقا \n🎟┊ الأمر بواسطه » "..tmkeeper(msg).."\n ‏ ", 1, "md")
 redis:set(KEEPER.."bot:tgservice:mute" .. msg.chat_id_, true)
 end
 end
 if lockKeeper[2] == "الملصقات" then
 if not redis:get(KEEPER.."bot:sticker:mute" .. msg.chat_id_) then
-send(msg.chat_id_, msg.id_, 1, "📌┊ تم قفل الملصقات ✓\n🗯┊ بواسطة ◂ `"..tmkeeper(msg).."`\n📛┊  الايدي  ◂ (`"..msg.sender_user_id_.."`)\n‏", 1, "md")
+send(msg.chat_id_, msg.id_, 1, "💬┊ تم قفل الملصقات \n🎟┊ الأمر بواسطه » "..tmkeeper(msg).."\n ‏ ", 1, "md")
 else
-send(msg.chat_id_, msg.id_, 1, "📌┊ الملصقات مقفوله سابقا ✓\n🗯┊ بواسطة ◂ `"..tmkeeper(msg).."`\n📛┊  الايدي  ◂ (`"..msg.sender_user_id_.."`)\n‏", 1, "md")
+send(msg.chat_id_, msg.id_, 1, "💬┊ الملصقات مقفوله سابقا \n🎟┊ الأمر بواسطه » "..tmkeeper(msg).."\n ‏ ", 1, "md")
 end
 redis:set(KEEPER.."bot:sticker:mute" .. msg.chat_id_, true)
 end
 if lockKeeper[2] == "التوجيه" then
 if not redis:get(KEEPER.."bot:forward:mute" .. msg.chat_id_) then
-send(msg.chat_id_, msg.id_, 1, "📌┊ تم قفل التوجيه ✓\n🗯┊ بواسطة ◂ `"..tmkeeper(msg).."`\n📛┊  الايدي  ◂ (`"..msg.sender_user_id_.."`)\n‏", 1, "md")
+send(msg.chat_id_, msg.id_, 1, "💬┊ تم قفل التوجيه \n🎟┊ الأمر بواسطه » "..tmkeeper(msg).."\n ‏ ", 1, "md")
 else
-send(msg.chat_id_, msg.id_, 1, "📌┊ التوجيه مقفوله سابقا ✓\n🗯┊ بواسطة ◂ `"..tmkeeper(msg).."`\n📛┊  الايدي  ◂ (`"..msg.sender_user_id_.."`)\n‏", 1, "md")
+send(msg.chat_id_, msg.id_, 1, "💬┊ التوجيه مقفوله سابقا \n🎟┊ الأمر بواسطه » "..tmkeeper(msg).."\n ‏ ", 1, "md")
 end
 redis:set(KEEPER.."bot:forward:mute" .. msg.chat_id_, true)
 end end
@@ -7990,273 +7999,274 @@ send(msg.chat_id_, msg.id_, 1, '💲┊ للأدمنيـــــــه فقــ�
 else
 if UNkeeper[2] == "التعديل" then
 if redis:get(KEEPER.."editmsg" .. msg.chat_id_) then
-send(msg.chat_id_, msg.id_, 1, "📌┊ تم فتح التعديل ✓\n🗯┊ بواسطة ◂ `"..tmkeeper(msg).."`\n📛┊  الايدي  ◂ (`"..msg.sender_user_id_.."`)\n‏", 1, "md")
+send(msg.chat_id_, msg.id_, 1, "💬┊ تم فتح التعديل \n🎟┊ الأمر بواسطه » "..tmkeeper(msg).."\n ‏ ", 1, "md")
 redis:del(KEEPER.."editmsg" .. msg.chat_id_)
 else
-send(msg.chat_id_, msg.id_, 1, "📌┊ التعديل مفتوح سابقا ✓\n🗯┊ بواسطة ◂ `"..tmkeeper(msg).."`\n📛┊  الايدي  ◂ (`"..msg.sender_user_id_.."`)\n‏", 1, "md")
+send(msg.chat_id_, msg.id_, 1, "💬┊ التعديل مفتوح سابقا \n🎟┊ الأمر بواسطه » "..tmkeeper(msg).."\n ‏ ", 1, "md")
 end
 end
 if UNkeeper[2] == "الاوامر" then
 if redis:get(KEEPER.."bot:cmds" .. msg.chat_id_) then
-send(msg.chat_id_, msg.id_, 1, "📌┊ تم فتح الاوامر ✓\n🗯┊ بواسطة ◂ `"..tmkeeper(msg).."`\n📛┊  الايدي  ◂ (`"..msg.sender_user_id_.."`)\n‏", 1, "md")
+send(msg.chat_id_, msg.id_, 1, "💬┊ تم فتح الاوامر \n🎟┊ الأمر بواسطه » "..tmkeeper(msg).."\n ‏ ", 1, "md")
 else
-send(msg.chat_id_, msg.id_, 1, "📌┊ الاوامر مفتوحه سابقا ✓\n🗯┊ بواسطة ◂ `"..tmkeeper(msg).."`\n📛┊  الايدي  ◂ (`"..msg.sender_user_id_.."`)\n‏", 1, "md")
+send(msg.chat_id_, msg.id_, 1, "💬┊ الاوامر مفتوحه سابقا \n🎟┊ الأمر بواسطه » "..tmkeeper(msg).."\n ‏ ", 1, "md")
 end
 redis:del(KEEPER.."bot:cmds" .. msg.chat_id_)
 end
 if UNkeeper[2] == "البوتات" then
 if redis:get(KEEPER.."bot:bots:mute" .. msg.chat_id_) then
-send(msg.chat_id_, msg.id_, 1, "📌┊ تم فتح البوتات ✓\n🗯┊ بواسطة ◂ `"..tmkeeper(msg).."`\n📛┊  الايدي  ◂ (`"..msg.sender_user_id_.."`)\n‏", 1, "md")
+send(msg.chat_id_, msg.id_, 1, "💬┊ تم فتح البوتات \n🎟┊ الأمر بواسطه » "..tmkeeper(msg).."\n ‏ ", 1, "md")
 else
-send(msg.chat_id_, msg.id_, 1, "📌┊ البوتات مفتوحه سابقا ✓\n🗯┊ بواسطة ◂ `"..tmkeeper(msg).."`\n📛┊  الايدي  ◂ (`"..msg.sender_user_id_.."`)\n‏", 1, "md")
+send(msg.chat_id_, msg.id_, 1, "💬┊ البوتات مفتوحه سابقا \n🎟┊ الأمر بواسطه » "..tmkeeper(msg).."\n ‏ ", 1, "md")
 end
 redis:del(KEEPER.."bot:bots:mute" .. msg.chat_id_)
 end
 if UNkeeper[2] == "البوتات بالطرد" then
 if redis:get(KEEPER.."bot:botskick" .. msg.chat_id_) then
-send(msg.chat_id_, msg.id_, 1, "📌┊ تم فتح البوتات بالطرد ✓\n🗯┊ بواسطة ◂ `"..tmkeeper(msg).."`\n📛┊  الايدي  ◂ (`"..msg.sender_user_id_.."`)\n‏", 1, "md")
+send(msg.chat_id_, msg.id_, 1, "💬┊ تم فتح البوتات بالطرد \n🎟┊ الأمر بواسطه » "..tmkeeper(msg).."\n ‏ ", 1, "md")
 else
-send(msg.chat_id_, msg.id_, 1, "📌┊ البوتات بالطرد مفتوحه سابقا ✓\n🗯┊ بواسطة ◂ `"..tmkeeper(msg).."`\n📛┊  الايدي  ◂ (`"..msg.sender_user_id_.."`)\n‏", 1, "md")
+send(msg.chat_id_, msg.id_, 1, "💬┊ البوتات بالطرد مفتوحه سابقا \n🎟┊ الأمر بواسطه » "..tmkeeper(msg).."\n ‏ ", 1, "md")
 end
 redis:del(KEEPER.."bot:botskick" .. msg.chat_id_)
 end
 if UNkeeper[2] == "التكرار" then
 if redis:get(KEEPER.."anti-flood:" .. msg.chat_id_) then
-send(msg.chat_id_, msg.id_, 1, "📌┊ تم فتح التكرار ✓\n🗯┊ بواسطة ◂ `"..tmkeeper(msg).."`\n📛┊  الايدي  ◂ (`"..msg.sender_user_id_.."`)\n‏", 1, "md")
+send(msg.chat_id_, msg.id_, 1, "💬┊ تم فتح التكرار \n🎟┊ الأمر بواسطه » "..tmkeeper(msg).."\n ‏ ", 1, "md")
 else
-send(msg.chat_id_, msg.id_, 1, "📌┊ التكرار مفتوح سابقا ✓\n🗯┊ بواسطة ◂ `"..tmkeeper(msg).."`\n📛┊  الايدي  ◂ (`"..msg.sender_user_id_.."`)\n‏", 1, "md")
+send(msg.chat_id_, msg.id_, 1, "💬┊ التكرار مفتوح سابقا \n🎟┊ الأمر بواسطه » "..tmkeeper(msg).."\n ‏ ", 1, "md")
 end
 redis:del(KEEPER.."anti-flood:" .. msg.chat_id_)
 end
 if UNkeeper[2] == "التثبيت" then
 if redis:get(KEEPER.."bot:pin:mute" .. msg.chat_id_) then
-send(msg.chat_id_, msg.id_, 1, "📌┊ تم فتح التثبيت ✓\n🗯┊ بواسطة ◂ `"..tmkeeper(msg).."`\n📛┊  الايدي  ◂ (`"..msg.sender_user_id_.."`)\n‏", 1, "md")
+send(msg.chat_id_, msg.id_, 1, "💬┊ تم فتح التثبيت \n🎟┊ الأمر بواسطه » "..tmkeeper(msg).."\n ‏ ", 1, "md")
 else
-send(msg.chat_id_, msg.id_, 1, "📌┊ التثبيت مفتوح سابقا ✓\n🗯┊ بواسطة ◂ `"..tmkeeper(msg).."`\n📛┊  الايدي  ◂ (`"..msg.sender_user_id_.."`)\n‏", 1, "md")
+send(msg.chat_id_, msg.id_, 1, "💬┊ التثبيت مفتوح سابقا \n🎟┊ الأمر بواسطه » "..tmkeeper(msg).."\n ‏ ", 1, "md")
 end
 redis:del(KEEPER.."bot:pin:mute" .. msg.chat_id_)
 end
 if UNkeeper[2] == "الكل" then
 if redis:get(KEEPER.."bot:muteall" .. msg.chat_id_) then
-send(msg.chat_id_, msg.id_, 1, "📌┊ تم فتح الكل ✓\n🗯┊ بواسطة ◂ `"..tmkeeper(msg).."`\n📛┊  الايدي  ◂ (`"..msg.sender_user_id_.."`)\n‏", 1, "md")
+send(msg.chat_id_, msg.id_, 1, "💬┊ تم فتح الكل \n🎟┊ الأمر بواسطه » "..tmkeeper(msg).."\n ‏ ", 1, "md")
 else
-send(msg.chat_id_, msg.id_, 1,  "📌┊ الكل مفتوحه سابقا✓\n🗯┊ بواسطة ◂ `"..tmkeeper(msg).."`\n📛┊  الايدي  ◂ (`"..msg.sender_user_id_.."`)\n‏", 1, "md")
+send(msg.chat_id_, msg.id_, 1,  "💬┊ الكل مفتوحه سابقا\n🎟┊ الأمر بواسطه » "..tmkeeper(msg).."\n ‏ ", 1, "md")
 end
 redis:del(KEEPER.."bot:muteall" .. msg.chat_id_)
 redis:set(KEEPER.."bot:gtime:say" .. msg.chat_id_, true)
 end
 if UNkeeper[2] == "الدردشه" then
 if redis:get(KEEPER.."bot:text:mute" .. msg.chat_id_) then
-send(msg.chat_id_, msg.id_, 1,  "📌┊ تم فتح الدردشه ✓\n🗯┊ بواسطة ◂ `"..tmkeeper(msg).."`\n📛┊  الايدي  ◂ (`"..msg.sender_user_id_.."`)\n‏", 1, "md")
+send(msg.chat_id_, msg.id_, 1,  "💬┊ تم فتح الدردشه \n🎟┊ الأمر بواسطه » "..tmkeeper(msg).."\n ‏ ", 1, "md")
 else
-send(msg.chat_id_, msg.id_, 1,  "📌┊ الدردشه مفتوحه سابقا ✓\n🗯┊ بواسطة ◂ `"..tmkeeper(msg).."`\n📛┊  الايدي  ◂ (`"..msg.sender_user_id_.."`)\n‏", 1, "md")
+send(msg.chat_id_, msg.id_, 1,  "💬┊ الدردشه مفتوحه سابقا \n🎟┊ الأمر بواسطه » "..tmkeeper(msg).."\n ‏ ", 1, "md")
 end
 redis:del(KEEPER.."bot:text:mute" .. msg.chat_id_)
 end
 if UNkeeper[2] == "الصور" then
 if redis:get(KEEPER.."bot:photo:mute" .. msg.chat_id_) then
-send(msg.chat_id_, msg.id_, 1,  "📌┊ تم فتح الصور ✓\n🗯┊ بواسطة ◂ `"..tmkeeper(msg).."`\n📛┊  الايدي  ◂ (`"..msg.sender_user_id_.."`)\n‏", 1, "md")
+send(msg.chat_id_, msg.id_, 1,  "💬┊ تم فتح الصور \n🎟┊ الأمر بواسطه » "..tmkeeper(msg).."\n ‏ ", 1, "md")
 else
-send(msg.chat_id_, msg.id_, 1,  "📌┊ الصور مفتوحه سابقا ✓\n🗯┊ بواسطة ◂ `"..tmkeeper(msg).."`\n📛┊  الايدي  ◂ (`"..msg.sender_user_id_.."`)\n‏", 1, "md")
+send(msg.chat_id_, msg.id_, 1,  "💬┊ الصور مفتوحه سابقا \n🎟┊ الأمر بواسطه » "..tmkeeper(msg).."\n ‏ ", 1, "md")
 end
 redis:del(KEEPER.."bot:photo:mute" .. msg.chat_id_)
 end
 if UNkeeper[2] == "المشاركه" then
 if redis:get(KEEPER.."bot:duplipost:mute" .. msg.chat_id_) then
-send(msg.chat_id_, msg.id_, 1,  "📌┊ تم فتح المشاركه ✓\n🗯┊ بواسطة ◂ `"..tmkeeper(msg).."`\n📛┊  الايدي  ◂ (`"..msg.sender_user_id_.."`)\n‏", 1, "md")
+send(msg.chat_id_, msg.id_, 1,  "💬┊ تم فتح المشاركه \n🎟┊ الأمر بواسطه » "..tmkeeper(msg).."\n ‏ ", 1, "md")
 else
-send(msg.chat_id_, msg.id_, 1,  "📌┊ المشاركه مفتوحه سابقا ✓\n🗯┊ بواسطة ◂ `"..tmkeeper(msg).."`\n📛┊  الايدي  ◂ (`"..msg.sender_user_id_.."`)\n‏", 1, "md")
+send(msg.chat_id_, msg.id_, 1,  "💬┊ المشاركه مفتوحه سابقا \n🎟┊ الأمر بواسطه » "..tmkeeper(msg).."\n ‏ ", 1, "md")
 end
 redis:del(KEEPER.."bot:duplipost:mute" .. msg.chat_id_)
 end
 if UNkeeper[2] == "الكلايش" then
 if redis:get(KEEPER.."bot:spam:mute" .. msg.chat_id_) then
-send(msg.chat_id_, msg.id_, 1,  "📌┊ تم فتح الكلايش ✓\n🗯┊ بواسطة ◂ `"..tmkeeper(msg).."`\n📛┊  الايدي  ◂ (`"..msg.sender_user_id_.."`)\n‏", 1, "md")
+send(msg.chat_id_, msg.id_, 1,  "💬┊ تم فتح الكلايش \n🎟┊ الأمر بواسطه » "..tmkeeper(msg).."\n ‏ ", 1, "md")
 else
-send(msg.chat_id_, msg.id_, 1,  "📌┊ الكلايش مفتوحه سابقا ✓\n🗯┊ بواسطة ◂ `"..tmkeeper(msg).."`\n📛┊  الايدي  ◂ (`"..msg.sender_user_id_.."`)\n‏", 1, "md")
+send(msg.chat_id_, msg.id_, 1,  "💬┊ الكلايش مفتوحه سابقا \n🎟┊ الأمر بواسطه » "..tmkeeper(msg).."\n ‏ ", 1, "md")
 end
 redis:del(KEEPER.."bot:spam:mute" .. msg.chat_id_)
 end
 if UNkeeper[2] == "الفيديو" then
 if redis:get(KEEPER.."bot:video:mute" .. msg.chat_id_) then
-send(msg.chat_id_, msg.id_, 1,  "📌┊ تم فتح الفيديو ✓\n🗯┊ بواسطة ◂ `"..tmkeeper(msg).."`\n📛┊  الايدي  ◂ (`"..msg.sender_user_id_.."`)\n‏", 1, "md")
+send(msg.chat_id_, msg.id_, 1,  "💬┊ تم فتح الفيديو \n🎟┊ الأمر بواسطه » "..tmkeeper(msg).."\n ‏ ", 1, "md")
 else
-send(msg.chat_id_, msg.id_, 1,  "📌┊ الفيديو مفتوح سابقا ✓\n🗯┊ بواسطة ◂ `"..tmkeeper(msg).."`\n📛┊  الايدي  ◂ (`"..msg.sender_user_id_.."`)\n‏", 1, "md")
+send(msg.chat_id_, msg.id_, 1,  "💬┊ الفيديو مفتوح سابقا \n🎟┊ الأمر بواسطه » "..tmkeeper(msg).."\n ‏ ", 1, "md")
 end
 redis:del(KEEPER.."bot:video:mute" .. msg.chat_id_)
 end
 if UNkeeper[2] == "السيلفي" then
 if redis:get(KEEPER.."bot:selfvideo:mute" .. msg.chat_id_) then
-send(msg.chat_id_, msg.id_, 1, "📌┊ تم فتح السيلفي ✓\n🗯┊ بواسطة ◂ `"..tmkeeper(msg).."`\n📛┊  الايدي  ◂ (`"..msg.sender_user_id_.."`)\n‏", 1, "md")
+send(msg.chat_id_, msg.id_, 1, "💬┊ تم فتح السيلفي \n🎟┊ الأمر بواسطه » "..tmkeeper(msg).."\n ‏ ", 1, "md")
 else
-send(msg.chat_id_, msg.id_, 1, "📌┊ السيلفي مفتوح سابقا ✓\n🗯┊ بواسطة ◂ `"..tmkeeper(msg).."`\n📛┊  الايدي  ◂ (`"..msg.sender_user_id_.."`)\n‏", 1, "md")
+send(msg.chat_id_, msg.id_, 1, "💬┊ السيلفي مفتوح سابقا \n🎟┊ الأمر بواسطه » "..tmkeeper(msg).."\n ‏ ", 1, "md")
 end
 redis:del(KEEPER.."bot:selfvideo:mute" .. msg.chat_id_)
 end
 if UNkeeper[2] == "الفايلات" then
 if redis:get(KEEPER.."bot:document:mute" .. msg.chat_id_) then
-send(msg.chat_id_, msg.id_, 1, "📌┊ تم فتح الفايلات ✓\n🗯┊ بواسطة ◂ `"..tmkeeper(msg).."`\n📛┊  الايدي  ◂ (`"..msg.sender_user_id_.."`)\n‏", 1, "md")
+send(msg.chat_id_, msg.id_, 1, "💬┊ تم فتح الفايلات \n🎟┊ الأمر بواسطه » "..tmkeeper(msg).."\n ‏ ", 1, "md")
 else
-send(msg.chat_id_, msg.id_, 1, "📌┊ الفايلات مفتوحه سابقا ✓\n🗯┊ بواسطة ◂ `"..tmkeeper(msg).."`\n📛┊  الايدي  ◂ (`"..msg.sender_user_id_.."`)\n‏", 1, "md")
+send(msg.chat_id_, msg.id_, 1, "💬┊ الفايلات مفتوحه سابقا \n🎟┊ الأمر بواسطه » "..tmkeeper(msg).."\n ‏ ", 1, "md")
 end
 redis:del(KEEPER.."bot:document:mute" .. msg.chat_id_)
 end
 if UNkeeper[2] == "الالعاب" then
 if redis:get(KEEPER.."Game:lock" .. msg.chat_id_) then
-send(msg.chat_id_, msg.id_, 1, "📌┊ تم فتح الالعاب ✓\n🗯┊ بواسطة ◂ `"..tmkeeper(msg).."`\n📛┊  الايدي  ◂ (`"..msg.sender_user_id_.."`)\n‏", 1, "md")
+send(msg.chat_id_, msg.id_, 1, "💬┊ تم فتح الالعاب \n🎟┊ الأمر بواسطه » "..tmkeeper(msg).."\n ‏ ", 1, "md")
 else
-send(msg.chat_id_, msg.id_, 1, "📌┊ الالعاب مفتوحه سابقا ✓\n🗯┊ بواسطة ◂ `"..tmkeeper(msg).."`\n📛┊  الايدي  ◂ (`"..msg.sender_user_id_.."`)\n‏", 1, "md")
+send(msg.chat_id_, msg.id_, 1, "💬┊ الالعاب مفتوحه سابقا \n🎟┊ الأمر بواسطه » "..tmkeeper(msg).."\n ‏ ", 1, "md")
 end
 redis:del(KEEPER.."Game:lock" .. msg.chat_id_)
 end
 if UNkeeper[2] == "الانلاين" then
 if redis:get(KEEPER.."bot:inline:mute" .. msg.chat_id_) then
-send(msg.chat_id_, msg.id_, 1, "📌┊ تم فتح الانلاين ✓\n🗯┊ بواسطة ◂ `"..tmkeeper(msg).."`\n📛┊  الايدي  ◂ (`"..msg.sender_user_id_.."`)\n‏", 1, "md")
+send(msg.chat_id_, msg.id_, 1, "💬┊ تم فتح الانلاين \n🎟┊ الأمر بواسطه » "..tmkeeper(msg).."\n ‏ ", 1, "md")
 else
-send(msg.chat_id_, msg.id_, 1, "📌┊ الانلاين مفتوحه سابقا ✓\n🗯┊ بواسطة ◂ `"..tmkeeper(msg).."`\n📛┊  الايدي  ◂ (`"..msg.sender_user_id_.."`)\n‏", 1, "md")
+send(msg.chat_id_, msg.id_, 1, "💬┊ الانلاين مفتوحه سابقا \n🎟┊ الأمر بواسطه » "..tmkeeper(msg).."\n ‏ ", 1, "md")
 end
 redis:del(KEEPER.."bot:inline:mute" .. msg.chat_id_)
 end
 if UNkeeper[2] == "البوست" then
 if redis:get(KEEPER.."post:lock" .. msg.chat_id_) then
-send(msg.chat_id_, msg.id_, 1, "📌┊ تم فتح البوست ✓\n🗯┊ بواسطة ◂ `"..tmkeeper(msg).."`\n📛┊  الايدي  ◂ (`"..msg.sender_user_id_.."`)\n‏", 1, "md")              redis:del(KEEPER.."post:lock" .. msg.chat_id_)
+send(msg.chat_id_, msg.id_, 1, "💬┊ تم فتح البوست \n🎟┊ الأمر بواسطه » "..tmkeeper(msg).."\n ‏ ", 1, "md")            
+redis:del(KEEPER.."post:lock" .. msg.chat_id_)
 else
-send(msg.chat_id_, msg.id_, 1, "📌┊ البوست مفتوح سابقا ✓\n🗯┊ بواسطة ◂ `"..tmkeeper(msg).."`\n📛┊  الايدي  ◂ (`"..msg.sender_user_id_.."`)\n‏", 1, "md")
+send(msg.chat_id_, msg.id_, 1, "💬┊ البوست مفتوح سابقا \n🎟┊ الأمر بواسطه » "..tmkeeper(msg).."\n ‏ ", 1, "md")
 end
 redis:del(KEEPER.."post:lock" .. msg.chat_id_)
 end
 if UNkeeper[2] == "الماركدون" then
 if redis:get(KEEPER.."markdown:lock" .. msg.chat_id_) then
-send(msg.chat_id_, msg.id_, 1, "📌┊ تم فتح الماركدون ✓\n🗯┊ بواسطة ◂ `"..tmkeeper(msg).."`\n📛┊  الايدي  ◂ (`"..msg.sender_user_id_.."`)\n‏", 1, "md")
+send(msg.chat_id_, msg.id_, 1, "💬┊ تم فتح الماركدون \n🎟┊ الأمر بواسطه » "..tmkeeper(msg).."\n ‏ ", 1, "md")
 else
-send(msg.chat_id_, msg.id_, 1, "📌┊ الماركدون مفتوحه سابقا ✓\n🗯┊ بواسطة ◂ `"..tmkeeper(msg).."`\n📛┊  الايدي  ◂ (`"..msg.sender_user_id_.."`)\n‏", 1, "md")
+send(msg.chat_id_, msg.id_, 1, "💬┊ الماركدون مفتوحه سابقا \n🎟┊ الأمر بواسطه » "..tmkeeper(msg).."\n ‏ ", 1, "md")
 end
 redis:del(KEEPER.."markdown:lock" .. msg.chat_id_)
 end
 if UNkeeper[2] == "المتحركه" then
 if redis:get(KEEPER.."bot:gifs:mute" .. msg.chat_id_) then
-send(msg.chat_id_, msg.id_, 1, "📌┊ تم فتح المتحركه ✓\n🗯┊ بواسطة ◂ `"..tmkeeper(msg).."`\n📛┊  الايدي  ◂ (`"..msg.sender_user_id_.."`)\n‏", 1, "md")
+send(msg.chat_id_, msg.id_, 1, "💬┊ تم فتح المتحركه \n🎟┊ الأمر بواسطه » "..tmkeeper(msg).."\n ‏ ", 1, "md")
 else
-send(msg.chat_id_, msg.id_, 1, "📌┊ المتحركه مفتوحه سابقا ✓\n🗯┊ بواسطة ◂ `"..tmkeeper(msg).."`\n📛┊  الايدي  ◂ (`"..msg.sender_user_id_.."`)\n‏", 1, "md")
+send(msg.chat_id_, msg.id_, 1, "💬┊ المتحركه مفتوحه سابقا \n🎟┊ الأمر بواسطه » "..tmkeeper(msg).."\n ‏ ", 1, "md")
 end
 redis:del(KEEPER.."bot:gifs:mute" .. msg.chat_id_)
 end
 if UNkeeper[2] == "الاغاني" then
 if redis:get(KEEPER.."bot:music:mute" .. msg.chat_id_) then
-send(msg.chat_id_, msg.id_, 1, "📌┊ تم فتح الاغاني ✓\n🗯┊ بواسطة ◂ `"..tmkeeper(msg).."`\n📛┊  الايدي  ◂ (`"..msg.sender_user_id_.."`)\n‏", 1, "md")
+send(msg.chat_id_, msg.id_, 1, "💬┊ تم فتح الاغاني \n🎟┊ الأمر بواسطه » "..tmkeeper(msg).."\n ‏ ", 1, "md")
 else
-send(msg.chat_id_, msg.id_, 1, "📌┊ الاغاني مفتوحه سابقا ✓\n🗯┊ بواسطة ◂ `"..tmkeeper(msg).."`\n📛┊  الايدي  ◂ (`"..msg.sender_user_id_.."`)\n‏", 1, "md")
+send(msg.chat_id_, msg.id_, 1, "💬┊ الاغاني مفتوحه سابقا \n🎟┊ الأمر بواسطه » "..tmkeeper(msg).."\n ‏ ", 1, "md")
 end
 redis:del(KEEPER.."bot:music:mute" .. msg.chat_id_)
 end
 if UNkeeper[2] == "الصوت" then
 if redis:get(KEEPER.."bot:voice:mute" .. msg.chat_id_) then
-send(msg.chat_id_, msg.id_, 1, "📌┊ تم فتح الصوت ✓\n🗯┊ بواسطة ◂ `"..tmkeeper(msg).."`\n📛┊  الايدي  ◂ (`"..msg.sender_user_id_.."`)\n‏", 1, "md")
+send(msg.chat_id_, msg.id_, 1, "💬┊ تم فتح الصوت \n🎟┊ الأمر بواسطه » "..tmkeeper(msg).."\n ‏ ", 1, "md")
 else
-send(msg.chat_id_, msg.id_, 1, "📌┊ الصوت مفتوح سابقا ✓\n🗯┊ بواسطة ◂ `"..tmkeeper(msg).."`\n📛┊  الايدي  ◂ (`"..msg.sender_user_id_.."`)\n‏", 1, "md")
+send(msg.chat_id_, msg.id_, 1, "💬┊ الصوت مفتوح سابقا \n🎟┊ الأمر بواسطه » "..tmkeeper(msg).."\n ‏ ", 1, "md")
 end
 redis:del(KEEPER.."bot:voice:mute" .. msg.chat_id_)
 end
 if UNkeeper[2] == "الروابط" then
 if redis:get(KEEPER.."bot:links:mute" .. msg.chat_id_) then
-send(msg.chat_id_, msg.id_, 1, "📌┊ تم فتح الروابط ✓\n🗯┊ بواسطة ◂ `"..tmkeeper(msg).."`\n📛┊  الايدي  ◂ (`"..msg.sender_user_id_.."`)\n‏", 1, "md")
+send(msg.chat_id_, msg.id_, 1, "💬┊ تم فتح الروابط \n🎟┊ الأمر بواسطه » "..tmkeeper(msg).."\n ‏ ", 1, "md")
 else
-send(msg.chat_id_, msg.id_, 1, "📌┊ الروابط مفتوحه سابقا ✓\n🗯┊ بواسطة ◂ `"..tmkeeper(msg).."`\n📛┊  الايدي  ◂ (`"..msg.sender_user_id_.."`)\n‏", 1, "md")
+send(msg.chat_id_, msg.id_, 1, "💬┊ الروابط مفتوحه سابقا \n🎟┊ الأمر بواسطه » "..tmkeeper(msg).."\n ‏ ", 1, "md")
 end
 redis:del(KEEPER.."bot:links:mute" .. msg.chat_id_)
 end
 if UNkeeper[2] == "المواقع" then
 if redis:get(KEEPER.."bot:location:mute" .. msg.chat_id_) then
-send(msg.chat_id_, msg.id_, 1, "📌┊ تم فتح المواقع ✓\n🗯┊ بواسطة ◂ `"..tmkeeper(msg).."`\n📛┊  الايدي  ◂ (`"..msg.sender_user_id_.."`)\n‏", 1, "md")
+send(msg.chat_id_, msg.id_, 1, "💬┊ تم فتح المواقع \n🎟┊ الأمر بواسطه » "..tmkeeper(msg).."\n ‏ ", 1, "md")
 else
-send(msg.chat_id_, msg.id_, 1, "📌┊ المواقع مفتوحه سابقا ✓\n🗯┊ بواسطة ◂ `"..tmkeeper(msg).."`\n📛┊  الايدي  ◂ (`"..msg.sender_user_id_.."`)\n‏", 1, "md")
+send(msg.chat_id_, msg.id_, 1, "💬┊ المواقع مفتوحه سابقا \n🎟┊ الأمر بواسطه » "..tmkeeper(msg).."\n ‏ ", 1, "md")
 end
 redis:del(KEEPER.."bot:location:mute" .. msg.chat_id_)
 end
 if UNkeeper[2] == "التاك" then
 if redis:get(KEEPER.."tags:lock" .. msg.chat_id_) then
-send(msg.chat_id_, msg.id_, 1, "📌┊ تم فتح التاك ✓\n🗯┊ بواسطة ◂ `"..tmkeeper(msg).."`\n📛┊  الايدي  ◂ (`"..msg.sender_user_id_.."`)\n‏", 1, "md")
+send(msg.chat_id_, msg.id_, 1, "💬┊ تم فتح التاك \n🎟┊ الأمر بواسطه » "..tmkeeper(msg).."\n ‏ ", 1, "md")
 else
-send(msg.chat_id_, msg.id_, 1, "📌┊ التاك مفتوح سابقا✓\n🗯┊ بواسطة ◂ `"..tmkeeper(msg).."`\n📛┊  الايدي  ◂ (`"..msg.sender_user_id_.."`)\n‏", 1, "md")
+send(msg.chat_id_, msg.id_, 1, "💬┊ التاك مفتوح سابقا\n🎟┊ الأمر بواسطه » "..tmkeeper(msg).."\n ‏ ", 1, "md")
 end
 redis:del(KEEPER.."tags:lock" .. msg.chat_id_)
 end
 if UNkeeper[2] == "المعرف" then
 if redis:get(KEEPER.."tags:lock" .. msg.chat_id_) then
-send(msg.chat_id_, msg.id_, 1, "📌┊ تم فتح المعرف ✓\n🗯┊ بواسطة ◂ `"..tmkeeper(msg).."`\n📛┊  الايدي  ◂ (`"..msg.sender_user_id_.."`)\n‏", 1, "md")
+send(msg.chat_id_, msg.id_, 1, "💬┊ تم فتح المعرف \n🎟┊ الأمر بواسطه » "..tmkeeper(msg).."\n ‏ ", 1, "md")
 else
-send(msg.chat_id_, msg.id_, 1, "📌┊ المعرف مفتوح سابقا ✓\n🗯┊ بواسطة ◂ `"..tmkeeper(msg).."`\n📛┊  الايدي  ◂ (`"..msg.sender_user_id_.."`)\n‏", 1, "md")
+send(msg.chat_id_, msg.id_, 1, "💬┊ المعرف مفتوح سابقا \n🎟┊ الأمر بواسطه » "..tmkeeper(msg).."\n ‏ ", 1, "md")
 end
 redis:del(KEEPER.."tags:lock" .. msg.chat_id_)
 end
 if UNkeeper[2] == "الهاشتاك" then
 if redis:get(KEEPER.."bot:hashtag:mute" .. msg.chat_id_) then
-send(msg.chat_id_, msg.id_, 1, "📌┊ تم فتح الهاشتاك ✓\n🗯┊ بواسطة ◂ `"..tmkeeper(msg).."`\n📛┊  الايدي  ◂ (`"..msg.sender_user_id_.."`)\n‏", 1, "md")
+send(msg.chat_id_, msg.id_, 1, "💬┊ تم فتح الهاشتاك \n🎟┊ الأمر بواسطه » "..tmkeeper(msg).."\n ‏ ", 1, "md")
 else
-send(msg.chat_id_, msg.id_, 1, "📌┊ الهاشتاك مفتوحه سابقا ✓\n🗯┊ بواسطة ◂ `"..tmkeeper(msg).."`\n📛┊  الايدي  ◂ (`"..msg.sender_user_id_.."`)\n‏", 1, "md")
+send(msg.chat_id_, msg.id_, 1, "💬┊ الهاشتاك مفتوحه سابقا \n🎟┊ الأمر بواسطه » "..tmkeeper(msg).."\n ‏ ", 1, "md")
 end
 redis:del(KEEPER.."bot:hashtag:mute" .. msg.chat_id_)
 end
 if UNkeeper[2] == "الجهات" then
 if redis:get(KEEPER.."bot:contact:mute" .. msg.chat_id_) then
-send(msg.chat_id_, msg.id_, 1, "📌┊ تم فتح الجهات ✓\n🗯┊ بواسطة ◂ `"..tmkeeper(msg).."`\n📛┊  الايدي  ◂ (`"..msg.sender_user_id_.."`)\n‏", 1, "md")
+send(msg.chat_id_, msg.id_, 1, "💬┊ تم فتح الجهات \n🎟┊ الأمر بواسطه » "..tmkeeper(msg).."\n ‏ ", 1, "md")
 else
-send(msg.chat_id_, msg.id_, 1, "📌┊ لجهات مفتوحه سابقا ✓\n🗯┊ بواسطة ◂ `"..tmkeeper(msg).."`\n📛┊  الايدي  ◂ (`"..msg.sender_user_id_.."`)\n‏", 1, "md")
+send(msg.chat_id_, msg.id_, 1, "💬┊ لجهات مفتوحه سابقا \n🎟┊ الأمر بواسطه » "..tmkeeper(msg).."\n ‏ ", 1, "md")
 end
 redis:del(KEEPER.."bot:contact:mute" .. msg.chat_id_)
 end
 if UNkeeper[2] == "الويب" then
 if redis:get(KEEPER.."bot:webpage:mute" .. msg.chat_id_) then
-send(msg.chat_id_, msg.id_, 1, "📌┊ تم فتح الويب ✓\n🗯┊ بواسطة ◂ `"..tmkeeper(msg).."`\n📛┊  الايدي  ◂ (`"..msg.sender_user_id_.."`)\n‏", 1, "md")
+send(msg.chat_id_, msg.id_, 1, "💬┊ تم فتح الويب \n🎟┊ الأمر بواسطه » "..tmkeeper(msg).."\n ‏ ", 1, "md")
 else
-send(msg.chat_id_, msg.id_, 1, "📌┊ الويب مفتوح سابقا ✓\n🗯┊ بواسطة ◂ `"..tmkeeper(msg).."`\n📛┊  الايدي  ◂ (`"..msg.sender_user_id_.."`)\n‏", 1, "md")
+send(msg.chat_id_, msg.id_, 1, "💬┊ الويب مفتوح سابقا \n🎟┊ الأمر بواسطه » "..tmkeeper(msg).."\n ‏ ", 1, "md")
 end
 redis:del(KEEPER.."bot:webpage:mute" .. msg.chat_id_)
 end
 if UNkeeper[2] == "العربيه" then
 if redis:get(KEEPER.."bot:arabic:mute" .. msg.chat_id_) then
-send(msg.chat_id_, msg.id_, 1, "📌┊ تم فتح العربيه ✓\n🗯┊ بواسطة ◂ `"..tmkeeper(msg).."`\n📛┊  الايدي  ◂ (`"..msg.sender_user_id_.."`)\n‏", 1, "md")
+send(msg.chat_id_, msg.id_, 1, "💬┊ تم فتح العربيه \n🎟┊ الأمر بواسطه » "..tmkeeper(msg).."\n ‏ ", 1, "md")
 else
-send(msg.chat_id_, msg.id_, 1, "📌┊ العربيه مفتوحه سابقا ✓\n🗯┊ بواسطة ◂ `"..tmkeeper(msg).."`\n📛┊  الايدي  ◂ (`"..msg.sender_user_id_.."`)\n‏", 1, "md")
+send(msg.chat_id_, msg.id_, 1, "💬┊ العربيه مفتوحه سابقا \n🎟┊ الأمر بواسطه » "..tmkeeper(msg).."\n ‏ ", 1, "md")
 end
 redis:del(KEEPER.."bot:arabic:mute" .. msg.chat_id_)
 end
 if UNkeeper[2] == "الانظمام" then
 if redis:get(KEEPER.."bot:member:lock" .. msg.chat_id_) then
-send(msg.chat_id_, msg.id_, 1, "📌┊ تم فتح الانظمام ✓\n🗯┊ بواسطة ◂ `"..tmkeeper(msg).."`\n📛┊  الايدي  ◂ (`"..msg.sender_user_id_.."`)\n‏", 1, "md")
+send(msg.chat_id_, msg.id_, 1, "💬┊ تم فتح الانظمام \n🎟┊ الأمر بواسطه » "..tmkeeper(msg).."\n ‏ ", 1, "md")
 else
-send(msg.chat_id_, msg.id_, 1, "📌┊ الانظمام مفتوح سابقا✓\n🗯┊ بواسطة ◂ `"..tmkeeper(msg).."`\n📛┊  الايدي  ◂ (`"..msg.sender_user_id_.."`)\n‏", 1, "md")
+send(msg.chat_id_, msg.id_, 1, "💬┊ الانظمام مفتوح سابقا\n🎟┊ الأمر بواسطه » "..tmkeeper(msg).."\n ‏ ", 1, "md")
 end
 redis:del(KEEPER.."bot:member:lock" .. msg.chat_id_)
 end
 if UNkeeper[2] == "الانكليزيه" then
 if redis:get(KEEPER.."bot:english:mute" .. msg.chat_id_) then
-send(msg.chat_id_, msg.id_, 1, "📌┊ تم فتح الانكليزي ✓\n🗯┊ بواسطة ◂ `"..tmkeeper(msg).."`\n📛┊  الايدي  ◂ (`"..msg.sender_user_id_.."`)\n‏", 1, "md")
+send(msg.chat_id_, msg.id_, 1, "💬┊ تم فتح الانكليزي \n🎟┊ الأمر بواسطه » "..tmkeeper(msg).."\n ‏ ", 1, "md")
 else
-send(msg.chat_id_, msg.id_, 1, "📌┊ الانكليزيه مفتوحه سابقا ✓\n🗯┊ بواسطة ◂ `"..tmkeeper(msg).."`\n📛┊  الايدي  ◂ (`"..msg.sender_user_id_.."`)\n‏", 1, "md")
+send(msg.chat_id_, msg.id_, 1, "💬┊ الانكليزيه مفتوحه سابقا \n🎟┊ الأمر بواسطه » "..tmkeeper(msg).."\n ‏ ", 1, "md")
 end
 redis:del(KEEPER.."bot:english:mute" .. msg.chat_id_)
 end
 if UNkeeper[2] == "الاشعارات" then
 if redis:get(KEEPER.."bot:tgservice:mute" .. msg.chat_id_) then
-send(msg.chat_id_, msg.id_, 1, "📌┊ تم فتح الاشعارات ✓\n🗯┊ بواسطة ◂ `"..tmkeeper(msg).."`\n📛┊  الايدي  ◂ (`"..msg.sender_user_id_.."`)\n‏", 1, "md")
+send(msg.chat_id_, msg.id_, 1, "💬┊ تم فتح الاشعارات \n🎟┊ الأمر بواسطه » "..tmkeeper(msg).."\n ‏ ", 1, "md")
 else
-send(msg.chat_id_, msg.id_, 1, "📌┊ الاشعارات مفتوحه سابقا ✓\n🗯┊ بواسطة ◂ `"..tmkeeper(msg).."`\n📛┊  الايدي  ◂ (`"..msg.sender_user_id_.."`)\n‏", 1, "md")
+send(msg.chat_id_, msg.id_, 1, "💬┊ الاشعارات مفتوحه سابقا \n🎟┊ الأمر بواسطه » "..tmkeeper(msg).."\n ‏ ", 1, "md")
 redis:del(KEEPER.."bot:tgservice:mute" .. msg.chat_id_)
 end end
 if UNkeeper[2] == "الملصقات" then
 if redis:get(KEEPER.."bot:sticker:mute" .. msg.chat_id_) then
-send(msg.chat_id_, msg.id_, 1, "📌┊ تم فتح الملصقات ✓\n🗯┊ بواسطة ◂ `"..tmkeeper(msg).."`\n📛┊  الايدي  ◂ (`"..msg.sender_user_id_.."`)\n‏", 1, "md")
+send(msg.chat_id_, msg.id_, 1, "💬┊ تم فتح الملصقات \n🎟┊ الأمر بواسطه » "..tmkeeper(msg).."\n ‏ ", 1, "md")
 else
-send(msg.chat_id_, msg.id_, 1, "📌┊ الملصقات مفتوحه سابقا✓\n🗯┊ بواسطة ◂ `"..tmkeeper(msg).."`\n📛┊  الايدي  ◂ (`"..msg.sender_user_id_.."`)\n‏", 1, "md")
+send(msg.chat_id_, msg.id_, 1, "💬┊ الملصقات مفتوحه سابقا\n🎟┊ الأمر بواسطه » "..tmkeeper(msg).."\n ‏ ", 1, "md")
 end
 redis:del(KEEPER.."bot:sticker:mute" .. msg.chat_id_)
 end
 if UNkeeper[2] == "التوجيه" then
 if redis:get(KEEPER.."bot:forward:mute" .. msg.chat_id_) then
-send(msg.chat_id_, msg.id_, 1, "📌┊ تم فتح التوجيه ✓\n🗯┊ بواسطة ◂ `"..tmkeeper(msg).."`\n📛┊  الايدي  ◂ (`"..msg.sender_user_id_.."`)\n‏", 1, "md")
+send(msg.chat_id_, msg.id_, 1, "💬┊ تم فتح التوجيه \n🎟┊ الأمر بواسطه » "..tmkeeper(msg).."\n ‏ ", 1, "md")
 else
-send(msg.chat_id_, msg.id_, 1, "📌┊ التوجيه مفتوح سابقا ✓\n🗯┊ بواسطة ◂ `"..tmkeeper(msg).."`\n📛┊  الايدي  ◂ (`"..msg.sender_user_id_.."`)\n‏", 1, "md")
+send(msg.chat_id_, msg.id_, 1, "💬┊ التوجيه مفتوح سابقا \n🎟┊ الأمر بواسطه » "..tmkeeper(msg).."\n ‏ ", 1, "md")
 end
 redis:del(KEEPER.."bot:forward:mute" .. msg.chat_id_)
 end
@@ -8264,290 +8274,290 @@ end end end
 ------------------lock help keed--------------------------------------------------------------------------------------------
 if is_momod(msg.sender_user_id_, msg.chat_id_) and text == "قفل الدردشه بالتقييد" then
 if not redis:get(KEEPER.."keed_text" .. msg.chat_id_) then
-send(msg.chat_id_, msg.id_, 1,  "📌┊ تم قفل الدردشه بالتقييد ✓\n🗯┊ بواسطة ◂ `"..tmkeeper(msg).."`\n📛┊  الايدي  ◂ (`"..msg.sender_user_id_.."`)\n‏", 1, "md")
+send(msg.chat_id_, msg.id_, 1,  "💬┊ تم قفل الدردشه بالتقييد \n🎟┊ الأمر بواسطه » "..tmkeeper(msg).."\n ‏ ", 1, "md")
 else
-send(msg.chat_id_, msg.id_, 1,  "📌┊ الدردشه بالتقييد مقفوله ✓\n🗯┊ بواسطة ◂ `"..tmkeeper(msg).."`\n📛┊  الايدي  ◂ (`"..msg.sender_user_id_.."`)\n‏", 1, "md")
+send(msg.chat_id_, msg.id_, 1,  "💬┊ الدردشه بالتقييد مقفوله \n🎟┊ الأمر بواسطه » "..tmkeeper(msg).."\n ‏ ", 1, "md")
 end
 redis:set(KEEPER.."keed_text" .. msg.chat_id_, true)
 end
 if is_momod(msg.sender_user_id_, msg.chat_id_) and text == "قفل الصور بالتقييد" then
 if not redis:get(KEEPER.."keed_photo" .. msg.chat_id_) then
-send(msg.chat_id_, msg.id_, 1,  "📌┊ تم قفل الصور بالتقييد ✓\n🗯┊ بواسطة ◂ `"..tmkeeper(msg).."`\n📛┊  الايدي  ◂ (`"..msg.sender_user_id_.."`)\n‏", 1, "md")
+send(msg.chat_id_, msg.id_, 1,  "💬┊ تم قفل الصور بالتقييد \n🎟┊ الأمر بواسطه » "..tmkeeper(msg).."\n ‏ ", 1, "md")
 else
-send(msg.chat_id_, msg.id_, 1,  "📌┊ الصور بالتقييد مقفوله ✓\n🗯┊ بواسطة ◂ `"..tmkeeper(msg).."`\n📛┊  الايدي  ◂ (`"..msg.sender_user_id_.."`)\n‏", 1, "md")
+send(msg.chat_id_, msg.id_, 1,  "💬┊ الصور بالتقييد مقفوله \n🎟┊ الأمر بواسطه » "..tmkeeper(msg).."\n ‏ ", 1, "md")
 end
 redis:set(KEEPER.."keed_photo" .. msg.chat_id_, true)
 end
 if is_momod(msg.sender_user_id_, msg.chat_id_) and text == "قفل الفيديو بالتقييد" then
 if not redis:get(KEEPER.."keed_video" .. msg.chat_id_) then
-send(msg.chat_id_, msg.id_, 1,  "📌┊ تم قفل الفيديو بالتقييد ✓\n🗯┊ بواسطة ◂ `"..tmkeeper(msg).."`\n📛┊  الايدي  ◂ (`"..msg.sender_user_id_.."`)\n‏", 1, "md")
+send(msg.chat_id_, msg.id_, 1,  "💬┊ تم قفل الفيديو بالتقييد \n🎟┊ الأمر بواسطه » "..tmkeeper(msg).."\n ‏ ", 1, "md")
 else
-send(msg.chat_id_, msg.id_, 1,  "📌┊ الفيديو بالتقييد مقفول ✓\n🗯┊ بواسطة ◂ `"..tmkeeper(msg).."`\n📛┊  الايدي  ◂ (`"..msg.sender_user_id_.."`)\n‏", 1, "md")
+send(msg.chat_id_, msg.id_, 1,  "💬┊ الفيديو بالتقييد مقفول \n🎟┊ الأمر بواسطه » "..tmkeeper(msg).."\n ‏ ", 1, "md")
 end
 redis:set(KEEPER.."keed_video" .. msg.chat_id_, true)
 end
 if is_momod(msg.sender_user_id_, msg.chat_id_) and text == "قفل الفايلات بالتقييد" then
 if not redis:get(KEEPER.."keed_Document" .. msg.chat_id_) then
-send(msg.chat_id_, msg.id_, 1, "📌┊ تم قفل الفايلات بالتقييد ✓\n🗯┊ بواسطة ◂ `"..tmkeeper(msg).."`\n📛┊  الايدي  ◂ (`"..msg.sender_user_id_.."`)\n‏", 1, "md")
+send(msg.chat_id_, msg.id_, 1, "💬┊ تم قفل الفايلات بالتقييد \n🎟┊ الأمر بواسطه » "..tmkeeper(msg).."\n ‏ ", 1, "md")
 else
-send(msg.chat_id_, msg.id_, 1, "📌┊ الفايلات بالتقييد مقفوله ✓\n🗯┊ بواسطة ◂ `"..tmkeeper(msg).."`\n📛┊  الايدي  ◂ (`"..msg.sender_user_id_.."`)\n‏", 1, "md")
+send(msg.chat_id_, msg.id_, 1, "💬┊ الفايلات بالتقييد مقفوله \n🎟┊ الأمر بواسطه » "..tmkeeper(msg).."\n ‏ ", 1, "md")
 end
 redis:set(KEEPER.."keed_Document" .. msg.chat_id_, true)
 end
 if is_momod(msg.sender_user_id_, msg.chat_id_) and text == "قفل الماركدون بالتقييد" then
 if not redis:get(KEEPER.."keed_markdon" .. msg.chat_id_) then
-send(msg.chat_id_, msg.id_, 1, "📌┊ تم قفل الماركدون بالتقييد ✓\n🗯┊ بواسطة ◂ `"..tmkeeper(msg).."`\n📛┊  الايدي  ◂ (`"..msg.sender_user_id_.."`)\n‏", 1, "md")
+send(msg.chat_id_, msg.id_, 1, "💬┊ تم قفل الماركدون بالتقييد \n🎟┊ الأمر بواسطه » "..tmkeeper(msg).."\n ‏ ", 1, "md")
 else
-send(msg.chat_id_, msg.id_, 1, "📌┊ الماركدون بالتقييد مقفوله ✓\n🗯┊ بواسطة ◂ `"..tmkeeper(msg).."`\n📛┊  الايدي  ◂ (`"..msg.sender_user_id_.."`)\n‏", 1, "md")
+send(msg.chat_id_, msg.id_, 1, "💬┊ الماركدون بالتقييد مقفوله \n🎟┊ الأمر بواسطه » "..tmkeeper(msg).."\n ‏ ", 1, "md")
 end
 redis:set(KEEPER.."keed_markdon" .. msg.chat_id_, true)
 end
 if is_momod(msg.sender_user_id_, msg.chat_id_) and text == "قفل المتحركه بالتقييد" then
 if not redis:get(KEEPER.."keed_gif" .. msg.chat_id_) then
-send(msg.chat_id_, msg.id_, 1, "📌┊ تم قفل المتحركه بالتقييد ✓\n🗯┊ بواسطة ◂ `"..tmkeeper(msg).."`\n📛┊  الايدي  ◂ (`"..msg.sender_user_id_.."`)\n‏", 1, "md")
+send(msg.chat_id_, msg.id_, 1, "💬┊ تم قفل المتحركه بالتقييد \n🎟┊ الأمر بواسطه » "..tmkeeper(msg).."\n ‏ ", 1, "md")
 else
-send(msg.chat_id_, msg.id_, 1, "📌┊ المتحركه بالتقييد مقفوله ✓\n🗯┊ بواسطة ◂ `"..tmkeeper(msg).."`\n📛┊  الايدي  ◂ (`"..msg.sender_user_id_.."`)\n‏", 1, "md")
+send(msg.chat_id_, msg.id_, 1, "💬┊ المتحركه بالتقييد مقفوله \n🎟┊ الأمر بواسطه » "..tmkeeper(msg).."\n ‏ ", 1, "md")
 end
 redis:set(KEEPER.."keed_gif" .. msg.chat_id_, true)
 end
 if is_momod(msg.sender_user_id_, msg.chat_id_) and text == "قفل الاغاني بالتقييد" then
 if not redis:get(KEEPER.."keed_audio" .. msg.chat_id_) then
-send(msg.chat_id_, msg.id_, 1, "📌┊ تم قفل الاغاني بالتقييد ✓\n🗯┊ بواسطة ◂ `"..tmkeeper(msg).."`\n📛┊  الايدي  ◂ (`"..msg.sender_user_id_.."`)\n‏", 1, "md")
+send(msg.chat_id_, msg.id_, 1, "💬┊ تم قفل الاغاني بالتقييد \n🎟┊ الأمر بواسطه » "..tmkeeper(msg).."\n ‏ ", 1, "md")
 else
-send(msg.chat_id_, msg.id_, 1, "📌┊ الاغاني بالتقييد مقفوله ✓\n🗯┊ بواسطة ◂ `"..tmkeeper(msg).."`\n📛┊  الايدي  ◂ (`"..msg.sender_user_id_.."`)\n‏", 1, "md")
+send(msg.chat_id_, msg.id_, 1, "💬┊ الاغاني بالتقييد مقفوله \n🎟┊ الأمر بواسطه » "..tmkeeper(msg).."\n ‏ ", 1, "md")
 end
 redis:set(KEEPER.."keed_audio" .. msg.chat_id_, true)
 end
 if is_momod(msg.sender_user_id_, msg.chat_id_) and text == "قفل الصوت بالتقييد" then
 if not redis:get(KEEPER.."keed_voice" .. msg.chat_id_) then
-send(msg.chat_id_, msg.id_, 1, "📌┊ تم قفل الصوت بالتقييد ✓\n🗯┊ بواسطة ◂ `"..tmkeeper(msg).."`\n📛┊  الايدي  ◂ (`"..msg.sender_user_id_.."`)\n‏", 1, "md")
+send(msg.chat_id_, msg.id_, 1, "💬┊ تم قفل الصوت بالتقييد \n🎟┊ الأمر بواسطه » "..tmkeeper(msg).."\n ‏ ", 1, "md")
 else
-send(msg.chat_id_, msg.id_, 1, "📌┊ الصوت بالتقييد مقفول ✓\n🗯┊ بواسطة ◂ `"..tmkeeper(msg).."`\n📛┊  الايدي  ◂ (`"..msg.sender_user_id_.."`)\n‏", 1, "md")
+send(msg.chat_id_, msg.id_, 1, "💬┊ الصوت بالتقييد مقفول \n🎟┊ الأمر بواسطه » "..tmkeeper(msg).."\n ‏ ", 1, "md")
 end
 redis:set(KEEPER.."keed_voice" .. msg.chat_id_, true)
 end
 if is_momod(msg.sender_user_id_, msg.chat_id_) and text == "قفل الروابط بالتقييد" then
 if not redis:get(KEEPER.."keed_link" .. msg.chat_id_) then
-send(msg.chat_id_, msg.id_, 1, "📌┊ تم قفل الروابط بالتقييد ✓\n🗯┊ بواسطة ◂ `"..tmkeeper(msg).."`\n📛┊  الايدي  ◂ (`"..msg.sender_user_id_.."`)\n‏", 1, "md")
+send(msg.chat_id_, msg.id_, 1, "💬┊ تم قفل الروابط بالتقييد \n🎟┊ الأمر بواسطه » "..tmkeeper(msg).."\n ‏ ", 1, "md")
 else
-send(msg.chat_id_, msg.id_, 1, "📌┊ الروابط بالتقييد مقفوله ✓\n🗯┊ بواسطة ◂ `"..tmkeeper(msg).."`\n📛┊  الايدي  ◂ (`"..msg.sender_user_id_.."`)\n‏", 1, "md")
+send(msg.chat_id_, msg.id_, 1, "💬┊ الروابط بالتقييد مقفوله \n🎟┊ الأمر بواسطه » "..tmkeeper(msg).."\n ‏ ", 1, "md")
 end
 redis:set(KEEPER.."keed_link" .. msg.chat_id_, true)
 end
 if is_momod(msg.sender_user_id_, msg.chat_id_) and text == "قفل التاك بالتقييد" then
 if not redis:get(KEEPER.."keed_user" .. msg.chat_id_) then
-send(msg.chat_id_, msg.id_, 1, "📌┊ تم قفل التاك بالتقييد ✓\n🗯┊ بواسطة ◂ `"..tmkeeper(msg).."`\n📛┊  الايدي  ◂ (`"..msg.sender_user_id_.."`)\n‏", 1, "md")
+send(msg.chat_id_, msg.id_, 1, "💬┊ تم قفل التاك بالتقييد \n🎟┊ الأمر بواسطه » "..tmkeeper(msg).."\n ‏ ", 1, "md")
 else
-send(msg.chat_id_, msg.id_, 1, "📌┊ التاك بالتقييد مقفول ✓\n🗯┊ بواسطة ◂ `"..tmkeeper(msg).."`\n📛┊  الايدي  ◂ (`"..msg.sender_user_id_.."`)\n‏", 1, "md")
+send(msg.chat_id_, msg.id_, 1, "💬┊ التاك بالتقييد مقفول \n🎟┊ الأمر بواسطه » "..tmkeeper(msg).."\n ‏ ", 1, "md")
 end
 redis:set(KEEPER.."keed_user" .. msg.chat_id_, true)
 end
 if is_momod(msg.sender_user_id_, msg.chat_id_) and text == "قفل المعرف بالتقييد" then
 if not redis:get(KEEPER.."keed_user" .. msg.chat_id_) then
-send(msg.chat_id_, msg.id_, 1, "📌┊ تم قفل المعرف بالتقييد ✓\n🗯┊ بواسطة ◂ `"..tmkeeper(msg).."`\n📛┊  الايدي  ◂ (`"..msg.sender_user_id_.."`)\n‏", 1, "md")
+send(msg.chat_id_, msg.id_, 1, "💬┊ تم قفل المعرف بالتقييد \n🎟┊ الأمر بواسطه » "..tmkeeper(msg).."\n ‏ ", 1, "md")
 else
-send(msg.chat_id_, msg.id_, 1, "📌┊ المعرف بالتقييد مقفول ✓\n🗯┊ بواسطة ◂ `"..tmkeeper(msg).."`\n📛┊  الايدي  ◂ (`"..msg.sender_user_id_.."`)\n‏", 1, "md")
+send(msg.chat_id_, msg.id_, 1, "💬┊ المعرف بالتقييد مقفول \n🎟┊ الأمر بواسطه » "..tmkeeper(msg).."\n ‏ ", 1, "md")
 end
 redis:set(KEEPER.."keed_user" .. msg.chat_id_, true)
 end
 if is_momod(msg.sender_user_id_, msg.chat_id_) and text == "قفل الهاشتاك بالتقييد" then
 if not redis:get(KEEPER.."keed_hashtag" .. msg.chat_id_) then
-send(msg.chat_id_, msg.id_, 1, "📌┊ تم قفل الهاشتاك بالتقييد ✓\n🗯┊ بواسطة ◂ `"..tmkeeper(msg).."`\n📛┊  الايدي  ◂ (`"..msg.sender_user_id_.."`)\n‏", 1, "md")
+send(msg.chat_id_, msg.id_, 1, "💬┊ تم قفل الهاشتاك بالتقييد \n🎟┊ الأمر بواسطه » "..tmkeeper(msg).."\n ‏ ", 1, "md")
 else
-send(msg.chat_id_, msg.id_, 1, "📌┊ الهاشتاك بالتقييد مقفوله ✓\n🗯┊ بواسطة ◂ `"..tmkeeper(msg).."`\n📛┊  الايدي  ◂ (`"..msg.sender_user_id_.."`)\n‏", 1, "md")
+send(msg.chat_id_, msg.id_, 1, "💬┊ الهاشتاك بالتقييد مقفوله \n🎟┊ الأمر بواسطه » "..tmkeeper(msg).."\n ‏ ", 1, "md")
 end
 redis:set(KEEPER.."keed_hashtag" .. msg.chat_id_, true)
 end
 if is_momod(msg.sender_user_id_, msg.chat_id_) and text == "قفل الجهات بالتقييد" then
 if not redis:get(KEEPER.."keed_contect" .. msg.chat_id_) then
-send(msg.chat_id_, msg.id_, 1, "📌┊ تم قفل الجهات بالتقييد ✓\n🗯┊ بواسطة ◂ `"..tmkeeper(msg).."`\n📛┊  الايدي  ◂ (`"..msg.sender_user_id_.."`)\n‏", 1, "md")
+send(msg.chat_id_, msg.id_, 1, "💬┊ تم قفل الجهات بالتقييد \n🎟┊ الأمر بواسطه » "..tmkeeper(msg).."\n ‏ ", 1, "md")
 else
-send(msg.chat_id_, msg.id_, 1, "📌┊ الجهات بالتقييد مقفوله ✓\n🗯┊ بواسطة ◂ `"..tmkeeper(msg).."`\n📛┊  الايدي  ◂ (`"..msg.sender_user_id_.."`)\n‏", 1, "md")
+send(msg.chat_id_, msg.id_, 1, "💬┊ الجهات بالتقييد مقفوله \n🎟┊ الأمر بواسطه » "..tmkeeper(msg).."\n ‏ ", 1, "md")
 end
 redis:set(KEEPER.."keed_contect" .. msg.chat_id_, true)
 end
 if is_momod(msg.sender_user_id_, msg.chat_id_) and text == "قفل العربيه بالتقييد" then
 if not redis:get(KEEPER.."keed_arbic" .. msg.chat_id_) then
-send(msg.chat_id_, msg.id_, 1, "📌┊ تم قفل العربيه بالتقييد ✓\n🗯┊ بواسطة ◂ `"..tmkeeper(msg).."`\n📛┊  الايدي  ◂ (`"..msg.sender_user_id_.."`)\n‏", 1, "md")
+send(msg.chat_id_, msg.id_, 1, "💬┊ تم قفل العربيه بالتقييد \n🎟┊ الأمر بواسطه » "..tmkeeper(msg).."\n ‏ ", 1, "md")
 else
-send(msg.chat_id_, msg.id_, 1, "📌┊العربيه بالتقييد مقفوله ✓\n🗯┊ بواسطة ◂ `"..tmkeeper(msg).."`\n📛┊  الايدي  ◂ (`"..msg.sender_user_id_.."`)\n‏", 1, "md")
+send(msg.chat_id_, msg.id_, 1, "💬┊العربيه بالتقييد مقفوله \n🎟┊ الأمر بواسطه » "..tmkeeper(msg).."\n ‏ ", 1, "md")
 end
 redis:set(KEEPER.."keed_arbic" .. msg.chat_id_, true)
 end
 if is_momod(msg.sender_user_id_, msg.chat_id_) and text == "قفل الانكليزيه بالتقييد" then
 if not redis:get(KEEPER.."keed_english" .. msg.chat_id_) then
-send(msg.chat_id_, msg.id_, 1, "📌┊ تم قفل الانكليزي بالتقييد ✓\n🗯┊ بواسطة ◂ `"..tmkeeper(msg).."`\n📛┊  الايدي  ◂ (`"..msg.sender_user_id_.."`)\n‏", 1, "md")
+send(msg.chat_id_, msg.id_, 1, "💬┊ تم قفل الانكليزي بالتقييد \n🎟┊ الأمر بواسطه » "..tmkeeper(msg).."\n ‏ ", 1, "md")
 else
-send(msg.chat_id_, msg.id_, 1, "📌┊ الانكليزي بالتقييد مقفوله ✓\n🗯┊ بواسطة ◂ `"..tmkeeper(msg).."`\n📛┊  الايدي  ◂ (`"..msg.sender_user_id_.."`)\n‏", 1, "md")
+send(msg.chat_id_, msg.id_, 1, "💬┊ الانكليزي بالتقييد مقفوله \n🎟┊ الأمر بواسطه » "..tmkeeper(msg).."\n ‏ ", 1, "md")
 end
 redis:set(KEEPER.."keed_english" .. msg.chat_id_, true)
 end
 if is_momod(msg.sender_user_id_, msg.chat_id_) and text == "قفل الملصقات بالتقييد" then
 if not redis:get(KEEPER.."keed_stecker" .. msg.chat_id_) then
-send(msg.chat_id_, msg.id_, 1, "📌┊ تم قفل الملصقات بالتقييد ✓\n🗯┊ بواسطة ◂ `"..tmkeeper(msg).."`\n📛┊  الايدي  ◂ (`"..msg.sender_user_id_.."`)\n‏", 1, "md")
+send(msg.chat_id_, msg.id_, 1, "💬┊ تم قفل الملصقات بالتقييد \n🎟┊ الأمر بواسطه » "..tmkeeper(msg).."\n ‏ ", 1, "md")
 else
-send(msg.chat_id_, msg.id_, 1, "📌┊ الملصقات بالتقييد مقفوله ✓\n🗯┊ بواسطة ◂ `"..tmkeeper(msg).."`\n📛┊  الايدي  ◂ (`"..msg.sender_user_id_.."`)\n‏", 1, "md")
+send(msg.chat_id_, msg.id_, 1, "💬┊ الملصقات بالتقييد مقفوله \n🎟┊ الأمر بواسطه » "..tmkeeper(msg).."\n ‏ ", 1, "md")
 end
 redis:set(KEEPER.."lock_stecker" .. msg.chat_id_, true)
 end
 if is_momod(msg.sender_user_id_, msg.chat_id_) and text == "قفل التوجيه بالتقييد" then
 if not redis:get(KEEPER.."keed_fwd" .. msg.chat_id_) then
-send(msg.chat_id_, msg.id_, 1, "📌┊ تم قفل التوجيه بالتقييد ✓\n🗯┊ بواسطة ◂ `"..tmkeeper(msg).."`\n📛┊  الايدي  ◂ (`"..msg.sender_user_id_.."`)\n‏", 1, "md")
+send(msg.chat_id_, msg.id_, 1, "💬┊ تم قفل التوجيه بالتقييد \n🎟┊ الأمر بواسطه » "..tmkeeper(msg).."\n ‏ ", 1, "md")
 else
-send(msg.chat_id_, msg.id_, 1, "📌┊ التوجيه بالتقييد مقفول ✓\n🗯┊ بواسطة ◂ `"..tmkeeper(msg).."`\n📛┊  الايدي  ◂ (`"..msg.sender_user_id_.."`)\n‏", 1, "md")
+send(msg.chat_id_, msg.id_, 1, "💬┊ التوجيه بالتقييد مقفول \n🎟┊ الأمر بواسطه » "..tmkeeper(msg).."\n ‏ ", 1, "md")
 end
 redis:set(KEEPER.."keed_fwd" .. msg.chat_id_, true)
 end
 if is_momod(msg.sender_user_id_, msg.chat_id_) and text == "قفل البوتات بالتقييد" then
 if not redis:get(KEEPER.."keed_bots" .. msg.chat_id_) then
-send(msg.chat_id_, msg.id_, 1,  "📌┊ تم قفل البوتات بالتقييد ✓\n🗯┊ بواسطة ◂ `"..tmkeeper(msg).."`\n📛┊  الايدي  ◂ (`"..msg.sender_user_id_.."`)\n‏", 1, "md")
+send(msg.chat_id_, msg.id_, 1,  "💬┊ تم قفل البوتات بالتقييد \n🎟┊ الأمر بواسطه » "..tmkeeper(msg).."\n ‏ ", 1, "md")
 else
-send(msg.chat_id_, msg.id_, 1,  "📌┊ البوتات بالتقييد مقفوله ✓\n🗯┊ بواسطة ◂ `"..tmkeeper(msg).."`\n📛┊  الايدي  ◂ (`"..msg.sender_user_id_.."`)\n‏", 1, "md")
+send(msg.chat_id_, msg.id_, 1,  "💬┊ البوتات بالتقييد مقفوله \n🎟┊ الأمر بواسطه » "..tmkeeper(msg).."\n ‏ ", 1, "md")
 end
 redis:set(KEEPER.."keed_bots" .. msg.chat_id_, true)
 end
 ----------------------------------------------------------------------------------------
 if is_momod(msg.sender_user_id_, msg.chat_id_) and text == "فتح الدردشه بالتقييد" then
 if redis:get(KEEPER.."keed_text" .. msg.chat_id_) then
-send(msg.chat_id_, msg.id_, 1,  "📌┊ تم فتح الدردشه بالتقييد ✓\n🗯┊ بواسطة ◂ `"..tmkeeper(msg).."`\n📛┊  الايدي  ◂ (`"..msg.sender_user_id_.."`)\n‏", 1, "md")
+send(msg.chat_id_, msg.id_, 1,  "💬┊ تم فتح الدردشه بالتقييد \n🎟┊ الأمر بواسطه » "..tmkeeper(msg).."\n ‏ ", 1, "md")
 else
-send(msg.chat_id_, msg.id_, 1,  "📌┊ الدردشه بالتقييد مفتوحه ✓\n🗯┊ بواسطة ◂ `"..tmkeeper(msg).."`\n📛┊  الايدي  ◂ (`"..msg.sender_user_id_.."`)\n‏", 1, "md")
+send(msg.chat_id_, msg.id_, 1,  "💬┊ الدردشه بالتقييد مفتوحه \n🎟┊ الأمر بواسطه » "..tmkeeper(msg).."\n ‏ ", 1, "md")
 end
 redis:del(KEEPER.."keed_text" .. msg.chat_id_)
 end
 if is_momod(msg.sender_user_id_, msg.chat_id_) and text == "فتح الصور بالتقييد" then
 if redis:get(KEEPER.."keed_photo" .. msg.chat_id_) then
-send(msg.chat_id_, msg.id_, 1,  "📌┊ تم فتح الصور بالتقييد ✓\n🗯┊ بواسطة ◂ `"..tmkeeper(msg).."`\n📛┊  الايدي  ◂ (`"..msg.sender_user_id_.."`)\n‏", 1, "md")
+send(msg.chat_id_, msg.id_, 1,  "💬┊ تم فتح الصور بالتقييد \n🎟┊ الأمر بواسطه » "..tmkeeper(msg).."\n ‏ ", 1, "md")
 else
-send(msg.chat_id_, msg.id_, 1,  "📌┊ الصور بالتقييد مفتوحه ✓\n🗯┊ بواسطة ◂ `"..tmkeeper(msg).."`\n📛┊  الايدي  ◂ (`"..msg.sender_user_id_.."`)\n‏", 1, "md")
+send(msg.chat_id_, msg.id_, 1,  "💬┊ الصور بالتقييد مفتوحه \n🎟┊ الأمر بواسطه » "..tmkeeper(msg).."\n ‏ ", 1, "md")
 end
 redis:del(KEEPER.."keed_photo" .. msg.chat_id_)
 end
 if is_momod(msg.sender_user_id_, msg.chat_id_) and text == "فتح الفيديو بالتقييد" then
 if redis:get(KEEPER.."keed_video" .. msg.chat_id_) then
-send(msg.chat_id_, msg.id_, 1,  "📌┊ تم فتح الفيديو بالتقييد ✓\n🗯┊ بواسطة ◂ `"..tmkeeper(msg).."`\n📛┊  الايدي  ◂ (`"..msg.sender_user_id_.."`)\n‏", 1, "md")
+send(msg.chat_id_, msg.id_, 1,  "💬┊ تم فتح الفيديو بالتقييد \n🎟┊ الأمر بواسطه » "..tmkeeper(msg).."\n ‏ ", 1, "md")
 else
-send(msg.chat_id_, msg.id_, 1,  "📌┊ الفيديو بالتقييد مفتوح ✓\n🗯┊ بواسطة ◂ `"..tmkeeper(msg).."`\n📛┊  الايدي  ◂ (`"..msg.sender_user_id_.."`)\n‏", 1, "md")
+send(msg.chat_id_, msg.id_, 1,  "💬┊ الفيديو بالتقييد مفتوح \n🎟┊ الأمر بواسطه » "..tmkeeper(msg).."\n ‏ ", 1, "md")
 end
 redis:del(KEEPER.."keed_video" .. msg.chat_id_)
 end
 if is_momod(msg.sender_user_id_, msg.chat_id_) and text == "فتح الفايلات بالتقييد" then
 if redis:get(KEEPER.."keed_Document" .. msg.chat_id_) then
-send(msg.chat_id_, msg.id_, 1, "📌┊ تم فتح الفايلات بالتقييد ✓\n🗯┊ بواسطة ◂ `"..tmkeeper(msg).."`\n📛┊  الايدي  ◂ (`"..msg.sender_user_id_.."`)\n‏", 1, "md")
+send(msg.chat_id_, msg.id_, 1, "💬┊ تم فتح الفايلات بالتقييد \n🎟┊ الأمر بواسطه » "..tmkeeper(msg).."\n ‏ ", 1, "md")
 else
-send(msg.chat_id_, msg.id_, 1, "📌┊ الفايلات بالتقييد مفتوحه ✓\n🗯┊ بواسطة ◂ `"..tmkeeper(msg).."`\n📛┊  الايدي  ◂ (`"..msg.sender_user_id_.."`)\n‏", 1, "md")
+send(msg.chat_id_, msg.id_, 1, "💬┊ الفايلات بالتقييد مفتوحه \n🎟┊ الأمر بواسطه » "..tmkeeper(msg).."\n ‏ ", 1, "md")
 end
 redis:del(KEEPER.."keed_Document" .. msg.chat_id_)
 end
 if is_momod(msg.sender_user_id_, msg.chat_id_) and text == "فتح الماركدون بالتقييد" then
 if redis:get(KEEPER.."keed_markdon" .. msg.chat_id_) then
-send(msg.chat_id_, msg.id_, 1, "📌┊ تم فتح الماركدون بالتقييد ✓\n🗯┊ بواسطة ◂ `"..tmkeeper(msg).."`\n📛┊  الايدي  ◂ (`"..msg.sender_user_id_.."`)\n‏", 1, "md")
+send(msg.chat_id_, msg.id_, 1, "💬┊ تم فتح الماركدون بالتقييد \n🎟┊ الأمر بواسطه » "..tmkeeper(msg).."\n ‏ ", 1, "md")
 else
-send(msg.chat_id_, msg.id_, 1, "📌┊ الماركدون بالتقييد مفتوحه ✓\n🗯┊ بواسطة ◂ `"..tmkeeper(msg).."`\n📛┊  الايدي  ◂ (`"..msg.sender_user_id_.."`)\n‏", 1, "md")
+send(msg.chat_id_, msg.id_, 1, "💬┊ الماركدون بالتقييد مفتوحه \n🎟┊ الأمر بواسطه » "..tmkeeper(msg).."\n ‏ ", 1, "md")
 end
 redis:del(KEEPER.."keed_markdon" .. msg.chat_id_)
 end
 if is_momod(msg.sender_user_id_, msg.chat_id_) and text == "فتح المتحركه بالتقييد" then
 if redis:get(KEEPER.."keed_gif" .. msg.chat_id_) then
-send(msg.chat_id_, msg.id_, 1, "📌┊ تم فتح المتحركه بالتقييد ✓\n🗯┊ بواسطة ◂ `"..tmkeeper(msg).."`\n📛┊  الايدي  ◂ (`"..msg.sender_user_id_.."`)\n‏", 1, "md")
+send(msg.chat_id_, msg.id_, 1, "💬┊ تم فتح المتحركه بالتقييد \n🎟┊ الأمر بواسطه » "..tmkeeper(msg).."\n ‏ ", 1, "md")
 else
-send(msg.chat_id_, msg.id_, 1, "📌┊ المتحركه بالتقييد مفتوحه ✓\n🗯┊ بواسطة ◂ `"..tmkeeper(msg).."`\n📛┊  الايدي  ◂ (`"..msg.sender_user_id_.."`)\n‏", 1, "md")
+send(msg.chat_id_, msg.id_, 1, "💬┊ المتحركه بالتقييد مفتوحه \n🎟┊ الأمر بواسطه » "..tmkeeper(msg).."\n ‏ ", 1, "md")
 end
 redis:del(KEEPER.."keed_gif" .. msg.chat_id_)
 end
 if is_momod(msg.sender_user_id_, msg.chat_id_) and text == "فتح الاغاني بالتقييد" then
 if redis:get(KEEPER.."keed_audio" .. msg.chat_id_) then
-send(msg.chat_id_, msg.id_, 1, "📌┊ تم فتح الاغاني بالتقييد ✓\n🗯┊ بواسطة ◂ `"..tmkeeper(msg).."`\n📛┊  الايدي  ◂ (`"..msg.sender_user_id_.."`)\n‏", 1, "md")
+send(msg.chat_id_, msg.id_, 1, "💬┊ تم فتح الاغاني بالتقييد \n🎟┊ الأمر بواسطه » "..tmkeeper(msg).."\n ‏ ", 1, "md")
 else
-send(msg.chat_id_, msg.id_, 1, "📌┊ الاغاني بالتقييد مفتوحه ✓\n🗯┊ بواسطة ◂ `"..tmkeeper(msg).."`\n📛┊  الايدي  ◂ (`"..msg.sender_user_id_.."`)\n‏", 1, "md")
+send(msg.chat_id_, msg.id_, 1, "💬┊ الاغاني بالتقييد مفتوحه \n🎟┊ الأمر بواسطه » "..tmkeeper(msg).."\n ‏ ", 1, "md")
 end
 redis:del(KEEPER.."keed_audio" .. msg.chat_id_)
 end
 if is_momod(msg.sender_user_id_, msg.chat_id_) and text == "فتح الصوت بالتقييد" then
 if redis:get(KEEPER.."keed_voice" .. msg.chat_id_) then
-send(msg.chat_id_, msg.id_, 1, "📌┊ تم فتح الصوت بالتقييد ✓\n🗯┊ بواسطة ◂ `"..tmkeeper(msg).."`\n📛┊  الايدي  ◂ (`"..msg.sender_user_id_.."`)\n‏", 1, "md")
+send(msg.chat_id_, msg.id_, 1, "💬┊ تم فتح الصوت بالتقييد \n🎟┊ الأمر بواسطه » "..tmkeeper(msg).."\n ‏ ", 1, "md")
 else
-send(msg.chat_id_, msg.id_, 1, "📌┊ الصوت بالتقييد مفتوح ✓\n🗯┊ بواسطة ◂ `"..tmkeeper(msg).."`\n📛┊  الايدي  ◂ (`"..msg.sender_user_id_.."`)\n‏", 1, "md")
+send(msg.chat_id_, msg.id_, 1, "💬┊ الصوت بالتقييد مفتوح \n🎟┊ الأمر بواسطه » "..tmkeeper(msg).."\n ‏ ", 1, "md")
 end
 redis:del(KEEPER.."keed_voice" .. msg.chat_id_)
 end
 if is_momod(msg.sender_user_id_, msg.chat_id_) and text == "فتح الروابط بالتقييد" then
 if redis:get(KEEPER.."keed_link" .. msg.chat_id_) then
-send(msg.chat_id_, msg.id_, 1, "📌┊ تم فتح الروابط بالتقييد ✓\n🗯┊ بواسطة ◂ `"..tmkeeper(msg).."`\n📛┊  الايدي  ◂ (`"..msg.sender_user_id_.."`)\n‏", 1, "md")
+send(msg.chat_id_, msg.id_, 1, "💬┊ تم فتح الروابط بالتقييد \n🎟┊ الأمر بواسطه » "..tmkeeper(msg).."\n ‏ ", 1, "md")
 else
-send(msg.chat_id_, msg.id_, 1, "📌┊ الروابط بالتقييد مفتوحه ✓\n🗯┊ بواسطة ◂ `"..tmkeeper(msg).."`\n📛┊  الايدي  ◂ (`"..msg.sender_user_id_.."`)\n‏", 1, "md")
+send(msg.chat_id_, msg.id_, 1, "💬┊ الروابط بالتقييد مفتوحه \n🎟┊ الأمر بواسطه » "..tmkeeper(msg).."\n ‏ ", 1, "md")
 end
 redis:del(KEEPER.."keed_link" .. msg.chat_id_)
 end
 if is_momod(msg.sender_user_id_, msg.chat_id_) and text == "فتح التاك بالتقييد" then
 if redis:get(KEEPER.."keed_user" .. msg.chat_id_) then
-send(msg.chat_id_, msg.id_, 1, "📌┊ تم فتح التاك بالتقييد ✓\n🗯┊ بواسطة ◂ `"..tmkeeper(msg).."`\n📛┊  الايدي  ◂ (`"..msg.sender_user_id_.."`)\n‏", 1, "md")
+send(msg.chat_id_, msg.id_, 1, "💬┊ تم فتح التاك بالتقييد \n🎟┊ الأمر بواسطه » "..tmkeeper(msg).."\n ‏ ", 1, "md")
 else
-send(msg.chat_id_, msg.id_, 1, "📌┊ التاك بالتقييد مفتوح ✓\n🗯┊ بواسطة ◂ `"..tmkeeper(msg).."`\n📛┊  الايدي  ◂ (`"..msg.sender_user_id_.."`)\n‏", 1, "md")
+send(msg.chat_id_, msg.id_, 1, "💬┊ التاك بالتقييد مفتوح \n🎟┊ الأمر بواسطه » "..tmkeeper(msg).."\n ‏ ", 1, "md")
 end
 redis:del(KEEPER.."keed_user" .. msg.chat_id_)
 end
 if is_momod(msg.sender_user_id_, msg.chat_id_) and text == "فتح المعرف بالتقييد" then
 if redis:get(KEEPER.."keed_user" .. msg.chat_id_) then
-send(msg.chat_id_, msg.id_, 1, "📌┊ تم فتح المعرف بالتقييد ✓\n🗯┊ بواسطة ◂ `"..tmkeeper(msg).."`\n📛┊  الايدي  ◂ (`"..msg.sender_user_id_.."`)\n‏", 1, "md")
+send(msg.chat_id_, msg.id_, 1, "💬┊ تم فتح المعرف بالتقييد \n🎟┊ الأمر بواسطه » "..tmkeeper(msg).."\n ‏ ", 1, "md")
 else
-send(msg.chat_id_, msg.id_, 1, "📌┊ المعرف بالتقييد مفتوح ✓\n🗯┊ بواسطة ◂ `"..tmkeeper(msg).."`\n📛┊  الايدي  ◂ (`"..msg.sender_user_id_.."`)\n‏", 1, "md")
+send(msg.chat_id_, msg.id_, 1, "💬┊ المعرف بالتقييد مفتوح \n🎟┊ الأمر بواسطه » "..tmkeeper(msg).."\n ‏ ", 1, "md")
 end
 redis:del(KEEPER.."keed_user" .. msg.chat_id_)
 end
 if is_momod(msg.sender_user_id_, msg.chat_id_) and text == "فتح الهاشتاك بالتقييد" then
 if redis:get(KEEPER.."keed_hashtag" .. msg.chat_id_) then
-send(msg.chat_id_, msg.id_, 1, "📌┊ تم فتح الهاشتاك بالتقييد ✓\n🗯┊ بواسطة ◂ `"..tmkeeper(msg).."`\n📛┊  الايدي  ◂ (`"..msg.sender_user_id_.."`)\n‏", 1, "md")
+send(msg.chat_id_, msg.id_, 1, "💬┊ تم فتح الهاشتاك بالتقييد \n🎟┊ الأمر بواسطه » "..tmkeeper(msg).."\n ‏ ", 1, "md")
 else
-send(msg.chat_id_, msg.id_, 1, "📌┊ الهاشتاك بالتقييد مفتوحه ✓\n🗯┊ بواسطة ◂ `"..tmkeeper(msg).."`\n📛┊  الايدي  ◂ (`"..msg.sender_user_id_.."`)\n‏", 1, "md")
+send(msg.chat_id_, msg.id_, 1, "💬┊ الهاشتاك بالتقييد مفتوحه \n🎟┊ الأمر بواسطه » "..tmkeeper(msg).."\n ‏ ", 1, "md")
 end
 redis:del(KEEPER.."keed_hashtag" .. msg.chat_id_)
 end
 if is_momod(msg.sender_user_id_, msg.chat_id_) and text == "فتح الجهات بالتقييد" then
 if redis:get(KEEPER.."keed_contect" .. msg.chat_id_) then
-send(msg.chat_id_, msg.id_, 1, "📌┊ تم فتح الجهات بالتقييد ✓\n🗯┊ بواسطة ◂ `"..tmkeeper(msg).."`\n📛┊  الايدي  ◂ (`"..msg.sender_user_id_.."`)\n‏", 1, "md")
+send(msg.chat_id_, msg.id_, 1, "💬┊ تم فتح الجهات بالتقييد \n🎟┊ الأمر بواسطه » "..tmkeeper(msg).."\n ‏ ", 1, "md")
 else
-send(msg.chat_id_, msg.id_, 1, "📌┊ الجهات بالتقييد مفتوحه ✓\n🗯┊ بواسطة ◂ `"..tmkeeper(msg).."`\n📛┊  الايدي  ◂ (`"..msg.sender_user_id_.."`)\n‏", 1, "md")
+send(msg.chat_id_, msg.id_, 1, "💬┊ الجهات بالتقييد مفتوحه \n🎟┊ الأمر بواسطه » "..tmkeeper(msg).."\n ‏ ", 1, "md")
 end
 redis:del(KEEPER.."keed_contect" .. msg.chat_id_)
 end
 if is_momod(msg.sender_user_id_, msg.chat_id_) and text == "فتح العربيه بالتقييد" then
 if redis:get(KEEPER.."keed_arbic" .. msg.chat_id_) then
-send(msg.chat_id_, msg.id_, 1, "📌┊ تم فتح العربيه بالتقييد ✓\n🗯┊ بواسطة ◂ `"..tmkeeper(msg).."`\n📛┊  الايدي  ◂ (`"..msg.sender_user_id_.."`)\n‏", 1, "md")
+send(msg.chat_id_, msg.id_, 1, "💬┊ تم فتح العربيه بالتقييد \n🎟┊ الأمر بواسطه » "..tmkeeper(msg).."\n ‏ ", 1, "md")
 else
-send(msg.chat_id_, msg.id_, 1, "📌┊ العربيه بالتقييد مفتوحه ✓\n🗯┊ بواسطة ◂ `"..tmkeeper(msg).."`\n📛┊  الايدي  ◂ (`"..msg.sender_user_id_.."`)\n‏", 1, "md")
+send(msg.chat_id_, msg.id_, 1, "💬┊ العربيه بالتقييد مفتوحه \n🎟┊ الأمر بواسطه » "..tmkeeper(msg).."\n ‏ ", 1, "md")
 end
 redis:del(KEEPER.."keed_arbic" .. msg.chat_id_)
 end
 if is_momod(msg.sender_user_id_, msg.chat_id_) and text == "فتح الانكليزيه بالتقييد" then
 if redis:get(KEEPER.."keed_english" .. msg.chat_id_) then
-send(msg.chat_id_, msg.id_, 1, "📌┊ تم فتح الانكليزي بالتقييد ✓\n🗯┊ بواسطة ◂ `"..tmkeeper(msg).."`\n📛┊  الايدي  ◂ (`"..msg.sender_user_id_.."`)\n‏", 1, "md")
+send(msg.chat_id_, msg.id_, 1, "💬┊ تم فتح الانكليزي بالتقييد \n🎟┊ الأمر بواسطه » "..tmkeeper(msg).."\n ‏ ", 1, "md")
 else
-send(msg.chat_id_, msg.id_, 1, "📌┊ الانكليزي بالتقييد مفتوحه ✓\n🗯┊ بواسطة ◂ `"..tmkeeper(msg).."`\n📛┊  الايدي  ◂ (`"..msg.sender_user_id_.."`)\n‏", 1, "md")
+send(msg.chat_id_, msg.id_, 1, "💬┊ الانكليزي بالتقييد مفتوحه \n🎟┊ الأمر بواسطه » "..tmkeeper(msg).."\n ‏ ", 1, "md")
 end
 redis:del(KEEPER.."keed_english" .. msg.chat_id_)
 end
 if is_momod(msg.sender_user_id_, msg.chat_id_) and text == "فتح الملصقات بالتقييد" then
 if redis:get(KEEPER.."lock_stecker" .. msg.chat_id_) then
-send(msg.chat_id_, msg.id_, 1, "📌┊ تم فتح الملصقات بالتقييد ✓\n🗯┊ بواسطة ◂ `"..tmkeeper(msg).."`\n📛┊  الايدي  ◂ (`"..msg.sender_user_id_.."`)\n‏", 1, "md")
+send(msg.chat_id_, msg.id_, 1, "💬┊ تم فتح الملصقات بالتقييد \n🎟┊ الأمر بواسطه » "..tmkeeper(msg).."\n ‏ ", 1, "md")
 else
-send(msg.chat_id_, msg.id_, 1, "📌┊ الملصقات بالتقييد مفتوحه ✓\n🗯┊ بواسطة ◂ `"..tmkeeper(msg).."`\n📛┊  الايدي  ◂ (`"..msg.sender_user_id_.."`)\n‏", 1, "md")
+send(msg.chat_id_, msg.id_, 1, "💬┊ الملصقات بالتقييد مفتوحه \n🎟┊ الأمر بواسطه » "..tmkeeper(msg).."\n ‏ ", 1, "md")
 end
 redis:del(KEEPER.."lock_stecker" .. msg.chat_id_)
 end
 if is_momod(msg.sender_user_id_, msg.chat_id_) and text == "فتح التوجيه بالتقييد" then
 if redis:get(KEEPER.."keed_fwd" .. msg.chat_id_) then
-send(msg.chat_id_, msg.id_, 1, "📌┊ تم فتح التوجيه بالتقييد ✓\n🗯┊ بواسطة ◂ `"..tmkeeper(msg).."`\n📛┊  الايدي  ◂ (`"..msg.sender_user_id_.."`)\n‏", 1, "md")
+send(msg.chat_id_, msg.id_, 1, "💬┊ تم فتح التوجيه بالتقييد \n🎟┊ الأمر بواسطه » "..tmkeeper(msg).."\n ‏ ", 1, "md")
 else
-send(msg.chat_id_, msg.id_, 1, "📌┊ التوجيه بالتقييد مفتوح✓\n🗯┊ بواسطة ◂ `"..tmkeeper(msg).."`\n📛┊  الايدي  ◂ (`"..msg.sender_user_id_.."`)\n‏", 1, "md")
+send(msg.chat_id_, msg.id_, 1, "💬┊ التوجيه بالتقييد مفتوح\n🎟┊ الأمر بواسطه » "..tmkeeper(msg).."\n ‏ ", 1, "md")
 end
 redis:del(KEEPER.."keed_fwd" .. msg.chat_id_)
 end
 if is_momod(msg.sender_user_id_, msg.chat_id_) and text == "فتح البوتات بالتقييد" then
 if redis:get(KEEPER.."keed_bots" .. msg.chat_id_) then
-send(msg.chat_id_, msg.id_, 1,  "📌┊ تم فتح البوتات بالتقييد ✓\n🗯┊ بواسطة ◂ `"..tmkeeper(msg).."`\n📛┊  الايدي  ◂ (`"..msg.sender_user_id_.."`)\n‏", 1, "md")
+send(msg.chat_id_, msg.id_, 1,  "💬┊ تم فتح البوتات بالتقييد \n🎟┊ الأمر بواسطه » "..tmkeeper(msg).."\n ‏ ", 1, "md")
 else
-send(msg.chat_id_, msg.id_, 1,  "📌┊ البوتات بالتقييد مفتوحه ✓\n🗯┊ بواسطة ◂ `"..tmkeeper(msg).."`\n📛┊  الايدي  ◂ (`"..msg.sender_user_id_.."`)\n‏", 1, "md")
+send(msg.chat_id_, msg.id_, 1,  "💬┊ البوتات بالتقييد مفتوحه \n🎟┊ الأمر بواسطه » "..tmkeeper(msg).."\n ‏ ", 1, "md")
 end
 redis:del(KEEPER.."keed_bots" .. msg.chat_id_)
 end
@@ -8568,7 +8578,7 @@ redis:set(KEEPER.."keed_Document" .. msg.chat_id_,true)
 redis:set(KEEPER.."keed_video" .. msg.chat_id_,true)
 redis:set(KEEPER.."keed_photo" .. msg.chat_id_,true)
 redis:set(KEEPER.."keed_user" .. msg.chat_id_,true)
-send(msg.chat_id_, msg.id_, 1, "📌┊ تم قفل الكل بالتقييد ✓\n🗯┊ بواسطة ◂ `"..tmkeeper(msg).."`\n📛┊  الايدي  ◂ (`"..msg.sender_user_id_.."`)\n‏", 1, "md")
+send(msg.chat_id_, msg.id_, 1, "💬┊ تم قفل الكل بالتقييد \n🎟┊ الأمر بواسطه » "..tmkeeper(msg).."\n ‏ ", 1, "md")
 end
 if is_momod(msg.sender_user_id_, msg.chat_id_) and idf:match("-100(%d+)") and (text:match("^فتح الكل بالتقييد"))  then
 redis:del(KEEPER.."keed_bots" .. msg.chat_id_)
@@ -8587,7 +8597,7 @@ redis:del(KEEPER.."keed_Document" .. msg.chat_id_)
 redis:del(KEEPER.."keed_video" .. msg.chat_id_)
 redis:del(KEEPER.."keed_photo" .. msg.chat_id_)
 redis:del(KEEPER.."keed_user" .. msg.chat_id_)
-send(msg.chat_id_, msg.id_, 1, "📌┊ تم فتح الكل بالتقييد ✓\n🗯┊ بواسطة ◂ `"..tmkeeper(msg).."`\n📛┊  الايدي  ◂ (`"..msg.sender_user_id_.."`)\n‏", 1, "md")
+send(msg.chat_id_, msg.id_, 1, "💬┊ تم فتح الكل بالتقييد \n🎟┊ الأمر بواسطه » "..tmkeeper(msg).."\n ‏ ", 1, "md")
 end
 ----------------------sitting keeds----------------------------------------
 if is_momod(msg.sender_user_id_, msg.chat_id_) and idf:match("-100(%d+)") and (text:match("^اعدادات التقييد"))  then
@@ -9150,7 +9160,7 @@ send(msg.chat_id_, msg.id_, 1, '💲┊ للمطور الاساسي فقــــ
 else
 os.execute('rm -rf KEEPER.lua') 
 os.execute('wget https://raw.githubusercontent.com/alqaser/KEEPER/master/KEEPER.lua') 
-send(msg.chat_id_, msg.id_, 1, '🌀┊ تم تحديث السورس بنجاح ', 1, 'md') 
+send(msg.chat_id_, msg.id_, 1, "💬┊ بواسطه » "..tmkeeper(msg).."\n🎟┊ تم تحديث السورس \n ✓ ", 1, 'md')
 dofile('KEEPER.lua')  
 io.popen("rm -rf ~/.telegram-cli/data/audio/*") 
 io.popen("rm -rf ~/.telegram-cli/data/document/*") 
@@ -9504,7 +9514,7 @@ end
 if msg.content_.text_ then
 local content_text = redis:get(KEEPER..'add:repgp'..msg.sender_user_id_..''..msg.chat_id_..'')
 if content_text == 'del_repgp1' then
-send(msg.chat_id_, msg.id_, 1, '📌┊ تم مسح الرد بنجاح\n', 1, 'md')
+send(msg.chat_id_, msg.id_, 1, "💬┊ بواسطه » "..tmkeeper(msg).."\n🎟┊ تم مسح الرد بنجاح\n ✓ ", 1, 'md')
 redis:del(KEEPER..'add:repgp'..msg.sender_user_id_..''..msg.chat_id_..'')
 redis:del(KEEPER..'gif_repgp'..msg.content_.text_..''..msg.chat_id_..'')
 redis:del(KEEPER..'voice_repgp'..msg.content_.text_..''..msg.chat_id_..'')
@@ -9559,7 +9569,7 @@ redis:del(KEEPER..'video_repgp'..v..msg.chat_id_)
 redis:del(KEEPER..'text_repgp'..v..msg.chat_id_)
 redis:del(KEEPER..'rep_owner'..msg.chat_id_..'',msg.content_.text_)
 end
-send(msg.chat_id_, msg.id_, 1, '📌┊ تم مسح جميع الردود ❗️\n',1, 'md')
+send(msg.chat_id_, msg.id_, 1, "💬┊ بواسطه » "..tmkeeper(msg).."\n🎟┊ تم مسح جميع الردود\n ✓ ", 1, 'md')
 return false
 end
 end
@@ -9573,7 +9583,7 @@ end
 if msg.content_.text_ then
 local content_text = redis:get(KEEPER.."add:repallt"..msg.sender_user_id_)
 if content_text == 'del_rep1' then
-send(msg.chat_id_, msg.id_, 1, "📌┊ تم مسح الرد بنجاح\n", 1, 'md')
+send(msg.chat_id_, msg.id_, 1, "💬┊ بواسطه » "..tmkeeper(msg).."\n🎟┊ تم مسح الرد للكل\n ✓ ", 1, 'md')
 redis:del(KEEPER.."add:repallt"..msg.sender_user_id_)
 redis:del(KEEPER.."gif_repall"..msg.content_.text_)
 redis:del(KEEPER.."voice_repall"..msg.content_.text_)
@@ -9628,7 +9638,7 @@ redis:del(KEEPER.."video_repall"..v)
 redis:del(KEEPER.."text_repall"..v)
 redis:del(KEEPER.."rep_sudo",msg.content_.text_)
 end
-send(msg.chat_id_, msg.id_, 1, "📌┊ تم مسح جميع ردود المطور ❗️\n",1, "md")
+send(msg.chat_id_, msg.id_, 1, "💬┊ بواسطه » "..tmkeeper(msg).."\n🎟┊ تم مسح ردود المطور\n ✓ ", 1, 'md')
 return false
 end
 end
@@ -9689,7 +9699,7 @@ io.popen("rm -rf ~/.telegram-cli/data/thumb/*")
 io.popen("rm -rf ~/.telegram-cli/data/video/*") 
 io.popen("rm -rf ~/.telegram-cli/data/voice/*") 
 io.popen("rm -rf ~/.telegram-cli/data/profile_photo/*")
-send(msg.chat_id_, msg.id_, 1,'🌀┊ تم تحديث الملفات ✔', 1, 'md')
+send(msg.chat_id_, msg.id_, 1, "💬┊ بواسطه » "..tmkeeper(msg).."\n🎟┊ تم تحديث ملفات البوت\n ✓ ", 1, 'md')
 end end end
 -------------CHAT NAME--------------------------------------------------------------
 if text == 'اسم المجموعه' then
@@ -9895,14 +9905,14 @@ if not is_KP(msg) then
 send(msg.chat_id_, msg.id_, 1, '💲┊ للمطور الاساسي فقــــــــط', 1, 'md')
 else
 redis:del(KEEPER.."startbot")
-send(msg.chat_id_, msg.id_, 1, '🌀┊ تم حذف الكليشه بنجاح', 1, "md")
+send(msg.chat_id_, msg.id_, 1, "💬┊ بواسطه » "..tmkeeper(msg).."\n🎟┊ تم مسح كليشه start\n ✓ ", 1, 'md')
 end end
 if text == "حذف قناة الاشتراك" or text == "مسح قناة الاشتراك" then
 if not is_KP(msg) then
 send(msg.chat_id_, msg.id_, 1, '💲┊ للمطور الاساسي فقــــــــط', 1, 'md')
 else
 redis:del(KEEPER.."Kpch1")
-send(msg.chat_id_, msg.id_, 1, '🌀┊ تم مسح القناة بنجاح', 1, "md")
+send(msg.chat_id_, msg.id_, 1, "💬┊ بواسطه » "..tmkeeper(msg).."\n🎟┊ تم مسح قناة الاشتراك\n ✓ ", 1, 'md')
 end end
 ---------------------cod msgs-------------------------
 if text:match("^رسائلي$") or text:match("^رسايلي$") then
