@@ -1012,7 +1012,6 @@ else
 return var
 end
 end
-
 --------------function retba---------------------------------
 local tmkeeper = function(msg)
 if is_KpiD(msg.sender_user_id_) then
@@ -1125,7 +1124,8 @@ user_id_ = userid
 }
 }, dl_cb, nil)
 end
-function title_name(GroupID) tdcli_function({ID ="GetChat",chat_id_=GroupID},function(arg,data)---title_name
+function title_name(GroupID) 
+tdcli_function({ID ="GetChat",chat_id_=GroupID},function(arg,data)---title_name
 redis:set(KEEPER..'group:name'..GroupID,data.title_) end,nil) return redis:get(KEEPER..'group:name'..GroupID) end
 local sendDocument = function(chat_id, reply_to_message_id, disable_notification, from_background, reply_markup, document, caption, cb, cmd)
 local input_message_content = {
@@ -2169,7 +2169,7 @@ msg_type = "MSG:Document"
 end
 if msg.content_.ID == "MessageSticker" then
 redis:incr(KEEPER.."sticker:"..msg.sender_user_id_..":"..msg.chat_id_.."")
-if not redis:get(KEEPER.."lock_reeeep"..msg.chat_id_) then
+if not redis:get(KEEPER.."lock_STCK"..msg.chat_id_) then
 if not redis:get(KEEPER..'lock:add'..msg.chat_id_) then
 local KEEPER = {"منور انت ، 😙","اه باع وجهك شكد نضيف 😅","هذا منو ، 😏","تسمحلي ابوسك ☹️😹","مليان ضحك مليان 😹❤️","تف على هذا  ويهك 💦😹","اذا حاته ممكن الرقم 😆😹","تدري صار "..(redis:get(KEEPER.."sticker:"..msg.sender_user_id_..":"..msg.chat_id_.."")).." ملصق داز  شهالتبذير 🤔😹","كافي ملصقات مشايف 😫"}
 send(msg.chat_id_, msg.id_, 1,""..KEEPER[math.random(#KEEPER)].."", 1, 'md')
@@ -4764,12 +4764,13 @@ return
 end
 end
 ---------------save name bot-----------------------------
-if text then
 if redis:get(KEEPER..'botts:namess'..msg.sender_user_id_) then
 redis:del(KEEPER..'botts:namess'..msg.sender_user_id_)
-redis:set(KEEPER..'keepernams',text)
+local NAME_BOT = msg.content_.text_:match("(.*)")
+redis:set(KEEPER..'keepernams',NAME_BOT)
 send(msg.chat_id_, msg.id_, 1, "🌀┊ تم وضع اسم البوت 🍃",1, 'html')
-end end
+return false
+end
 ------------------------save cam link-----------------------------------
 if redis:get(KEEPER.."bot:group:link" .. msg.chat_id_ .. ":" .. msg.sender_user_id_) and (msg.content_.text_:match("(https://telegram.me/joinchat/%S+)") or msg.content_.text_:match("(https://t.me/joinchat/%S+)")) then
 local glink = msg.content_.text_:match("(https://telegram.me/joinchat/%S+)") or msg.content_.text_:match("(https://t.me/joinchat/%S+)")
@@ -5052,6 +5053,48 @@ if is_sudo(msg) and idf:match("-100(%d+)") and (text:match('^'..(redis:get(KEEPE
 send(msg.chat_id_, msg.id_, 1, "✺↓ تم مغادره المجموعــه ♩†",  1, "md")
 redis:srem(KEEPER.."bot:groups", msg.chat_id_)
 chat_leave(msg.chat_id_, bot_id)
+end
+--------------------------------------------
+if text == 'تفعيل رفع الادمن' and is_owner(msg.sender_user_id_, msg.chat_id_) then
+send(msg.chat_id_, msg.id_, 1, "💬┊ بواسطه » "..tmkeeper(msg).."\n🎟┊ تم تفعيل خاصية رفع الادمن\n ✓ ", 1, 'md')
+redis:del(KEEPER.."lock_addd"..msg.chat_id_)
+end
+if text == 'تعطيل رفع الادمن' and is_owner(msg.sender_user_id_, msg.chat_id_) then
+send(msg.chat_id_, msg.id_, 1, "💬┊ بواسطه » "..tmkeeper(msg).."\n🎟┊ تم تعطيل خاصية رفع الادمن\n ✓ ", 1, 'md')
+redis:set(KEEPER.."lock_addd"..msg.chat_id_, true)
+end
+-------------------------------------------------
+if text == 'تفعيل رفع المميز' and is_owner(msg.sender_user_id_, msg.chat_id_) then
+send(msg.chat_id_, msg.id_, 1, "💬┊ بواسطه » "..tmkeeper(msg).."\n🎟┊ تم تفعيل خاصية رفع المميز\n ✓ ", 1, 'md')
+redis:del(KEEPER.."lock_adddvip"..msg.chat_id_)
+end
+if text == 'تعطيل رفع المميز' and is_owner(msg.sender_user_id_, msg.chat_id_) then
+send(msg.chat_id_, msg.id_, 1, "💬┊ بواسطه » "..tmkeeper(msg).."\n🎟┊ تم تعطيل خاصية رفع المميز\n ✓ ", 1, 'md')
+redis:set(KEEPER.."lock_adddvip"..msg.chat_id_, true)
+end
+--------------------------------------------------------------------
+if is_owner(msg.sender_user_id_, msg.chat_id_) and idf:match("-100(%d+)") and text:match("^رفع ادمن بالتفاعل (%d+)$")  then
+local uuuu = { string.match(text, "^(رفع ادمن بالتفاعل) (%d+)$")}
+send(msg.chat_id_, msg.id_, 1, "⚜️┊ تم حفظ العدد *"..uuuu[2].."*\n💬┊ سيتم رفع العضو ادمن\n🚫┊اذا اثبت تفاعله\n✓",1, 'md')
+redis:set(KEEPER.."KEEPER_O" .. msg.chat_id_, uuuu[2])
+end
+local msgs = tonumber(redis:get(KEEPER.."msgs:"..msg.sender_user_id_..":"..msg.chat_id_))
+local get_keeper = tonumber(redis:get(KEEPER.."KEEPER_O" .. msg.chat_id_)) 
+if msgs == get_keeper and not redis:get(KEEPER.."lock_addd"..msg.chat_id_) then
+send(msg.chat_id_, msg.id_, 1, "💬┊ هذا العضو اثبت تفاعله\n🎟┊تم رفعه ادمن في المجموعه\n✓",  1, "md")
+redis:sadd(KEEPER..'bot:momod:'..msg.chat_id_, msg.sender_user_id_)
+end
+--------------------------------------------------------------------
+if is_owner(msg.sender_user_id_, msg.chat_id_) and idf:match("-100(%d+)") and text:match("^رفع مميز بالتفاعل (%d+)$")  then
+local uuuu = { string.match(text, "^(رفع مميز بالتفاعل) (%d+)$")}
+send(msg.chat_id_, msg.id_, 1, "⚜️┊ تم حفظ العدد *"..uuuu[2].."*\n💬┊ سيتم رفع العضو مميز\n🚫┊اذا اثبت تفاعله\n✓",1, 'md')
+redis:set(KEEPER.."KEEPER_OO" .. msg.chat_id_, uuuu[2])
+end
+local msgs = tonumber(redis:get(KEEPER.."msgs:"..msg.sender_user_id_..":"..msg.chat_id_))
+local get_keeper = tonumber(redis:get(KEEPER.."KEEPER_OO" .. msg.chat_id_)) 
+if msgs == get_keeper and not redis:get(KEEPER.."lock_adddvip"..msg.chat_id_) then
+send(msg.chat_id_, msg.id_, 1, "📌┊ هذا العضو اثبت تفاعله\n🌀┊تم رفعه عضو مميز في المجموعه\n✓",  1, "md")
+redis:sadd(KEEPER..'bot:vipmem:'..msg.chat_id_, msg.sender_user_id_)
 end
 ------------------------------ADD vipmems BY Reply------------------------------------------------------------------
 if text:match("^رفع مميز عام$") and is_KP(msg) and msg.reply_to_message_id_ ~= 0  then
@@ -6001,6 +6044,15 @@ delete_msg(msg.chat_id_, {
 })
 delete_msg(msg.chat_id_, msgs)
 end end
+--------------------------------------------------------------------------------------
+if text == 'تفعيل الملصقات' and is_owner(msg.sender_user_id_, msg.chat_id_) then
+send(msg.chat_id_, msg.id_, 1, "💬┊ بواسطه » "..tmkeeper(msg).."\n🎟┊ تم تفعيل ردود الملصقات\n ✓ ", 1, 'md')
+redis:del(KEEPER.."lock_STCK"..msg.chat_id_)
+end
+if text == 'تعطيل الملصقات' and is_owner(msg.sender_user_id_, msg.chat_id_) then
+send(msg.chat_id_, msg.id_, 1, "💬┊ بواسطه » "..tmkeeper(msg).."\n🎟┊ تم تعطيل ردود الملصقات\n ✓ ", 1, 'md')
+redis:set(KEEPER.."lock_STCK"..msg.chat_id_, true)
+end
 -------------------welcome on---------------------------------------------------------
 if text:match("^تفعيل الترحيب$") and is_momod(msg.sender_user_id_, msg.chat_id_) then
 redis:set(KEEPER..'status:welcome:'..msg.chat_id_,'enable')
@@ -7268,21 +7320,12 @@ end
 end
 ----------------LOCK FOSHN--------------------------------------------------
 if text:match("كس") or text:match("طيز") or text:match("ديس") or text:match("زب") or text:match("انيجمك") or text:match("انيج") or text:match("نيج") or text:match("ديوس") or text:match("عير") or text:match("كسختك") or text:match("كسمك") or text:match("كسربك") or text:match("بلاع") or text:match("ابو العيوره") or text:match("منيوج") or text:match("كحبه") or text:match("اخ الكحبه") or text:match("اخو الكحبه") or text:match("الكحبه") or text:match("كسك") or text:match("طيزك") or text:match("عير بطيزك") or text:match("كس امك") or text:match("امك الكحبه") or text:match("عيرك") or text:match("عير بيك") or text:match("صرمك") and is_owner(msg.sender_user_id_, msg.chat_id_) then
-if not redis:get(KEEPER.."ffosh"..msg.chat_id_) and not is_owner(msg.sender_user_id_, msg.chat_id_) then
+if redis:get(KEEPER.."ffosh"..msg.chat_id_) and not is_owner(msg.sender_user_id_, msg.chat_id_) then
 local id = msg.id_
 local msgs = { [0] = id}
 local chat = msg.chat_id_
 delete_msg(chat, msgs)
 end end
-----------------LOCK FOSHN--------------------------------------------------
-if text == 'قفل الفشار' and is_owner(msg.sender_user_id_, msg.chat_id_) then
-send(msg.chat_id_, msg.id_, 1, "🌀┊ تم قفل الفشار ❗️\n🚫┊ بواسطه ◂ "..tmkeeper(msg).."\n🔑┊ الايدي ◂ (`"..msg.sender_user_id_.."`)", 1, 'md')
-redis:del(KEEPER.."ffosh"..msg.chat_id_)
-end
-if text == 'فتح الفشار' and is_owner(msg.sender_user_id_, msg.chat_id_) then
-send(msg.chat_id_, msg.id_, 1, "🌀┊ تم فتح الفشار ❗️\n🚫┊ بواسطه ◂ "..tmkeeper(msg).."\n🔑┊ الايدي ◂ (`"..msg.sender_user_id_.."`)", 1, 'md')
-redis:set(KEEPER.."ffosh"..msg.chat_id_, true)
-end
 --------------RETBA----------------------------------------------------
 if text == "الرتبه" and msg.reply_to_message_id_ ~= 0 then
 function id_by_reply(extra, result, success)
@@ -7441,6 +7484,12 @@ local text = [[
 
 🔍 ┇ تفعيل الردود
 🔍 ┇ تعطيل الردود
+🔍 ┇ تفعيل رفع المميز
+🔍 ┇ تعطيل رفع المميز
+🔍 ┇ تفعيل رفع الادمن
+🔍 ┇ تعطيل رفع الادمن
+🔍 ┇ رفع ادمن بالتفاعل + العدد
+🔍 ┇ رفع مميز بالتفاعل + العدد
 🔍 ┇ تفعيل التثبيت
 ‏🔍 ┇ تعطيل التثبيــت
 🔍 ┇ تفعيل مسح الرسائل
@@ -7718,10 +7767,10 @@ else
 if lockKeeper[2] == "التعديل" then
 if not redis:get(KEEPER.."editmsg" .. msg.chat_id_) then
 send(msg.chat_id_, msg.id_, 1, "💬┊ تم قفل التعديل \n🎟┊ الأمر بواسطه » "..tmkeeper(msg).."\n ‏ ", 1, "md")
-redis:set(KEEPER..'editmsg'..msg.chat_id_,'delmsg')
 else
 send(msg.chat_id_, msg.id_, 1, "💬┊ التعديل مقفول سابقا \n🎟┊ الأمر بواسطه » "..tmkeeper(msg).."\n ‏ ", 1, "md")
 end
+redis:set(KEEPER..'editmsg'..msg.chat_id_,'delmsg')
 end
 if lockKeeper[2] == "الاوامر" then
 if not redis:get(KEEPER.."bot:cmds" .. msg.chat_id_) then
@@ -7970,8 +8019,8 @@ if not redis:get(KEEPER.."bot:tgservice:mute" .. msg.chat_id_) then
 send(msg.chat_id_, msg.id_, 1, "💬┊ تم قفل الاشعارات \n🎟┊ الأمر بواسطه » "..tmkeeper(msg).."\n ‏ ", 1, "md")
 else
 send(msg.chat_id_, msg.id_, 1, "💬┊ الاشعارات مقفوله سابقا \n🎟┊ الأمر بواسطه » "..tmkeeper(msg).."\n ‏ ", 1, "md")
-redis:set(KEEPER.."bot:tgservice:mute" .. msg.chat_id_, true)
 end
+redis:set(KEEPER.."bot:tgservice:mute" .. msg.chat_id_, true)
 end
 if lockKeeper[2] == "الملصقات" then
 if not redis:get(KEEPER.."bot:sticker:mute" .. msg.chat_id_) then
@@ -7988,8 +8037,18 @@ else
 send(msg.chat_id_, msg.id_, 1, "💬┊ التوجيه مقفوله سابقا \n🎟┊ الأمر بواسطه » "..tmkeeper(msg).."\n ‏ ", 1, "md")
 end
 redis:set(KEEPER.."bot:forward:mute" .. msg.chat_id_, true)
-end end
-end end
+end 
+if lockKeeper[2] == "الفشار" then
+if not redis:get(KEEPER.."ffosh" .. msg.chat_id_) then
+send(msg.chat_id_, msg.id_, 1, "💬┊ تم قفل الفشار \n🎟┊ الأمر بواسطه » "..tmkeeper(msg).."\n ‏ ", 1, "md")
+else
+send(msg.chat_id_, msg.id_, 1, "💬┊ الفشار مقفوله سابقا \n🎟┊ الأمر بواسطه » "..tmkeeper(msg).."\n ‏ ", 1, "md")
+end
+redis:set(KEEPER.."ffosh"..msg.chat_id_, true)
+end 
+end
+end 
+end
 -----------UN LOCK HELPS--------------------------------------------------------------------------------------------------------------
 if text:match("^فتح (.*)$")  then
 if not redis:get(KEEPER..'lock:add'..msg.chat_id_) then
@@ -8129,7 +8188,6 @@ end
 if UNkeeper[2] == "البوست" then
 if redis:get(KEEPER.."post:lock" .. msg.chat_id_) then
 send(msg.chat_id_, msg.id_, 1, "💬┊ تم فتح البوست \n🎟┊ الأمر بواسطه » "..tmkeeper(msg).."\n ‏ ", 1, "md")            
-redis:del(KEEPER.."post:lock" .. msg.chat_id_)
 else
 send(msg.chat_id_, msg.id_, 1, "💬┊ البوست مفتوح سابقا \n🎟┊ الأمر بواسطه » "..tmkeeper(msg).."\n ‏ ", 1, "md")
 end
@@ -8269,8 +8327,18 @@ else
 send(msg.chat_id_, msg.id_, 1, "💬┊ التوجيه مفتوح سابقا \n🎟┊ الأمر بواسطه » "..tmkeeper(msg).."\n ‏ ", 1, "md")
 end
 redis:del(KEEPER.."bot:forward:mute" .. msg.chat_id_)
+end 
+if UNkeeper[2] == "الفشار" then
+if redis:get(KEEPER.."ffosh"..msg.chat_id_) then
+send(msg.chat_id_, msg.id_, 1, "💬┊ تم فتح الفشار \n🎟┊ الأمر بواسطه » "..tmkeeper(msg).."\n ‏ ", 1, "md")
+else
+send(msg.chat_id_, msg.id_, 1, "💬┊ الفشار مفتوح سابقا \n🎟┊ الأمر بواسطه » "..tmkeeper(msg).."\n ‏ ", 1, "md")
 end
-end end end
+redis:del(KEEPER.."ffosh"..msg.chat_id_)
+end
+end 
+end 
+end
 ------------------lock help keed--------------------------------------------------------------------------------------------
 if is_momod(msg.sender_user_id_, msg.chat_id_) and text == "قفل الدردشه بالتقييد" then
 if not redis:get(KEEPER.."keed_text" .. msg.chat_id_) then
@@ -9348,11 +9416,7 @@ end end
 local start_get_data = function(extra, result)
 getUser(result.sender_user_id_, data_by_reply)
 end
-if redis:get(KEEPER.."bot:reloadingtime") then
-send(msg.chat_id_, msg.id_, 1, "🌀┊  تم تحديث البوت 🎐 ", 1, "md")
-else
 getMessage(msg.chat_id_, msg.reply_to_message_id_, start_get_data)
-end
 end
 end
 end
@@ -9860,7 +9924,8 @@ user_id_ = apfa[2]
 chat_id = msg.chat_id_
 })
 end	end
--------------------------------ID CHATS----------------------------
+
+------------------------------ID CHATS----------------------------
 if text:match("^ايدي المجموعات$") then
 if not is_sudo(msg) then
 send(msg.chat_id_, msg.id_, 1, '💲┊ للمطوريـــــــن فقــــــــط', 1, 'md')
