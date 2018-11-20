@@ -1012,37 +1012,53 @@ else
 return var
 end
 end
---------------function retba---------------------------------
 local tmkeeper = function(msg)
 if is_KpiD(msg.sender_user_id_) then
-keeper  = "المطور 🌿"
+keeper  = "المطور  👨‍✈️"
 elseif is_sudoid(msg.sender_user_id_) then
-keeper = "المطور 🌿"
+keeper = "المطور  🕵🏻‍♂️"
 elseif is_admin(msg.sender_user_id_) then
-keeper = "الادمن 🐾"
+keeper = "الادمن 👨🏻‍🎓"
 elseif is_vipmems(msg.sender_user_id_) then
-keeper = "مميز عام 🐾"
+keeper = "المميز عام 👨🏽‍🔧"
 elseif is_monshi(msg.sender_user_id_, msg.chat_id_) then
-keeper = "المنشىء 🌿"
+keeper = "المنشىء 👨🏻‍💼"
 elseif is_owner(msg.sender_user_id_, msg.chat_id_) then
-keeper = "المدير 🌿"
+keeper = "المدير 🤴🏻"
 elseif is_momod(msg.sender_user_id_, msg.chat_id_) then
-keeper = "الادمن 🐾"
+keeper = "الادمن 👨🏻‍🎤"
 elseif is_vipmem(msg.sender_user_id_, msg.chat_id_) then
-keeper = "عضو مميز 🌿 "
+keeper = "عضو مميز 👷‍♂️ "
 else
-keeper = "عضو 🐾"
+keeper = "العضو 🙎🏻‍♂️"
 end
 return keeper
 end
 ----------------KP_TM_NM----BY KEEPER-----------------------------------
 local KP_TM_NM = function(msgs)
-if msgs < 100 then KP_TM = 'ضعيف جدا 🌿'
-elseif msgs < 200 then KP_TM = 'ضعيف' elseif msgs < 555 then KP_TM = 'متفاعل 🔥'
-elseif msgs < 1000 then KP_TM = 'متفاعل ✨' elseif msgs < 2000 then KP_TM = 'استمر بالتفاعل⚡️'
-elseif msgs < 7000 then KP_TM = 'متفاعل 🌙'elseif msgs < 20000 then KP_TM = 'روعه 💪'
-elseif msgs < 40000 then KP_TM = 'اقوى تفاعل 👏🏻' elseif msgs < 70000 then KP_TM = 'ناري 😻'
-elseif msgs < 100000 then KP_TM = 'اقوى تفاعل 😽' elseif msgs < 200000 then KP_TM = 'التفاعل الامثل 🤸‍♂️'
+local KP_TM = ''
+if msgs < 100 then
+ KP_TM = 'ضعيف 🌪'
+elseif msgs < 400 then 
+KP_TM = 'غير متفاعل ⚡️' 
+elseif msgs < 755 then 
+KP_TM = 'استمر بطل 💫'
+elseif msgs < 2000 then 
+KP_TM = 'استمر بالتفاعل 🌟' 
+elseif msgs < 4000 then 
+KP_TM = 'ملك التفاعل 🌙'
+elseif msgs < 7000 then 
+KP_TM = 'اسد التفاعل ✨' 
+elseif msgs < 20000 then 
+KP_TM = 'اقوى تفاعل 🔥'
+elseif msgs < 40000 then 
+KP_TM = 'اجمل تفاعل 💥' 
+elseif msgs < 70000 then 
+KP_TM = 'تفاعل روعه 🌜'
+elseif msgs < 100000 then 
+KP_TM = 'التفاعل المثالي ⭐️'
+elseif msgs < 200000 then 
+KP_TM = 'اقوى تفاعل 🌸'
 end
 return KP_TM
 end
@@ -2137,27 +2153,36 @@ text = redis:get(KEEPER..'welcome:'..msg.chat_id_)
 else
 text = 'اهلا عزيزي {firstname}\nنورت المجموعه 🌸'
 end
-local text = text:gsub('{firstname}',(result.first_name_ or ''))
-local text = text:gsub('{lastname}',(result.last_name_ or ''))
-local text = text:gsub('{username}',(result.username_ or ''))
+local text = text:gsub('{firstname}',(result.first_name_ or '--'))
+local text = text:gsub('{lastname}',(result.last_name_ or '--'))
+local text = text:gsub('{username}',('[@'..result.username_..']'))
 send(msg.chat_id_, msg.id_, 1, text, 1, 'md')
 end
 getUser(msg.sender_user_id_,wlc)
 end
 end
+end
+local status_welcome = (redis:get(KEEPER..'status:welcome:'..msg.chat_id_) or 'disable')
+if status_welcome == 'enable' then
 if msg.content_.members_ and msg.content_.members_[0] and msg.content_.members_[0].type_.ID == 'UserTypeGeneral' then
 if msg.content_.ID == "MessageChatAddMembers" then
 if not is_banned(msg.chat_id_,msg.content_.members_[0].id_) then
+function wlc_m(extra,result,success)
 if redis:get(KEEPER..'welcome:'..msg.chat_id_) then
 text = redis:get(KEEPER..'welcome:'..msg.chat_id_)
 else
 text = 'اهلا عزيزي {firstname}\nنورت المجموعه 🌸'
 end
-local text = text:gsub('{firstname}',(msg.content_.members_[0].first_name_ or ''))
-local text = text:gsub('{lastname}',(msg.content_.members_[0].last_name_ or ''))
-local text = text:gsub('{username}',('@'..msg.content_.members_[0].username_ or ''))
-send(msg.chat_id_, msg.id_, 1, text, 1, 'html')
-end end end end
+local text = text:gsub('{firstname}',(msg.content_.members_[0].first_name_ or '--'))
+local text = text:gsub('{lastname}',(msg.content_.members_[0].last_name_ or '--'))
+local text = text:gsub('{username}',('[@'..msg.content_.members_[0].username_..']'))
+send(msg.chat_id_, msg.id_, 1, text, 1, 'md')
+end
+end 
+end
+getUser(msg.sender_user_id_,wlc_m) 
+end
+end
 ----------------- save all msg bot --------------------------
 redis:incr(KEEPER.."bot:allmsgs")
 if msg.chat_id_ then
@@ -6628,20 +6653,20 @@ send(msg.chat_id_, msg.id_, 1, "®️┊تم وضع عدد نقاط البيع\n
 redis:set(KEEPER.."KEEPER_OO0" .. msg.chat_id_, keeper[2])
 return false end
 -------------------------------------------------------------------------------------
-if text == 'تفعيل اللعبه' and is_owner(msg.sender_user_id_, msg.chat_id_) then
+if text == 'تفعيل اللعبه' and is_momod(msg.sender_user_id_, msg.chat_id_) then
 send(msg.chat_id_, msg.id_, 1, "💬┊ بواسطه » "..tmkeeper(msg).."\n🎟┊ تم تفعيل اللعبه\n ✓ ", 1, 'md')
 redis:del(KEEPER.."lock_GEM"..msg.chat_id_)
 end
-if text == 'تعطيل اللعبه' and is_owner(msg.sender_user_id_, msg.chat_id_) then
+if text == 'تعطيل اللعبه' and is_momod(msg.sender_user_id_, msg.chat_id_) then
 send(msg.chat_id_, msg.id_, 1, "💬┊ بواسطه » "..tmkeeper(msg).."\n🎟┊ تم تعطيل استخدام اللعبه\n ✓ ", 1, 'md')
 redis:set(KEEPER.."lock_GEM"..msg.chat_id_, true)
 end 
 ------------------------------------------------------------------------------
-if text == 'تفعيل الملصقات' and is_owner(msg.sender_user_id_, msg.chat_id_) then
+if text == 'تفعيل الملصقات' and is_momod(msg.sender_user_id_, msg.chat_id_) then
 send(msg.chat_id_, msg.id_, 1, "💬┊ بواسطه » "..tmkeeper(msg).."\n🎟┊ تم تفعيل ردود الملصقات\n ✓ ", 1, 'md')
 redis:del(KEEPER.."lock_STCK"..msg.chat_id_)
 end
-if text == 'تعطيل الملصقات' and is_owner(msg.sender_user_id_, msg.chat_id_) then
+if text == 'تعطيل الملصقات' and is_momod(msg.sender_user_id_, msg.chat_id_) then
 send(msg.chat_id_, msg.id_, 1, "💬┊ بواسطه » "..tmkeeper(msg).."\n🎟┊ تم تعطيل ردود الملصقات\n ✓ ", 1, 'md')
 redis:set(KEEPER.."lock_STCK"..msg.chat_id_, true)
 end 
@@ -7042,7 +7067,7 @@ end
 end
 -----------------ADD FREE BOT IN GP----------------------------------------        ----------
 if idf:match("-100(%d+)") and text:match("^تفعيل$") and not is_sudo(msg)  then
-local adding = function(extra, result)
+local add1ing = function(extra, result)
 function ddd( arg,data )
 local txt = { string.match(text, "^(تفعيل)$")}
 if not redis:get(KEEPER.."bot:free") and not is_sudo(msg) then
@@ -7082,13 +7107,21 @@ owner = user_info
 else
 owner = "لا يوجد "
 end
+if not redis:get(KEEPER.."bot:group:link"..msg.chat_id_) then
 local getlink = 'https://api.telegram.org/bot'..KEEPER_TOKEN..'/exportChatInviteLink?chat_id='..msg.chat_id_
 local req = https.request(getlink)
 local link = KPJS:decode(req)
 if link.ok == true then 
 redis:set(KEEPER.."bot:group:link"..msg.chat_id_,link.result)
 end
-send(Kp_Owner,0, 1,"- *تم اضافه مجموعه* »\nﮧ┉┉┉┉┉┉┉┉┉\n‏🔱┊ المدير ≈ [" .. owner .. "]\n🔰┊ ["..title_name(msg.chat_id_).."]("..(link.result or "https://t.me/keeper_ch")..")\n🚫┊ *ايدي المجموعه* »\n📉┊ﮧ "..msg.chat_id_.."\n*«معلومات عن المطور»*\nﮧ┉┉┉┉┉┉┉┉┉\n🌀┊ ايديه ≈ (" .. msg.sender_user_id_ .. ")\n🚫┊ اسمه ≈ " ..result.first_name_.. "\n️⚠️┊ معرفه ≈ [" .. username .. "]\n‏", 1, "md")
+end
+local lik_1 = redis:get(KEEPER.."bot:group:link"..msg.chat_id_)
+if lik_1 then
+link = lik_1 
+else
+link = link.result
+end
+send(Kp_Owner,0, 1,"- *تم اضافه مجموعه* »\nﮧ┉┉┉┉┉┉┉┉┉\n‏🔱┊ المدير ≈ [" .. owner .. "]\n🔰┊ ["..title_name(msg.chat_id_).."]("..(link or "t.me/keeper_ch")..")\n🚫┊ *ايدي المجموعه* »\n📉┊ﮧ "..msg.chat_id_.."\n*«معلومات عن المطور»*\nﮧ┉┉┉┉┉┉┉┉┉\n🌀┊ ايديه ≈ (" .. msg.sender_user_id_ .. ")\n🚫┊ اسمه ≈ " ..result.first_name_.. "\n️⚠️┊ معرفه ≈ [" .. username .. "]\n✓", 1, "md")
 redis:set(KEEPER.."bot:enable:" .. msg.chat_id_, true)
 redis:setex(KEEPER.."bot:charge:" .. msg.chat_id_, 9999 * day, true)
 redis:sadd(KEEPER.."sudo:data:" .. msg.sender_user_id_, msg.chat_id_)
@@ -7096,9 +7129,9 @@ end
 tdcli_function ({
 ID = "GetChannelFull",
 channel_id_ = getChatId(msg.chat_id_).ID
-}, add_gp, nil)
+}, ddd, nil)
 end
-getUser(msg.sender_user_id_, adding)
+getUser(msg.sender_user_id_, add1ing)
 end
 -------------------charge----------------------------------------------------------------------------
 if is_sudo(msg) then
@@ -7164,13 +7197,21 @@ owner = user_info
 else
 owner = "لا يوجد "
 end
+if not redis:get(KEEPER.."bot:group:link"..msg.chat_id_) then
 local getlink = 'https://api.telegram.org/bot'..KEEPER_TOKEN..'/exportChatInviteLink?chat_id='..msg.chat_id_
 local req = https.request(getlink)
 local link = KPJS:decode(req)
 if link.ok == true then 
 redis:set(KEEPER.."bot:group:link"..msg.chat_id_,link.result)
 end
-send(Kp_Owner,0, 1,"- *تم اضافه مجموعه* »\nﮧ┉┉┉┉┉┉┉┉┉\n‏🔱┊ المدير ≈ [" .. owner .. "]\n🔰┊ ["..title_name(msg.chat_id_).."]("..(link.result or "https://t.me/keeper_ch")..")\n🚫┊ *ايدي المجموعه* »\n📉┊ﮧ "..msg.chat_id_.."\n*«معلومات عن المطور»*\nﮧ┉┉┉┉┉┉┉┉┉\n🌀┊ ايديه ≈ (" .. msg.sender_user_id_ .. ")\n🚫┊ اسمه ≈ " ..result.first_name_.. "\n️⚠️┊ معرفه ≈ [" .. username .. "]\n‏", 1, "md")
+end
+local lik_1 = redis:get(KEEPER.."bot:group:link"..msg.chat_id_)
+if lik_1 then
+link = lik_1 
+else
+link = link.result
+end
+send(Kp_Owner,0, 1,"- *تم اضافه مجموعه* »\nﮧ┉┉┉┉┉┉┉┉┉\n‏🔱┊ المدير ≈ [" .. owner .. "]\n🔰┊ ["..title_name(msg.chat_id_).."]("..(link or "t.me/keeper_ch")..")\n🚫┊ *ايدي المجموعه* »\n📉┊ﮧ "..msg.chat_id_.."\n*«معلومات عن المطور»*\nﮧ┉┉┉┉┉┉┉┉┉\n🌀┊ ايديه ≈ (" .. msg.sender_user_id_ .. ")\n🚫┊ اسمه ≈ " ..result.first_name_.. "\n️⚠️┊ معرفه ≈ [" .. username .. "]\n✓", 1, "md")
 redis:set(KEEPER.."bot:enable:" .. msg.chat_id_, true)
 redis:setex(KEEPER.."bot:charge:" .. msg.chat_id_, 9999 * day, true)
 redis:sadd(KEEPER.."sudo:data:" .. msg.sender_user_id_, msg.chat_id_)
@@ -7182,7 +7223,7 @@ channel_id_ = getChatId(msg.chat_id_).ID
 end
 getUser(msg.sender_user_id_, adding)
 end
--------------------REM GRUP--------------------------------------------------------------------------
+-------------------------------------------------------------------
 if text:match("^تعطيل$") then
 local txt = { string.match(text, "^(تعطيل)$") }
 if not is_sudo(msg) then
@@ -7265,35 +7306,36 @@ if text:match("^ايدي @(%S+)$") then
 do
 local ap = {string.match(text, "^(ايدي) @(%S+)$") }
 local id_by_username = function(extra, result)
-local kp_msgss = tonumber(redis:get(KEEPER.."msgs:"..result.id_..":"..msg.chat_id_))
+local num_keep = (tonumber(redis:get(KEEPER.."incr_msg"..result.id_..""..msg.chat_id_.."") or 0 ))
+local msgs = (tonumber(redis:get(KEEPER.."msgs:"..result.id_..":"..msg.chat_id_) or  0))
 local Kpcontact = (tonumber(redis:get(KEEPER.."kpaddcon"..msg.chat_id_..":"..result.id_) or 0))
 if result.id_ then
 if tonumber(result.id_) == tonumber(Kp_Owner) then
-t = "مطور الاساسـي 🍃"
+t = "مطور اساسي 🎖"
 elseif is_sudoid(result.id_) then
-t = "المطور 🍃"
+t = "المطور 🕵🏻‍♂️"
 elseif is_admin(result.id_) then
-t = "ادمن في البوت 🍃"
+t = "ادمن في البوت 🎭"
 elseif is_vipmems(result.id_) then
-t = "مميز عام 🍃"
+t = "مميز عام 🥈"
 elseif is_monshi(result.id_, msg.chat_id_) then
-t = "منشىء الكروب 🎐"
+t = "المنشىء 👨🏽‍🔧"
 elseif is_owner(result.id_, msg.chat_id_) then
-t = "مدير في البوت 🍃"
+t = "مدير  في البوت 🕴"
 elseif is_momod(result.id_, msg.chat_id_) then
-t = "ادمن 🍃"
+t = "ادمن المجموعه 👍"
 elseif is_vipmem(result.id_, msg.chat_id_) then
-t = "عضو مميز 🍃"
+t = "عضو مميز 😻"
 else
-t = "عضو 🍃"
+t = "عضو فقط ✋🏼"
 end end
 local gpid = tostring(result.id_)
 if gpid:match("^(%d+)") then
-text = "🎟╏ ⌍ العضو ⌌ » [@" .. ap[2] .. "]\n📩╏ ⌏ رسائله ⌎ » *" .. kp_msgss .. "*\n🗯╏ ⌍ جهاتـه ⌌ » *"..Kpcontact.."*\n⚙️╏ ⌏ تفاعله ⌎ » " .. KP_TM_NM(kp_msgss) .. "\n⚠️╏ ⌍ ايديــه⌌ » `" .. result.id_ .. "`\n📌╏ ⌏ موقعه⌎ » " .. t .. "\n╍ ╍ ╍ ╍ ╍ ╍ ╍ ╍ ╍ ╍\n"
+kepper_info2 = "🎟┊ ايديه  » `" .. result.id_ .. "`\n©️┊ معرفه »  [@" .. ap[2] .. "]\n👤┊ جهاته  »   "..Kpcontact.."\n🔆┊ نقاطه  »   "..num_keep.."\n🌐┊ تفاعله »  " .. KP_TM_NM(msgs) .. "\n✉️┊ رسائله » " .. msgs .. "\n📌┊ موقعه » " .. t .. "\n‏┄┄┄┄┄┄┄┄┄┄┄┄"
 elseif not result.id_ then
-text = "🌀┊ لا يوجد عضو بهذا المعرف"
+kepper_info2 = "🌀┊ لا يوجد عضو بهذا المعرف"
 end
-send(msg.chat_id_, msg.id_, 1, text, 1, "md")
+send(msg.chat_id_, msg.id_, 1, kepper_info2, 1, "md")
 end
 resolve_username(ap[2], id_by_username)
 end else end 
@@ -7324,7 +7366,7 @@ t = "عضو 🍃"
 end end
 local gpid = tostring(result.id_)
 if gpid:match("^(%d+)") then
-text = "💠┊ الايدي » *(" .. result.id_ .. ")*\n🎫┊ الرتبه » *" .. t .. "*\n"
+text = "💠┊ الايدي » *(" .. result.id_ .. ")*\n🎫┊ الرتبه » *" .. t .. "*\n✓"
 elseif not result.id_ then
 text = "🌀┊ المعرف غير صحيح   "
 end
@@ -7488,7 +7530,8 @@ end
 --------------------ID BY REPLY------------------------------------------
 if text:match("^ايدي$") and msg.reply_to_message_id_ ~= 0 then
 function iD_reP(extra, result, success)
-local Kpmsgss = (tonumber(redis:get(KEEPER.."msgs:"..result.sender_user_id_..":"..msg.chat_id_) or 0 ))
+local num_keep = (tonumber(redis:get(KEEPER.."incr_msg"..result.sender_user_id_..""..msg.chat_id_.."") or 0 ))
+local msgs = (tonumber(redis:get(KEEPER.."msgs:"..result.sender_user_id_..":"..msg.chat_id_) or 0 ))
 local Kpcontact = (tonumber(redis:get(KEEPER.."kpaddcon"..msg.chat_id_..":"..result.sender_user_id_) or 0))
 if result.id_ then
 if tonumber(result.sender_user_id_) == tonumber(Kp_Owner) then
@@ -7511,7 +7554,8 @@ else
 keeper3 = "عـضـو 🐾"
 end
 end
-send(msg.chat_id_, result.id_, 1, "‏‏📩╏ ⌍ رسائله⌌• *" ..Kpmsgss.. "*\n🗯╏ ⌏ جهاتـه⌎• *"..Kpcontact.."*\n⚙️╏ ⌍ تفاعله⌌• " ..KP_TM_NM(Kpmsgss).. "\n⚠️╏ ⌍ ايديــه⌌• `" ..result.sender_user_id_.. "`\n📌╏ ⌏ موقعه⌎• " ..keeper3.. "\n╍ ╍ ╍ ╍ ╍ ╍ ╍ ╍ ╍ ╍", 1, "md")
+local keeper_info = "🎟┊ ايديه  » `" .. result.sender_user_id_ .. "`\n👤┊ جهاته  »   "..Kpcontact.."\n🔆┊ نقاطه  »   "..num_keep.."\n🌐┊ تفاعله »  " .. KP_TM_NM(msgs) .. "\n✉️┊ رسائله » " .. msgs .. "\n📌┊ موقعه » " .. keeper3 .. "\n‏┄┄┄┄┄┄┄┄┄┄┄┄"
+send(msg.chat_id_, result.id_, 1, keeper_info, 1, "md")
 end
 getMessage(msg.chat_id_, msg.reply_to_message_id_,iD_reP)
 end
@@ -7733,7 +7777,7 @@ end
 -------------------------SET LINK---------------------------------------------------------------
 if is_momod(msg.sender_user_id_, msg.chat_id_) and idf:match("-100(%d+)") and (text:match("^ضع رابط$"))  then
 send(msg.chat_id_, msg.id_, 1, "🌀┊ ارســــل لي الرابط الان 🎐", 1, "md")
-redis:setex(KEEPER.."bot:group:link" .. msg.chat_id_ .. ":" .. msg.sender_user_id_, 120, true)
+redis:setex(KEEPER.."bot:group:link" .. msg.chat_id_ .. ":" .. msg.sender_user_id_, 1200, true)
 end
 if is_momod(msg.sender_user_id_, msg.chat_id_) and idf:match("-100(%d+)") and (text:match("^حذف الرابط$"))  then
 send(msg.chat_id_, msg.id_, 1, "💬┊ بواسطه » "..tmkeeper(msg).."\n🎟┊ تم حذف الرابط بنجاح\n ✓ ", 1, 'md')
@@ -10384,6 +10428,7 @@ if not is_sudo(msg) then
 send(msg.chat_id_, msg.id_, 1, '💲┊ للمطوريـــــــن فقــــــــط', 1, 'md')
 else
 function gp_keeper_info(arg,data)
+function add_gps( arg,data )
 local list = redis:smembers(KEEPER.."bot:owners:" .. chattid)
 if list[1] or list[2] or list[3] or list[4] then
 user_info = redis:get(KEEPER.."user:Name" .. (list[1] or list[2] or list[3] or list[4]))
@@ -10399,10 +10444,37 @@ sudo = User
 else
 sudo = "لا يوجد"
 end
-send(msg.chat_id_, msg.id_, 1, "‏‏\n👨🏼┊ المدير » [" .. owner .. "]\n🏮┊ المطور » [" .. sudo .. "]\n💠┊ الرابط » [اضغـط هنـا](" .. (redis:get(KEEPER.."bot:group:link" .. chattid) or "https://t.me/keeper_ch") .. ")\n🔱┊ الاسم » 👇🏾\n🔰┊ ("..title_name(chattid)..")\n️⚠️┊ الايدي» 👇🏾\nﮧ `" .. (chattid) .. "`\n‏\n", 1,'md')
+local kpmonshis = redis:scard(KEEPER.."bot:monshis:" .. chattid) or "0"
+local kpbanned = redis:scard(KEEPER.."bot:banned:" .. chattid) or "0"
+local kpowners = redis:scard(KEEPER.."bot:owners:" .. chattid) or "0"
+local kpmuted = redis:scard(KEEPER.."bot:muted:" .. chattid) or "0"
+local kpkeed = redis:scard(KEEPER.."bot:keed:" .. chattid) or "0"
+local kpmomod = redis:scard(KEEPER.."bot:momod:" .. chattid) or "0"
+local kpvipmem = redis:scard(KEEPER.."bot:vipmem:" .. chattid) or "0"
+if not redis:get(KEEPER.."bot:group:link"..chattid) then
+local getlink = 'https://api.telegram.org/bot'..KEEPER_TOKEN..'/exportChatInviteLink?chat_id='..chattid
+local req = https.request(getlink)
+local link = KPJS:decode(req)
+if link.ok == true then 
+redis:set(KEEPER.."bot:group:link"..chattid,link.result)
+end
+end
+local lik_1 = redis:get(KEEPER.."bot:group:link"..msg.chat_id_)
+if lik_1 then
+link = lik_1 
+else
+link = link.result
+end
+send(msg.chat_id_, msg.id_, 1, "🕴┊ المدير » ["..owner.."]\n🥈┊ﮧ ["..title_name(chattid).."]("..(link or "t.me/keeper_ch")..")\n©️┊ عدد المــــدراء   » *"..kpowners.."*\n©️┊ عدد المنشئين   » *"..kpmonshis.."*\n🔆┊ عدد الادمنيـــه   » *"..kpmomod.."*\n🔰┊ عدد المكتومين  » *"..kpmuted.."*\n®️┊ عدد المحظورين » *"..kpbanned.."*\n®️┊ عدد المقيديــن   » *"..kpkeed.."*\n🗯┊ عدد المميزيـــن  » *"..kpvipmem.."*\n💠┊ﮧ `"..chattid.."`\n🏮┊ المطور » ["..sudo.."]\n✓", 1,"md")
+end
+tdcli_function ({
+ID = "GetChannelFull",
+channel_id_ = getChatId(chattid).ID
+}, add_gps, nil)
 end
 getChannelFull(chattid, gp_keeper_info, nil)
-end end
+end 
+end
 ------------UNPIN-----------------------------------------------
 if is_momod(msg.sender_user_id_, msg.chat_id_) and idf:match("-100(%d+)") and (text:match("^الغاء تثبيت$"))  then
 if not redis:get(KEEPER..'lock:add'..msg.chat_id_) then
