@@ -8199,6 +8199,7 @@ local text = [[
 🗯 ┇ ضع قوانين - القوانين
 🗯 ┇ الترحيب  - الاعدادات
 🔍 ┇ اللعبه - بدء العبه
+🔍 ┇ رفع قيود (rep:id:@..)
 🗯 ┇ منع  ≈ للمنع الفردي
 🗯 ┇ الغاء ≈ لكي تلغي المنع
 🗯 ┇ تقييد - فك التقييد
@@ -10459,7 +10460,7 @@ if link.ok == true then
 redis:set(KEEPER.."bot:group:link"..chattid,link.result)
 end
 end
-local lik_1 = redis:get(KEEPER.."bot:group:link"..msg.chat_id_)
+local lik_1 = redis:get(KEEPER.."bot:group:link"..chattid)
 if lik_1 then
 link = lik_1 
 else
