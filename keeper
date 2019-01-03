@@ -26,11 +26,11 @@ prtbrown() {
       wget "$TDCLI" -O TG
       chmod +x TG
       prtgrn "
- ➡[ @llx8xll ] 
+ ➡[ @FOTDXK] 
 "
       sudo apt-get -y update && sudo apt-get -y upgrade 
       prtgrn "
- ➡[ @llx8xll ] 
+ ➡[ @FOTDXK ] 
 "
       sudo apt-get --force-yes install git wget screen tmux libconfig9 libevent-dev libjansson4 libstdc++6 lua-socket lua5.2 liblua5.2 make unzip redis-server lua-sec libnotify-dev software-properties-common g++
       sudo apt-get -y update && sudo apt-get -y upgrade
@@ -55,7 +55,7 @@ prtbrown() {
       cd ..
 	  rm -fr luarocks-2.2.2.tar.gz
 	  rm -fr luarocks-2.2.2
-	  lua ./KEEPER.lua
+	  lua ./AWACSI.lua
 
 	  
 	  
